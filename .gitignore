@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Entorno virtual
+venv/
+
+# Variables de entorno
+.env
+
+# IDE
+.vscode/
+
+# Quarto
+docs/_site/
+docs/.quarto/
+
+db_schema.sql
+openapi.json
+initial-prompt
+api-examples.json

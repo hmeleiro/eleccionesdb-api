@@ -1,0 +1,46 @@
+# Publicar documentación Quarto en GitHub Pages
+#
+# Se ejecuta cuando se hace push a main con cambios en docs/
+# Requiere activar GitHub Pages con source "GitHub Actions" en:
+#   Settings → Pages → Build and deployment → Source → GitHub Actions
+
+name: Publicar sitio en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ['docs/**']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Renderizar sitio
+        run: quarto render docs/
+
+      - name: Subir artefacto de Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_site
+
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

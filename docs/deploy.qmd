@@ -1,0 +1,119 @@
+---
+title: "Guía de despliegue"
+---
+
+## Requisitos previos
+
+- **Docker** y **Docker Compose** instalados.
+- **PostgreSQL** con la base de datos creada y los datos electorales cargados (schema en `db_schema.sql`).
+- Archivo `.env` configurado con las variables de entorno.
+
+## Variables de entorno
+
+Copia `.env.example` a `.env` y ajusta los valores:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Descripción | Ejemplo |
+|---|---|---|
+| `DB_HOST` | Host de PostgreSQL | `localhost` |
+| `DB_PORT` | Puerto | `5432` |
+| `DB_NAME` | Nombre de la base de datos | `eleccionesdb` |
+| `DB_USER` | Usuario | `eleccionesdb_api` |
+| `DB_PASSWORD` | Contraseña | `changeme` |
+| `DB_SCHEMA` | Esquema (vacío = public) | |
+| `APP_ENV` | Entorno | `development` / `production` |
+| `ROOT_PATH` | Prefijo para reverse proxy | `/api` |
+
+### Configuración de `DB_HOST` según el escenario
+
+| Escenario | Valor de `DB_HOST` |
+|---|---|
+| Local sin Docker | `localhost` |
+| Docker en **Windows/Mac** (BD en el host) | `host.docker.internal` |
+| Docker en **Linux** (BD en el host) | `172.17.0.1` |
+| BD en otra máquina | IP o hostname del servidor |
+
+::: {.callout-note}
+`host.docker.internal` funciona de forma nativa en Docker Desktop (Windows/Mac). En Linux, funciona gracias a `extra_hosts` configurado en `docker-compose.yml`.
+:::
+
+## Desarrollo local sin Docker
+
+```bash
+# Crear entorno virtual
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Linux/Mac
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Configurar .env (DB_HOST=localhost)
+
+# Arrancar con recarga automática
+uvicorn app.main:app --reload
+```
+
+La documentación interactiva estará disponible en [http://localhost:8000/docs](http://localhost:8000/docs).
+
+## Desarrollo local con Docker
+
+```bash
+# Ajustar DB_HOST en .env:
+#   Windows/Mac: host.docker.internal
+#   Linux:       172.17.0.1
+
+docker compose up --build
+```
+
+Acceder a [http://localhost:8000/docs](http://localhost:8000/docs).
+
+## Producción con Docker Compose
+
+```bash
+# Ajustar .env:
+#   DB_HOST=<ip-del-servidor-de-bd>
+#   APP_ENV=production
+#   ROOT_PATH=/api   (si va detrás de Nginx en /api)
+
+docker compose up -d --build
+```
+
+La imagen Docker usa un multi-stage build que produce un contenedor optimizado (~150 MB) sin herramientas de compilación.
+
+## Nginx reverse proxy
+
+Si la API se sirve en `https://midominio.com/api`:
+
+```nginx
+location /api/ {
+    proxy_pass http://127.0.0.1:8000/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
+
+En `.env` configurar `ROOT_PATH=/api` para que FastAPI genere correctamente las rutas de la documentación interactiva.
+
+## Verificar el despliegue
+
+Una vez arrancada la API, comprobar que responde correctamente:
+
+```bash
+curl http://localhost:8000/health
+```
+
+Respuesta esperada:
+
+```json
+{
+  "status": "ok",
+  "environment": "production",
+  "database": "ok"
+}
+```

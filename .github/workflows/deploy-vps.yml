@@ -1,0 +1,53 @@
+# Desplegar API en VPS vía SSH
+#
+# Se ejecuta cuando se hace push a main con cambios en el código de la API
+# (se ignoran cambios que solo afectan a docs/)
+#
+# Secrets necesarios en GitHub (Settings → Secrets and variables → Actions):
+#   VPS_HOST       - IP o hostname del servidor
+#   VPS_USER       - Usuario SSH
+#   VPS_SSH_KEY    - Clave privada SSH
+#   VPS_DEPLOY_PATH - Ruta en el servidor (ej: /opt/eleccionesdb-api)
+
+name: Desplegar API en VPS
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Desplegar vía SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ${{ secrets.VPS_DEPLOY_PATH }}
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
+            docker image prune -f
+
+      - name: Verificar health de la API
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            for i in 1 2 3 4 5; do
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/health || true)
+              if [ "$STATUS" = "200" ]; then
+                echo "Health check OK (intento $i)"
+                exit 0
+              fi
+              echo "Intento $i: API no lista (HTTP $STATUS). Reintentando en 5s..."
+              sleep 5
+            done
+            echo "ERROR: La API no respondió tras 5 intentos"
+            exit 1

@@ -1,0 +1,25 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "EleccionesDB API"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Inicio
+      - href: api-reference.qmd
+        text: Referencia API
+      - href: schema.qmd
+        text: Esquema BD
+      - href: examples.qmd
+        text: Ejemplos
+      - href: deploy.qmd
+        text: Despliegue
+  page-footer:
+    center: "EleccionesDB API — Datos electorales españoles"
+
+format:
+  html:
+    theme: cosmo
+    lang: es

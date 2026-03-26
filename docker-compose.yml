@@ -1,0 +1,19 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eleccionesdb-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+    # ─── Conectividad con la BD del host ────────────────
+    # En Windows/Mac, Docker Desktop resuelve host.docker.internal
+    # automáticamente. En Linux, la siguiente directiva lo habilita.
+    # Configurar DB_HOST=host.docker.internal en .env para conectar
+    # con una BD que corre en el mismo host.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

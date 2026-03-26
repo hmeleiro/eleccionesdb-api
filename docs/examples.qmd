@@ -1,0 +1,481 @@
+---
+title: "Ejemplos de uso"
+---
+
+Ejemplos reales de peticiones y respuestas de la API EleccionesDB. Todos los ejemplos usan `http://localhost:8000` como base URL.
+
+## Health check
+
+```
+GET /health
+```
+
+```json
+{
+  "status": "ok",
+  "environment": "development",
+  "database": "ok"
+}
+```
+
+## Tipos de elección
+
+Lista completa del catálogo (array simple, sin paginación).
+
+```
+GET /api/v1/tipos-eleccion
+```
+
+```json
+[
+  {"codigo": "A", "descripcion": "Autómicas"},
+  {"codigo": "E", "descripcion": "Europeas"},
+  {"codigo": "G", "descripcion": "Congreso"},
+  {"codigo": "L", "descripcion": "Locales"},
+  {"codigo": "S", "descripcion": "Senado"}
+]
+```
+
+## Listado de elecciones (paginado)
+
+```
+GET /api/v1/elecciones?limit=3
+```
+
+```json
+{
+  "total": 254,
+  "skip": 0,
+  "limit": 3,
+  "data": [
+    {
+      "id": 1,
+      "tipo_eleccion": "G",
+      "year": "1977",
+      "mes": "06",
+      "dia": "15",
+      "fecha": "1977-06-15",
+      "descripcion": "Elecciones Generales 1977",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-1977"
+    },
+    {
+      "id": 2,
+      "tipo_eleccion": "G",
+      "year": "1979",
+      "mes": "03",
+      "dia": "01",
+      "fecha": "1979-03-01",
+      "descripcion": "Elecciones Generales 1979",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-1979"
+    },
+    {
+      "id": 3,
+      "tipo_eleccion": "A",
+      "year": "1979",
+      "mes": "04",
+      "dia": "03",
+      "fecha": "1979-04-03",
+      "descripcion": "Elecciones Autonómicas Navarra 1979",
+      "ambito": "Autonómico",
+      "slug": "elecciones-autonomicas-1979"
+    }
+  ]
+}
+```
+
+## Elecciones filtradas por tipo y año
+
+Se pueden combinar varios filtros. Para múltiples valores del mismo filtro se repite el parámetro.
+
+```
+GET /api/v1/elecciones?tipo_eleccion=G&year=2019&limit=5
+```
+
+```json
+{
+  "total": 2,
+  "skip": 0,
+  "limit": 5,
+  "data": [
+    {
+      "id": 208,
+      "tipo_eleccion": "G",
+      "year": "2019",
+      "mes": "04",
+      "dia": "28",
+      "fecha": "2019-04-28",
+      "descripcion": "Elecciones Generales 2019",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-2019"
+    },
+    {
+      "id": 226,
+      "tipo_eleccion": "G",
+      "year": "2019",
+      "mes": "11",
+      "dia": "10",
+      "fecha": "2019-11-10",
+      "descripcion": "Elecciones Generales 2019",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-2019"
+    }
+  ]
+}
+```
+
+## Detalle de una elección
+
+Incluye el tipo de elección como objeto expandido.
+
+```
+GET /api/v1/elecciones/208
+```
+
+```json
+{
+  "id": 208,
+  "tipo_eleccion": "G",
+  "year": "2019",
+  "mes": "04",
+  "dia": "28",
+  "fecha": "2019-04-28",
+  "codigo_ccaa": "99",
+  "numero_vuelta": 1,
+  "descripcion": "Elecciones Generales 2019",
+  "ambito": "Nacional",
+  "slug": "elecciones-generales-2019",
+  "tipo": {
+    "codigo": "G",
+    "descripcion": "Congreso"
+  }
+}
+```
+
+## Territorios por tipo
+
+```
+GET /api/v1/territorios?tipo=ccaa&limit=5
+```
+
+```json
+{
+  "total": 19,
+  "skip": 0,
+  "limit": 5,
+  "data": [
+    {"id": 1, "tipo": "ccaa", "nombre": "Andalucía", "codigo_completo": "0199999999999", "codigo_ccaa": "01", "codigo_provincia": "99"},
+    {"id": 2, "tipo": "ccaa", "nombre": "Aragón", "codigo_completo": "0299999999999", "codigo_ccaa": "02", "codigo_provincia": "99"},
+    {"id": 3, "tipo": "ccaa", "nombre": "Asturias", "codigo_completo": "0399999999999", "codigo_ccaa": "03", "codigo_provincia": "99"},
+    {"id": 4, "tipo": "ccaa", "nombre": "Baleares", "codigo_completo": "0499999999999", "codigo_ccaa": "04", "codigo_provincia": "99"},
+    {"id": 5, "tipo": "ccaa", "nombre": "Canarias", "codigo_completo": "0599999999999", "codigo_ccaa": "05", "codigo_provincia": "99"}
+  ]
+}
+```
+
+## Navegación jerárquica: hijos de un territorio
+
+```
+GET /api/v1/territorios/1/hijos?limit=3
+```
+
+```json
+{
+  "total": 8,
+  "skip": 0,
+  "limit": 3,
+  "data": [
+    {"id": 20, "tipo": "provincia", "nombre": "Almería", "codigo_completo": "0104999999999", "codigo_ccaa": "01", "codigo_provincia": "04"},
+    {"id": 21, "tipo": "provincia", "nombre": "Cádiz", "codigo_completo": "0111999999999", "codigo_ccaa": "01", "codigo_provincia": "11"},
+    {"id": 22, "tipo": "provincia", "nombre": "Córdoba", "codigo_completo": "0114999999999", "codigo_ccaa": "01", "codigo_provincia": "14"}
+  ]
+}
+```
+
+## Búsqueda de partidos por siglas
+
+La búsqueda es parcial y case-insensitive.
+
+```
+GET /api/v1/partidos?siglas=psoe&limit=3
+```
+
+```json
+{
+  "total": 345,
+  "skip": 0,
+  "limit": 3,
+  "data": [
+    {"id": 5082, "siglas": "IU-PSOE", "denominacion": "IU-PSOE", "partido_recode_id": 47},
+    {"id": 8432, "siglas": "ADEIA,PSM,PSOE,IV", "denominacion": "AGRUPACIO DEIA,PSM,PSOE,IVERDS", "partido_recode_id": 80},
+    {"id": 8486, "siglas": "CPC(PSM-EN, ENTESA, PSOE)", "denominacion": "CAMPOS PEL CANVI (PSM-EN, ENTESA, PSOE)", "partido_recode_id": 80}
+  ]
+}
+```
+
+## Detalle de partido con agrupación (recode)
+
+```
+GET /api/v1/partidos/5082
+```
+
+```json
+{
+  "id": 5082,
+  "siglas": "IU-PSOE",
+  "denominacion": "IU-PSOE",
+  "partido_recode_id": 47,
+  "recode": {
+    "id": 47,
+    "partido_recode": "IU",
+    "agrupacion": "PCE/IU",
+    "color": "#E51635"
+  }
+}
+```
+
+Un partido sin agrupación asignada devuelve `recode: null`:
+
+```
+GET /api/v1/partidos/11911
+```
+
+```json
+{
+  "id": 11911,
+  "siglas": "PACMA",
+  "denominacion": "PARTIDO ANIMALISTA CONTRA EL MALTRATO ANIMAL",
+  "partido_recode_id": null,
+  "recode": null
+}
+```
+
+## Totales territorio
+
+Resúmenes de participación filtrados por elección, tipo de territorio y CCAA.
+
+```
+GET /api/v1/resultados/totales-territorio?eleccion_id=208&tipo_territorio=provincia&codigo_ccaa=01&limit=2
+```
+
+```json
+{
+  "total": 8,
+  "skip": 0,
+  "limit": 2,
+  "data": [
+    {
+      "id": 408788,
+      "eleccion_id": 208,
+      "territorio_id": 20,
+      "censo_ine": 500556,
+      "participacion_1": 182762,
+      "participacion_2": 259071,
+      "participacion_3": null,
+      "votos_validos": 328097,
+      "abstenciones": 169541,
+      "votos_blancos": 2283,
+      "votos_nulos": 2918,
+      "nrepresentantes": 6
+    },
+    {
+      "id": 408789,
+      "eleccion_id": 208,
+      "territorio_id": 21,
+      "censo_ine": 1000032,
+      "participacion_1": 361498,
+      "participacion_2": 535223,
+      "participacion_3": null,
+      "votos_validos": 667562,
+      "abstenciones": 324120,
+      "votos_blancos": 8206,
+      "votos_nulos": 8350,
+      "nrepresentantes": 9
+    }
+  ]
+}
+```
+
+## Votos por partido
+
+```
+GET /api/v1/resultados/votos-partido?eleccion_id=208&territorio_id=20&limit=3
+```
+
+```json
+{
+  "total": 10,
+  "skip": 0,
+  "limit": 3,
+  "data": [
+    {"id": 5732188, "eleccion_id": 208, "territorio_id": 20, "partido_id": 1831, "votos": 56268, "representantes": 1},
+    {"id": 5732189, "eleccion_id": 208, "territorio_id": 20, "partido_id": 8180, "votos": 73952, "representantes": 2},
+    {"id": 5732190, "eleccion_id": 208, "territorio_id": 20, "partido_id": 9451, "votos": 98924, "representantes": 2}
+  ]
+}
+```
+
+## Resultado completo de una elección + territorio
+
+Combina totales territorio con el desglose de votos por partido (incluyendo datos del partido expandidos).
+
+```
+GET /api/v1/elecciones/208/totales-territorio/20
+```
+
+```json
+{
+  "totales_territorio": {
+    "id": 408788,
+    "eleccion_id": 208,
+    "territorio_id": 20,
+    "censo_ine": 500556,
+    "participacion_1": 182762,
+    "participacion_2": 259071,
+    "participacion_3": null,
+    "votos_validos": 328097,
+    "abstenciones": 169541,
+    "votos_blancos": 2283,
+    "votos_nulos": 2918,
+    "nrepresentantes": 6
+  },
+  "votos_partido": [
+    {
+      "id": 5732190,
+      "eleccion_id": 208,
+      "territorio_id": 20,
+      "partido_id": 9451,
+      "votos": 98924,
+      "representantes": 2,
+      "partido": {"id": 9451, "siglas": "PSOE", "denominacion": "PARTIDO SOCIALISTA OBRERO ESPAÑOL", "partido_recode_id": 80}
+    },
+    {
+      "id": 5732189,
+      "eleccion_id": 208,
+      "territorio_id": 20,
+      "partido_id": 8180,
+      "votos": 73952,
+      "representantes": 2,
+      "partido": {"id": 8180, "siglas": "PP", "denominacion": "PARTIDO POPULAR", "partido_recode_id": 73}
+    },
+    {
+      "id": 5732192,
+      "eleccion_id": 208,
+      "territorio_id": 20,
+      "partido_id": 11895,
+      "votos": 62648,
+      "representantes": 1,
+      "partido": {"id": 11895, "siglas": "VOX", "denominacion": "VOX", "partido_recode_id": 102}
+    }
+  ]
+}
+```
+
+## Resultados combinados
+
+Endpoint más completo: cada voto incluye partido (con agrupación), territorio y elección expandidos. Ideal para análisis cruzado.
+
+```
+GET /api/v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codigo_ccaa=01&limit=2
+```
+
+```json
+{
+  "total": 91,
+  "skip": 0,
+  "limit": 2,
+  "data": [
+    {
+      "id": 5732188,
+      "eleccion_id": 208,
+      "territorio_id": 20,
+      "partido_id": 1831,
+      "votos": 56268,
+      "representantes": 1,
+      "partido": {
+        "id": 1831,
+        "siglas": "CS",
+        "denominacion": "CIUDADANOS-PARTIDO DE LA CIUDADANÍA",
+        "partido_recode_id": 29,
+        "recode": {
+          "id": 29,
+          "partido_recode": "Cs",
+          "agrupacion": "Cs",
+          "color": "#ED6C00"
+        }
+      },
+      "territorio": {
+        "id": 20,
+        "tipo": "provincia",
+        "nombre": "Almería",
+        "codigo_completo": "0104999999999",
+        "codigo_ccaa": "01",
+        "codigo_provincia": "04"
+      },
+      "eleccion": {
+        "id": 208,
+        "tipo_eleccion": "G",
+        "year": "2019",
+        "mes": "04",
+        "dia": "28",
+        "fecha": "2019-04-28",
+        "descripcion": "Elecciones Generales 2019",
+        "ambito": "Nacional",
+        "slug": "elecciones-generales-2019"
+      }
+    }
+  ]
+}
+```
+
+## Resultado vacío
+
+Cuando los filtros no coinciden con ningún registro, la respuesta es HTTP 200 con `total=0` y `data=[]`.
+
+```
+GET /api/v1/elecciones?tipo_eleccion=G&year=1800
+```
+
+```json
+{
+  "total": 0,
+  "skip": 0,
+  "limit": 50,
+  "data": []
+}
+```
+
+## Errores
+
+### 404 — Recurso no encontrado
+
+```
+GET /api/v1/elecciones/99999
+```
+
+```json
+{
+  "detail": "Elección no encontrada"
+}
+```
+
+### 422 — Error de validación
+
+```
+GET /api/v1/elecciones?limit=-5
+```
+
+```json
+{
+  "detail": [
+    {
+      "type": "greater_than_equal",
+      "loc": ["query", "limit"],
+      "msg": "Input should be greater than or equal to 1",
+      "input": "-5",
+      "ctx": {"ge": 1}
+    }
+  ]
+}
+```
