@@ -2,6 +2,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 
 from app.config import settings
 from app.api import (
@@ -35,6 +36,12 @@ app = FastAPI(
 )
 
 # ─── Routers ────────────────────────────────────────────
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="./docs")
+
 
 app.include_router(routes_health.router)
 app.include_router(routes_elecciones.router)

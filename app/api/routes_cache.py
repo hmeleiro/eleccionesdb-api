@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.cache import response_cache
 
-router = APIRouter(prefix="/api/v1/cache", tags=["Cache"])
+router = APIRouter(prefix="/v1/cache", tags=["Cache"])
 
 
 @router.get("/stats")

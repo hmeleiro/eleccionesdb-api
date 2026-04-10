@@ -9,8 +9,8 @@ La base de datos EleccionesDB utiliza PostgreSQL y contiene **9 tablas** y **1 t
 La estructura se organiza en tres capas:
 
 1. **Catálogos**: tipos de elección, territorios, partidos y agrupaciones.
-2. **Resultados territoriales**: resúmenes de participación y censo por territorio y elección.
-3. **Votos**: desglose de votos y representantes por partido, territorio y elección.
+2. **Totales de territorio**: resúmenes de participación y censo por territorio y elección.
+3. **Votos a partidos**: desglose de votos y representantes por partido, territorio y elección.
 
 ## Diagrama entidad-relación
 

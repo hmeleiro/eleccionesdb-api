@@ -12,7 +12,7 @@ from app.schemas.resultados import (
 )
 from app import crud
 
-router = APIRouter(prefix="/api/v1/resultados", tags=["Resultados"])
+router = APIRouter(prefix="/v1/resultados", tags=["Resultados"])
 
 
 # ─── Totales territorio ─────────────────────────────────

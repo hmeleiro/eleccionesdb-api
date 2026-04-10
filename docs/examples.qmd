@@ -23,7 +23,7 @@ GET /health
 Lista completa del catálogo (array simple, sin paginación).
 
 ```
-GET /api/v1/tipos-eleccion
+GET /v1/tipos-eleccion
 ```
 
 ```json
@@ -39,7 +39,7 @@ GET /api/v1/tipos-eleccion
 ## Listado de elecciones (paginado)
 
 ```
-GET /api/v1/elecciones?limit=3
+GET /v1/elecciones?limit=3
 ```
 
 ```json
@@ -90,7 +90,7 @@ GET /api/v1/elecciones?limit=3
 Se pueden combinar varios filtros. Para múltiples valores del mismo filtro se repite el parámetro.
 
 ```
-GET /api/v1/elecciones?tipo_eleccion=G&year=2019&limit=5
+GET /v1/elecciones?tipo_eleccion=G&year=2019&limit=5
 ```
 
 ```json
@@ -130,7 +130,7 @@ GET /api/v1/elecciones?tipo_eleccion=G&year=2019&limit=5
 Incluye el tipo de elección como objeto expandido.
 
 ```
-GET /api/v1/elecciones/208
+GET /v1/elecciones/208
 ```
 
 ```json
@@ -156,7 +156,7 @@ GET /api/v1/elecciones/208
 ## Territorios por tipo
 
 ```
-GET /api/v1/territorios?tipo=ccaa&limit=5
+GET /v1/territorios?tipo=ccaa&limit=5
 ```
 
 ```json
@@ -177,7 +177,7 @@ GET /api/v1/territorios?tipo=ccaa&limit=5
 ## Navegación jerárquica: hijos de un territorio
 
 ```
-GET /api/v1/territorios/1/hijos?limit=3
+GET /v1/territorios/1/hijos?limit=3
 ```
 
 ```json
@@ -198,7 +198,7 @@ GET /api/v1/territorios/1/hijos?limit=3
 La búsqueda es parcial y case-insensitive.
 
 ```
-GET /api/v1/partidos?siglas=psoe&limit=3
+GET /v1/partidos?siglas=psoe&limit=3
 ```
 
 ```json
@@ -217,7 +217,7 @@ GET /api/v1/partidos?siglas=psoe&limit=3
 ## Detalle de partido con agrupación (recode)
 
 ```
-GET /api/v1/partidos/5082
+GET /v1/partidos/5082
 ```
 
 ```json
@@ -238,7 +238,7 @@ GET /api/v1/partidos/5082
 Un partido sin agrupación asignada devuelve `recode: null`:
 
 ```
-GET /api/v1/partidos/11911
+GET /v1/partidos/11911
 ```
 
 ```json
@@ -256,7 +256,7 @@ GET /api/v1/partidos/11911
 Resúmenes de participación filtrados por elección, tipo de territorio y CCAA.
 
 ```
-GET /api/v1/resultados/totales-territorio?eleccion_id=208&tipo_territorio=provincia&codigo_ccaa=01&limit=2
+GET /v1/resultados/totales-territorio?eleccion_id=208&tipo_territorio=provincia&codigo_ccaa=01&limit=2
 ```
 
 ```json
@@ -300,7 +300,7 @@ GET /api/v1/resultados/totales-territorio?eleccion_id=208&tipo_territorio=provin
 ## Votos por partido
 
 ```
-GET /api/v1/resultados/votos-partido?eleccion_id=208&territorio_id=20&limit=3
+GET /v1/resultados/votos-partido?eleccion_id=208&territorio_id=20&limit=3
 ```
 
 ```json
@@ -321,7 +321,7 @@ GET /api/v1/resultados/votos-partido?eleccion_id=208&territorio_id=20&limit=3
 Combina totales territorio con el desglose de votos por partido (incluyendo datos del partido expandidos).
 
 ```
-GET /api/v1/elecciones/208/totales-territorio/20
+GET /v1/elecciones/208/totales-territorio/20
 ```
 
 ```json
@@ -377,7 +377,7 @@ GET /api/v1/elecciones/208/totales-territorio/20
 Endpoint más completo: cada voto incluye partido (con agrupación), territorio y elección expandidos. Ideal para análisis cruzado.
 
 ```
-GET /api/v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codigo_ccaa=01&limit=2
+GET /v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codigo_ccaa=01&limit=2
 ```
 
 ```json
@@ -434,7 +434,7 @@ GET /api/v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codi
 Cuando los filtros no coinciden con ningún registro, la respuesta es HTTP 200 con `total=0` y `data=[]`.
 
 ```
-GET /api/v1/elecciones?tipo_eleccion=G&year=1800
+GET /v1/elecciones?tipo_eleccion=G&year=1800
 ```
 
 ```json
@@ -451,7 +451,7 @@ GET /api/v1/elecciones?tipo_eleccion=G&year=1800
 ### 404 — Recurso no encontrado
 
 ```
-GET /api/v1/elecciones/99999
+GET /v1/elecciones/99999
 ```
 
 ```json
@@ -463,7 +463,7 @@ GET /api/v1/elecciones/99999
 ### 422 — Error de validación
 
 ```
-GET /api/v1/elecciones?limit=-5
+GET /v1/elecciones?limit=-5
 ```
 
 ```json

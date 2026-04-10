@@ -27,41 +27,41 @@ La documentación interactiva (Swagger UI) está disponible en `/docs` una vez d
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/api/v1/tipos-eleccion` | Catálogo de tipos de elección (array simple, sin paginación) |
-| GET | `/api/v1/tipos-eleccion/{codigo}` | Detalle de un tipo de elección |
-| GET | `/api/v1/elecciones` | Listado paginado de elecciones con filtros |
-| GET | `/api/v1/elecciones/{id}` | Detalle de una elección con tipo expandido |
-| GET | `/api/v1/elecciones/{id}/totales-territorio` | Totales territorio de una elección (paginado, con filtros) |
-| GET | `/api/v1/elecciones/{id}/totales-territorio/{territorio_id}` | Resultado completo: totales + votos por partido |
+| GET | `/v1/tipos-eleccion` | Catálogo de tipos de elección (array simple, sin paginación) |
+| GET | `/v1/tipos-eleccion/{codigo}` | Detalle de un tipo de elección |
+| GET | `/v1/elecciones` | Listado paginado de elecciones con filtros |
+| GET | `/v1/elecciones/{id}` | Detalle de una elección con tipo expandido |
+| GET | `/v1/elecciones/{id}/totales-territorio` | Totales territorio de una elección (paginado, con filtros) |
+| GET | `/v1/elecciones/{id}/totales-territorio/{territorio_id}` | Resultado completo: totales + votos por partido |
 
 ### Territorios
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/api/v1/territorios` | Listado paginado de territorios con filtros |
-| GET | `/api/v1/territorios/{id}` | Detalle con todos los códigos |
-| GET | `/api/v1/territorios/{id}/hijos` | Hijos directos (navegación jerárquica) |
+| GET | `/v1/territorios` | Listado paginado de territorios con filtros |
+| GET | `/v1/territorios/{id}` | Detalle con todos los códigos |
+| GET | `/v1/territorios/{id}/hijos` | Hijos directos (navegación jerárquica) |
 
 ### Partidos
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/api/v1/partidos` | Listado paginado de partidos con filtros |
-| GET | `/api/v1/partidos/{id}` | Detalle con agrupación (recode) expandida |
-| GET | `/api/v1/partidos-recode` | Listado paginado de agrupaciones de partidos |
-| GET | `/api/v1/partidos-recode/{id}` | Detalle de agrupación con lista de partidos asociados |
+| GET | `/v1/partidos` | Listado paginado de partidos con filtros |
+| GET | `/v1/partidos/{id}` | Detalle con agrupación (recode) expandida |
+| GET | `/v1/partidos-recode` | Listado paginado de agrupaciones de partidos |
+| GET | `/v1/partidos-recode/{id}` | Detalle de agrupación con lista de partidos asociados |
 
 ### Resultados
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/api/v1/resultados/totales-territorio` | Totales territorio filtrables por múltiples criterios |
-| GET | `/api/v1/resultados/votos-partido` | Votos por partido filtrables |
-| GET | `/api/v1/resultados/combinados` | Votos con partido, territorio y elección expandidos |
+| GET | `/v1/resultados/totales-territorio` | Totales territorio filtrables por múltiples criterios |
+| GET | `/v1/resultados/votos-partido` | Votos por partido filtrables |
+| GET | `/v1/resultados/combinados` | Votos con partido, territorio y elección expandidos |
 
 ## Paginación
 
-Todos los endpoints que devuelven listados (excepto `/api/v1/tipos-eleccion`) usan paginación.
+Todos los endpoints que devuelven listados (excepto `/v1/tipos-eleccion`) usan paginación.
 
 ### Parámetros
 
@@ -108,7 +108,7 @@ Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no
 
 ### Filtros por endpoint
 
-#### `/api/v1/elecciones`
+#### `/v1/elecciones`
 
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
@@ -116,7 +116,7 @@ Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no
 | `year` | str (repetible) | `2019` | Año de la elección |
 | `mes` | str (repetible) | `04` | Mes (con cero a la izquierda) |
 
-#### `/api/v1/territorios`
+#### `/v1/territorios`
 
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
@@ -125,20 +125,20 @@ Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
 | `nombre` | str | `madrid` | Búsqueda parcial por nombre |
 
-#### `/api/v1/partidos`
+#### `/v1/partidos`
 
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `siglas` | str | `psoe` | Búsqueda parcial por siglas |
 | `denominacion` | str | `socialista` | Búsqueda parcial por nombre completo |
 
-#### `/api/v1/partidos-recode`
+#### `/v1/partidos-recode`
 
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `agrupacion` | str | `PCE/IU` | Búsqueda parcial por agrupación |
 
-#### `/api/v1/elecciones/{id}/totales-territorio`
+#### `/v1/elecciones/{id}/totales-territorio`
 
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
@@ -148,7 +148,7 @@ Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
 | `codigo_municipio` | str (repetible) | `079` | Código de municipio |
 
-#### `/api/v1/resultados/totales-territorio`
+#### `/v1/resultados/totales-territorio`
 
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
@@ -161,7 +161,7 @@ Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
 | `codigo_municipio` | str (repetible) | `079` | Código municipio |
 
-#### `/api/v1/resultados/votos-partido` y `/api/v1/resultados/combinados`
+#### `/v1/resultados/votos-partido` y `/v1/resultados/combinados`
 
 Los mismos filtros que `resultados/totales-territorio`, más:
 

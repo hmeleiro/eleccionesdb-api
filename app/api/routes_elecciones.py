@@ -9,7 +9,7 @@ from app.schemas.elecciones import TipoEleccionSchema, EleccionList, EleccionDet
 from app.schemas.resultados import TotalTerritorioSchema, ResultadoCompletoSchema
 from app import crud
 
-router = APIRouter(prefix="/api/v1", tags=["Elecciones"])
+router = APIRouter(prefix="/v1", tags=["Elecciones"])
 
 
 # ─── Tipos de elección ──────────────────────────────────

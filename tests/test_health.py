@@ -56,4 +56,4 @@ def test_openapi_docs_available():
     assert schema["info"]["title"] == "Elecciones DB API"
     # Debe tener al menos los paths de health y elecciones
     assert "/health" in schema["paths"]
-    assert "/api/v1/elecciones" in schema["paths"]
+    assert "/v1/elecciones" in schema["paths"]

@@ -17,25 +17,25 @@ Se han renombrado los endpoints y schemas relacionados con las tablas `resumen_t
 
 ## 1. Cambios en URLs de endpoints
 
-### Endpoints independientes (bajo `/api/v1/resultados/`)
+### Endpoints independientes (bajo `/v1/resultados/`)
 
 | Ruta anterior | Ruta nueva |
 |---|---|
-| `GET /api/v1/resultados/resumen` | `GET /api/v1/resultados/totales-territorio` |
-| `GET /api/v1/resultados/votos` | `GET /api/v1/resultados/votos-partido` |
+| `GET /v1/resultados/resumen` | `GET /v1/resultados/totales-territorio` |
+| `GET /v1/resultados/votos` | `GET /v1/resultados/votos-partido` |
 
-### Endpoints bajo `/api/v1/elecciones/{id}/`
+### Endpoints bajo `/v1/elecciones/{id}/`
 
 | Ruta anterior | Ruta nueva |
 |---|---|
-| `GET /api/v1/elecciones/{id}/resultados` | `GET /api/v1/elecciones/{id}/totales-territorio` |
-| `GET /api/v1/elecciones/{id}/resultados/{territorio_id}` | `GET /api/v1/elecciones/{id}/totales-territorio/{territorio_id}` |
+| `GET /v1/elecciones/{id}/resultados` | `GET /v1/elecciones/{id}/totales-territorio` |
+| `GET /v1/elecciones/{id}/resultados/{territorio_id}` | `GET /v1/elecciones/{id}/totales-territorio/{territorio_id}` |
 
 ### Endpoints SIN cambio
 
 | Ruta | Nota |
 |---|---|
-| `GET /api/v1/resultados/combinados` | Sin cambios en URL ni en estructura |
+| `GET /v1/resultados/combinados` | Sin cambios en URL ni en estructura |
 
 ---
 
@@ -53,7 +53,7 @@ El schema `ResultadoCompletoSchema` y `ResultadoCombinadoSchema` **mantienen su 
 
 ## 3. Cambios en campos de respuesta JSON
 
-### Endpoint: `GET /api/v1/elecciones/{id}/totales-territorio/{territorio_id}`
+### Endpoint: `GET /v1/elecciones/{id}/totales-territorio/{territorio_id}`
 
 **Antes:**
 ```json
@@ -162,6 +162,6 @@ response$votos             → response$votos_partido
 - **Tablas de la base de datos**: `resumen_territorial` y `votos_territoriales` mantienen sus nombres en PostgreSQL.
 - **Modelos SQLAlchemy internos**: `ResumenTerritorial` y `VotoTerritorial` en el código Python de la API.
 - **Estructura interna de los objetos**: Los campos de cada registro individual (`censo_ine`, `votos_validos`, `abstenciones`, `votos`, `representantes`, etc.) no cambian.
-- **Endpoint `/api/v1/resultados/combinados`**: Sin cambios.
+- **Endpoint `/v1/resultados/combinados`**: Sin cambios.
 - **Paginación**: La estructura `{ total, skip, limit, data }` no cambia.
 - **Filtros query parameters**: Mismos nombres y comportamiento.

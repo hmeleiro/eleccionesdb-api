@@ -19,7 +19,7 @@ def health_check(db: Session = Depends(get_db)):
         db_status = "error"
 
     return HealthResponse(
-        status="ooooooookk",
+        status="ok",
         environment=settings.APP_ENV,
         database=db_status,
     )

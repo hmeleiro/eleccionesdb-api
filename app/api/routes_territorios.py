@@ -8,7 +8,7 @@ from app.schemas.pagination import PaginationParams, PaginatedResponse
 from app.schemas.territorios import TerritorioList, TerritorioDetail
 from app import crud
 
-router = APIRouter(prefix="/api/v1", tags=["Territorios"])
+router = APIRouter(prefix="/v1", tags=["Territorios"])
 
 
 @router.get("/territorios", response_model=PaginatedResponse[TerritorioList])

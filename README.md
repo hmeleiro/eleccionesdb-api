@@ -1,6 +1,6 @@
 # Elecciones DB API
 
-API REST para consultar resultados electorales españoles.  
+API REST para realizar consultas a [eleccionesdb](https://hmeleiro.github.io/eleccionesdb-etl/), una base de datos de resultados electorales de España.  
 Desarrollada con **FastAPI** + **SQLAlchemy** + **PostgreSQL**.
 
 ---
@@ -40,21 +40,21 @@ docker-compose.yml
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | GET | `/health` | Estado de la app + check BD |
-| GET | `/api/v1/tipos-eleccion` | Catálogo de tipos de elección |
-| GET | `/api/v1/tipos-eleccion/{codigo}` | Detalle de un tipo de elección |
-| GET | `/api/v1/elecciones` | Lista paginada de las elecciones disponibles |
-| GET | `/api/v1/elecciones/{id}` | Detalle con atributo tipo expandido |
-| GET | `/api/v1/elecciones/{id}/totales-territorio` | Totales territorio de una elección |
-| GET | `/api/v1/elecciones/{id}/totales-territorio/{territorio_id}` | Totales territorio + votos por partido |
-| GET | `/api/v1/territorios` | Lista con filtros (tipo, CCAA, nombre) |
-| GET | `/api/v1/territorios/{id}` | Detalle con todos los códigos |
-| GET | `/api/v1/territorios/{id}/hijos` | Hijos directos (jerarquía) |
-| GET | `/api/v1/partidos` | Lista con filtro por siglas |
-| GET | `/api/v1/partidos/{id}` | Detalle con recode expandido |
-| GET | `/api/v1/partidos-recode` | Agrupaciones de partidos |
-| GET | `/api/v1/partidos-recode/{id}` | Detalle con partidos asociados |
-| GET | `/api/v1/resultados/totales-territorio` | Totales territorio |
-| GET | `/api/v1/resultados/votos-partido` | Votos por partido/territorio |
+| GET | `/v1/tipos-eleccion` | Catálogo de tipos de elección |
+| GET | `/v1/tipos-eleccion/{codigo}` | Detalle de un tipo de elección |
+| GET | `/v1/elecciones` | Lista paginada de las elecciones disponibles |
+| GET | `/v1/elecciones/{id}` | Detalle con atributo tipo expandido |
+| GET | `/v1/elecciones/{id}/totales-territorio` | Totales territorio de una elección |
+| GET | `/v1/elecciones/{id}/totales-territorio/{territorio_id}` | Totales territorio + votos por partido |
+| GET | `/v1/territorios` | Lista con filtros (tipo, CCAA, nombre) |
+| GET | `/v1/territorios/{id}` | Detalle con todos los códigos |
+| GET | `/v1/territorios/{id}/hijos` | Hijos directos (jerarquía) |
+| GET | `/v1/partidos` | Lista con filtro por siglas |
+| GET | `/v1/partidos/{id}` | Detalle con recode expandido |
+| GET | `/v1/partidos-recode` | Agrupaciones de partidos |
+| GET | `/v1/partidos-recode/{id}` | Detalle con partidos asociados |
+| GET | `/v1/resultados/totales-territorio` | Totales territorio |
+| GET | `/v1/resultados/votos-partido` | Votos por partido/territorio |
 
 Todos los listados soportan paginación: `?skip=0&limit=50` (máx 500).
 

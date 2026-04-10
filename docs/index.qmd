@@ -4,7 +4,7 @@ title: "EleccionesDB API"
 
 ## ¿Qué es EleccionesDB API?
 
-**EleccionesDB API** es una API REST de solo lectura para consultar resultados electorales españoles. Proporciona acceso estructurado a datos de elecciones generales, autonómicas, municipales, europeas y al Senado desde 1977 hasta la actualidad.
+**EleccionesDB API** es una API REST de solo lectura para realizar consultas a [eleccionesdb](https://hmeleiro.github.io/eleccionesdb-etl/), una base de datos de resultados electorales de España. Proporciona acceso estructurado a datos de elecciones generales, autonómicas, municipales, europeas y al Senado desde 1977 hasta la actualidad.
 
 La API permite consultar:
 

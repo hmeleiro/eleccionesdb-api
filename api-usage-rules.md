@@ -25,34 +25,34 @@ Documentación funcional para construir un paquete de R que consuma esta API.
 ### Elecciones
 | Método | Ruta | Respuesta | Descripción |
 |---|---|---|---|
-| GET | `/api/v1/tipos-eleccion` | `TipoEleccion[]` | Catálogo de tipos (array simple) |
-| GET | `/api/v1/tipos-eleccion/{codigo}` | `TipoEleccion` | Detalle de un tipo |
-| GET | `/api/v1/elecciones` | `PaginatedResponse[Eleccion]` | Listado paginado con filtros |
-| GET | `/api/v1/elecciones/{id}` | `EleccionDetail` | Detalle con tipo expandido |
+| GET | `/v1/tipos-eleccion` | `TipoEleccion[]` | Catálogo de tipos (array simple) |
+| GET | `/v1/tipos-eleccion/{codigo}` | `TipoEleccion` | Detalle de un tipo |
+| GET | `/v1/elecciones` | `PaginatedResponse[Eleccion]` | Listado paginado con filtros |
+| GET | `/v1/elecciones/{id}` | `EleccionDetail` | Detalle con tipo expandido |
 
 ### Territorios
 | Método | Ruta | Respuesta | Descripción |
 |---|---|---|---|
-| GET | `/api/v1/territorios` | `PaginatedResponse[Territorio]` | Listado paginado con filtros |
-| GET | `/api/v1/territorios/{id}` | `TerritorioDetail` | Detalle con todos los códigos |
-| GET | `/api/v1/territorios/{id}/hijos` | `PaginatedResponse[Territorio]` | Hijos directos (jerarquía) |
+| GET | `/v1/territorios` | `PaginatedResponse[Territorio]` | Listado paginado con filtros |
+| GET | `/v1/territorios/{id}` | `TerritorioDetail` | Detalle con todos los códigos |
+| GET | `/v1/territorios/{id}/hijos` | `PaginatedResponse[Territorio]` | Hijos directos (jerarquía) |
 
 ### Partidos
 | Método | Ruta | Respuesta | Descripción |
 |---|---|---|---|
-| GET | `/api/v1/partidos` | `PaginatedResponse[Partido]` | Listado paginado con filtros |
-| GET | `/api/v1/partidos/{id}` | `PartidoDetail` | Detalle con recode expandido |
-| GET | `/api/v1/partidos-recode` | `PaginatedResponse[PartidoRecode]` | Listado de agrupaciones |
-| GET | `/api/v1/partidos-recode/{id}` | `PartidoRecodeDetail` | Detalle con lista de partidos |
+| GET | `/v1/partidos` | `PaginatedResponse[Partido]` | Listado paginado con filtros |
+| GET | `/v1/partidos/{id}` | `PartidoDetail` | Detalle con recode expandido |
+| GET | `/v1/partidos-recode` | `PaginatedResponse[PartidoRecode]` | Listado de agrupaciones |
+| GET | `/v1/partidos-recode/{id}` | `PartidoRecodeDetail` | Detalle con lista de partidos |
 
 ### Resultados
 | Método | Ruta | Respuesta | Descripción |
 |---|---|---|---|
-| GET | `/api/v1/elecciones/{id}/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio de una elección |
-| GET | `/api/v1/elecciones/{id}/totales-territorio/{territorio_id}` | `ResultadoCompleto` | Totales territorio + votos por partido |
-| GET | `/api/v1/resultados/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio filtrable |
-| GET | `/api/v1/resultados/votos-partido` | `PaginatedResponse[VotoPartido]` | Votos por partido filtrable |
-| GET | `/api/v1/resultados/combinados` | `PaginatedResponse[ResultadoCombinado]` | Votos con todo expandido |
+| GET | `/v1/elecciones/{id}/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio de una elección |
+| GET | `/v1/elecciones/{id}/totales-territorio/{territorio_id}` | `ResultadoCompleto` | Totales territorio + votos por partido |
+| GET | `/v1/resultados/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio filtrable |
+| GET | `/v1/resultados/votos-partido` | `PaginatedResponse[VotoPartido]` | Votos por partido filtrable |
+| GET | `/v1/resultados/combinados` | `PaginatedResponse[ResultadoCombinado]` | Votos con todo expandido |
 
 ## 3. Paginación
 
@@ -98,14 +98,14 @@ Página 3: ?skip=200&limit=100
 
 ### Filtros por endpoint
 
-#### Elecciones (`/api/v1/elecciones`)
+#### Elecciones (`/v1/elecciones`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `tipo_eleccion` | str (repetible) | `G`, `A` | Código del tipo de elección |
 | `year` | str (repetible) | `2019` | Año de la elección |
 | `mes` | str (repetible) | `04` | Mes (con cero a la izquierda) |
 
-#### Territorios (`/api/v1/territorios`)
+#### Territorios (`/v1/territorios`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `tipo` | str (repetible) | `ccaa`, `provincia` | Tipo de territorio (enum) |
@@ -113,19 +113,19 @@ Página 3: ?skip=200&limit=100
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
 | `nombre` | str | `madrid` | Búsqueda parcial por nombre |
 
-#### Partidos (`/api/v1/partidos`)
+#### Partidos (`/v1/partidos`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `siglas` | str | `psoe` | Búsqueda parcial por siglas |
 | `denominacion` | str | `socialista` | Búsqueda parcial por nombre completo |
 | `partido_recode_id` | int (repetible) | `80` | ID del grupo/recode asociado |
 
-#### Partidos Recode (`/api/v1/partidos-recode`)
+#### Partidos Recode (`/v1/partidos-recode`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `agrupacion` | str | `PCE/IU` | Búsqueda parcial por agrupación |
 
-#### Resultados — Totales territorio (`/api/v1/resultados/totales-territorio`)
+#### Resultados — Totales territorio (`/v1/resultados/totales-territorio`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `eleccion_id` | int (repetible) | `208` | ID de elección |
@@ -133,17 +133,17 @@ Página 3: ?skip=200&limit=100
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
 
-#### Resultados — Votos partido (`/api/v1/resultados/votos-partido`)
+#### Resultados — Votos partido (`/v1/resultados/votos-partido`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `eleccion_id` | int (repetible) | `208` | ID de elección |
 | `territorio_id` | int (repetible) | `20` | ID de territorio |
 | `partido_id` | int (repetible) | `9451` | ID de partido |
 
-#### Resultados — Combinados (`/api/v1/resultados/combinados`)
+#### Resultados — Combinados (`/v1/resultados/combinados`)
 Mismos filtros que totales territorio: `eleccion_id`, `tipo_territorio`, `codigo_ccaa`, `codigo_provincia`.
 
-#### Totales territorio por elección (`/api/v1/elecciones/{id}/totales-territorio`)
+#### Totales territorio por elección (`/v1/elecciones/{id}/totales-territorio`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `tipo_territorio` | str (repetible) | `provincia` | tipo de territorio |
@@ -231,18 +231,18 @@ Los siguientes campos pueden ser `null`:
 ## 10. Respuestas especiales
 
 ### Endpoints sin paginación (arrays directos)
-- `GET /api/v1/tipos-eleccion` → devuelve un **array** directamente (no PaginatedResponse)
+- `GET /v1/tipos-eleccion` → devuelve un **array** directamente (no PaginatedResponse)
 
 ### Endpoints que devuelven objeto único (no paginado)
-- `GET /api/v1/tipos-eleccion/{codigo}` → TipoEleccion
-- `GET /api/v1/elecciones/{id}` → EleccionDetail
-- `GET /api/v1/territorios/{id}` → TerritorioDetail
-- `GET /api/v1/partidos/{id}` → PartidoDetail
-- `GET /api/v1/partidos-recode/{id}` → PartidoRecodeDetail
-- `GET /api/v1/elecciones/{id}/totales-territorio/{territorio_id}` → ResultadoCompleto
+- `GET /v1/tipos-eleccion/{codigo}` → TipoEleccion
+- `GET /v1/elecciones/{id}` → EleccionDetail
+- `GET /v1/territorios/{id}` → TerritorioDetail
+- `GET /v1/partidos/{id}` → PartidoDetail
+- `GET /v1/partidos-recode/{id}` → PartidoRecodeDetail
+- `GET /v1/elecciones/{id}/totales-territorio/{territorio_id}` → ResultadoCompleto
 
 ### Resultado completo (estructura compuesta)
-`GET /api/v1/elecciones/{id}/totales-territorio/{territorio_id}` devuelve:
+`GET /v1/elecciones/{id}/totales-territorio/{territorio_id}` devuelve:
 ```json
 {
   "totales_territorio": { ...TotalTerritorio },
@@ -254,7 +254,7 @@ Los siguientes campos pueden ser `null`:
 Los votos están **ordenados por número de votos descendente**.
 
 ### Resultados combinados (todo expandido)
-`GET /api/v1/resultados/combinados` devuelve votos con relaciones expandidas:
+`GET /v1/resultados/combinados` devuelve votos con relaciones expandidas:
 cada item incluye `partido` (con `recode` anidado), `territorio` y `eleccion`.
 
 ## 11. Manejo de errores

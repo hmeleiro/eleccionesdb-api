@@ -13,7 +13,7 @@ from app.schemas.partidos import (
 )
 from app import crud
 
-router = APIRouter(prefix="/api/v1", tags=["Partidos"])
+router = APIRouter(prefix="/v1", tags=["Partidos"])
 
 
 # ─── Partidos ───────────────────────────────────────────

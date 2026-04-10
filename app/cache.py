@@ -45,11 +45,11 @@ class ResponseCache:
         }
         # Orden importa: prefijos más específicos primero
         self._path_rules: list[tuple[str, str]] = [
-            ("/api/v1/tipos-eleccion", "catalogs"),
-            ("/api/v1/resultados", "results"),
-            ("/api/v1/elecciones", "reference"),
-            ("/api/v1/territorios", "reference"),
-            ("/api/v1/partidos", "reference"),
+            ("/v1/tipos-eleccion", "catalogs"),
+            ("/v1/resultados", "results"),
+            ("/v1/elecciones", "reference"),
+            ("/v1/territorios", "reference"),
+            ("/v1/partidos", "reference"),
         ]
 
     def _resolve_tier(self, path: str) -> str | None:
