@@ -1,4 +1,4 @@
-# Publicar documentación Quarto en GitHub Pages
+# Publicar documentación Hugo en GitHub Pages
 #
 # Se ejecuta cuando se hace push a main con cambios en docs/
 # Requiere activar GitHub Pages con source "GitHub Actions" en:
@@ -30,16 +30,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Instalar Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Instalar Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
 
-      - name: Renderizar sitio
-        run: quarto render docs/
+      - name: Construir sitio
+        run: hugo --minify --source docs/
 
       - name: Subir artefacto de Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/_site
+          path: docs/public
 
       - name: Desplegar en GitHub Pages
         id: deployment

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+  <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Datos y fuentes · EleccionesDB API</title>
+<meta name="description" content="Cobertura, fuentes oficiales y opciones de descarga de los datos electorales." />
+<meta name="author" content="Héctor Meleiro" />
+
+
+<meta property="og:title" content="Datos y fuentes" />
+<meta
+  property="og:description"
+  content="Cobertura, fuentes oficiales y opciones de descarga de los datos electorales."
+/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/eleccionesdb-api/datos/" />
+<meta property="og:site_name" content="EleccionesDB API" />
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+
+
+<link rel="stylesheet" href="/eleccionesdb-api/css/main.min.d666788fdc23143782a603dc60fca5f9f7ca9a4545d4a502c8d1d0da203d89bd.css" integrity="sha256-1mZ4j9wjFDeCpgPcYPyl&#43;ffKmkVF1KUCyNHQ2iA9ib0=" />
+</head>
+
+  <body><header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="site-logo">
+      <span class="logo-icon">◆</span>
+      <span class="logo-text">EleccionesDB API</span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span class="hamburger"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      <ul class="nav-list">
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/" class="nav-link">
+              Inicio
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/referencia/" class="nav-link">
+              Referencia API
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/ejemplos/" class="nav-link">
+              Ejemplos
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/datos/" class="nav-link is-active">
+              Datos y fuentes
+            </a>
+          </li>
+        
+        <li class="nav-item">
+          <a href="https://github.com/hmeleiro/eleccionesdb-api" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.getElementById("site-nav");
+    if (toggle && nav) {
+      toggle.addEventListener("click", function () {
+        const expanded = this.getAttribute("aria-expanded") === "true";
+        this.setAttribute("aria-expanded", !expanded);
+        nav.classList.toggle("is-open");
+      });
+    }
+  })();
+</script>
+<main id="content">
+  <article class="page-single">
+    <div class="container">
+      <div class="page-header">
+        <h1>Datos y fuentes</h1>
+        
+          <p class="page-desc">Cobertura, fuentes oficiales y opciones de descarga de los datos electorales.</p>
+        
+      </div>
+      <div class="page-content prose">
+        <h2 id="cobertura">Cobertura</h2>
+<p>La API da acceso a los datos de <a href="https://hmeleiro.github.io/eleccionesdb-etl/">eleccionesdb</a>, una base de datos relacional con resultados electorales de España.</p>
+<h3 id="ámbitos-electorales">Ámbitos electorales</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Tipo</th>
+          <th>Código</th>
+          <th>Cobertura temporal aprox.</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Congreso</strong> (Generales)</td>
+          <td><code>G</code></td>
+          <td>1977 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Andalucía</strong></td>
+          <td><code>A</code></td>
+          <td>1982 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Aragón</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Asturias</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Baleares</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Canarias</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Castilla y León</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Cataluña</strong></td>
+          <td><code>A</code></td>
+          <td>1980 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Comunidad Valenciana</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – actualidad</td>
+      </tr>
+      <tr>
+          <td><strong>Comunidad de Madrid</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – actualidad</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="niveles-territoriales">Niveles territoriales</h3>
+<p>Los resultados están disponibles a distintos niveles de la jerarquía territorial:</p>
+<ul>
+<li><strong>Comunidad autónoma</strong> (<code>ccaa</code>)</li>
+<li><strong>Provincia</strong> (<code>provincia</code>)</li>
+<li><strong>Municipio</strong> (<code>municipio</code>)</li>
+<li><strong>Sección censal</strong> (<code>seccion</code>)</li>
+</ul>
+<p>La disponibilidad de cada nivel varía según la comunidad y la convocatoria.</p>
+<h2 id="fuentes-de-datos">Fuentes de datos</h2>
+<p>Los datos provienen de <strong>fuentes oficiales</strong> de cada comunidad autónoma:</p>
+<ul>
+<li><strong>Portales de datos abiertos</strong> autonómicos y estatales</li>
+<li><strong>APIs institucionales</strong>: Junta de Andalucía, PARCAN (Canarias), etc.</li>
+<li><strong>Institutos estadísticos</strong>: IBESTAT (Baleares), ISTAC (Canarias), SADEI (Asturias), etc.</li>
+<li><strong>Paquetes R</strong>: <a href="https://github.com/rOpenSpain/infoelectoral"><code>infoelectoral</code></a> para datos del Ministerio del Interior</li>
+<li><strong>Datos históricos a nivel de mesa</strong>: <a href="https://gipeyop.uv.es/gipeyop/sea.html">Spanish Electoral Archive (SEA)</a> del GIPEYOP (Universitat de València)</li>
+</ul>
+<p>Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la <a href="https://hmeleiro.github.io/eleccionesdb-etl/fuentes.html">documentación de fuentes de datos</a> del proyecto eleccionesdb.</p>
+<h2 id="modelo-de-datos">Modelo de datos</h2>
+<p>Los datos siguen un <strong>esquema estrella</strong> con:</p>
+<ul>
+<li><strong>5 tablas de dimensiones</strong>: tipos de elección, elecciones, territorios (con jerarquía CCAA → provincia → municipio → sección), recodificaciones de partidos y partidos.</li>
+<li><strong>2 tablas de hechos principales</strong>: resumen territorial (censo, participación, votos válidos/blancos/nulos) y votos territoriales (votos y representantes electos por partido).</li>
+<li><strong>2 tablas CERA</strong>: resumen y votos de residentes ausentes.</li>
+</ul>
+<p>Para más detalles, consulta el <a href="https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html">modelo de datos</a> de eleccionesdb.</p>
+<h2 id="descarga-directa-de-datos">Descarga directa de datos</h2>
+<p>Además de consumir los datos a través de esta API, puedes descargar la base de datos completa en tres formatos:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Formato</th>
+          <th>Caso de uso</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Parquet</strong></td>
+          <td>Análisis con R / Python / DuckDB</td>
+          <td>Tablas individuales normalizadas</td>
+      </tr>
+      <tr>
+          <td><strong>SQLite</strong></td>
+          <td>Consultas SQL, exploración relacional</td>
+          <td>Esquema completo con PKs, FKs e índices</td>
+      </tr>
+      <tr>
+          <td><strong>CSV</strong></td>
+          <td>Uso rápido, hojas de cálculo</td>
+          <td>Tablas de hechos pre-joineadas con dimensiones</td>
+      </tr>
+  </tbody>
+</table>
+<p>Consulta la sección de <a href="https://hmeleiro.github.io/eleccionesdb-etl/descargas.html">descargas</a> del proyecto eleccionesdb.</p>
+<h2 id="enlaces">Enlaces</h2>
+<ul>
+<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/"><strong>eleccionesdb — Web del proyecto</strong></a> — Documentación completa de la base de datos</li>
+<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/fuentes.html"><strong>Fuentes de datos</strong></a> — Listado detallado por comunidad</li>
+<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html"><strong>Modelo de datos</strong></a> — Diagrama E/R y descripción de tablas</li>
+<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/descargas.html"><strong>Descargas</strong></a> — Parquet, SQLite y CSV</li>
+<li><a href="https://github.com/hmeleiro/eleccionesdb-etl"><strong>Código fuente del ETL</strong></a> — Repositorio en GitHub</li>
+</ul>
+
+      </div>
+    </div>
+  </article>
+</main><footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">◆</span>
+        <span class="footer-title">EleccionesDB API</span>
+        <p class="footer-desc">API REST gratuita y abierta para consultar datos electorales de España.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Documentación</h4>
+          <ul>
+            <li><a href="/eleccionesdb-api/referencia/">Referencia API</a></li>
+            <li><a href="/eleccionesdb-api/ejemplos/">Ejemplos</a></li>
+            <li><a href="/eleccionesdb-api/datos/">Datos y fuentes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Proyecto</h4>
+          <ul>
+            <li><a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a></li>
+            <li><a href="https://hmeleiro.github.io/eleccionesdb-etl/" target="_blank" rel="noopener">eleccionesdb (ETL)</a></li>
+            <li><a href="https://github.com/hmeleiro/eleccionesdb-api" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a>. Contenido disponible bajo licencia abierta.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

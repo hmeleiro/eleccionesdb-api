@@ -1,0 +1,7 @@
+{{/* Expects: . = dict with "title" and "description" */}}
+<div class="section-header">
+  <h2 class="section-title">{{ .title }}</h2>
+  {{ with .description }}
+    <p class="section-desc">{{ . }}</p>
+  {{ end }}
+</div>

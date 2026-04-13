@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="es">
+  <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Referencia de la API · EleccionesDB API</title>
+<meta name="description" content="Catálogo completo de endpoints, parámetros, filtros y estructura de respuestas." />
+<meta name="author" content="Héctor Meleiro" />
+
+
+<meta property="og:title" content="Referencia de la API" />
+<meta
+  property="og:description"
+  content="Catálogo completo de endpoints, parámetros, filtros y estructura de respuestas."
+/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/eleccionesdb-api/referencia/" />
+<meta property="og:site_name" content="EleccionesDB API" />
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+
+
+<link rel="stylesheet" href="/eleccionesdb-api/css/main.min.d666788fdc23143782a603dc60fca5f9f7ca9a4545d4a502c8d1d0da203d89bd.css" integrity="sha256-1mZ4j9wjFDeCpgPcYPyl&#43;ffKmkVF1KUCyNHQ2iA9ib0=" />
+</head>
+
+  <body><header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="site-logo">
+      <span class="logo-icon">◆</span>
+      <span class="logo-text">EleccionesDB API</span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span class="hamburger"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      <ul class="nav-list">
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/" class="nav-link">
+              Inicio
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/referencia/" class="nav-link is-active">
+              Referencia API
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/ejemplos/" class="nav-link">
+              Ejemplos
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/datos/" class="nav-link">
+              Datos y fuentes
+            </a>
+          </li>
+        
+        <li class="nav-item">
+          <a href="https://github.com/hmeleiro/eleccionesdb-api" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.getElementById("site-nav");
+    if (toggle && nav) {
+      toggle.addEventListener("click", function () {
+        const expanded = this.getAttribute("aria-expanded") === "true";
+        this.setAttribute("aria-expanded", !expanded);
+        nav.classList.toggle("is-open");
+      });
+    }
+  })();
+</script>
+<main id="content">
+  <article class="page-single">
+    <div class="container">
+      <div class="page-header">
+        <h1>Referencia de la API</h1>
+        
+          <p class="page-desc">Catálogo completo de endpoints, parámetros, filtros y estructura de respuestas.</p>
+        
+      </div>
+      <div class="page-content prose">
+        <h2 id="información-general">Información general</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Propiedad</th>
+          <th>Valor</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Base URL</td>
+          <td><code>https://api.spainelectoralproject.com/v1</code></td>
+      </tr>
+      <tr>
+          <td>Versión</td>
+          <td>1.0.0</td>
+      </tr>
+      <tr>
+          <td>Especificación</td>
+          <td>OpenAPI 3.1.0</td>
+      </tr>
+      <tr>
+          <td>Métodos HTTP</td>
+          <td>Solo <code>GET</code> (API de solo lectura)</td>
+      </tr>
+      <tr>
+          <td>Autenticación</td>
+          <td>Ninguna</td>
+      </tr>
+      <tr>
+          <td>Formato respuesta</td>
+          <td>JSON (<code>application/json</code>)</td>
+      </tr>
+  </tbody>
+</table>
+<p>La documentación interactiva (Swagger UI) está disponible en <a href="https://api.spainelectoralproject.com/docs"><code>/docs</code></a> donde puedes explorar y probar todos los endpoints directamente desde el navegador.</p>
+<h2 id="endpoints">Endpoints</h2>
+<h3 id="health">Health</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Método</th>
+          <th>Ruta</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>GET</td>
+          <td><code>/health</code></td>
+          <td>Estado de la aplicación y conexión a la BD</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="elecciones">Elecciones</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Método</th>
+          <th>Ruta</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/tipos-eleccion</code></td>
+          <td>Catálogo de tipos de elección (array simple, sin paginación)</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/tipos-eleccion/{codigo}</code></td>
+          <td>Detalle de un tipo de elección</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/elecciones</code></td>
+          <td>Listado paginado de elecciones con filtros</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/elecciones/{id}</code></td>
+          <td>Detalle de una elección con tipo expandido</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/elecciones/{id}/totales-territorio</code></td>
+          <td>Totales territorio de una elección (paginado, con filtros)</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/elecciones/{id}/totales-territorio/{territorio_id}</code></td>
+          <td>Resultado completo: totales + votos por partido</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="territorios">Territorios</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Método</th>
+          <th>Ruta</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/territorios</code></td>
+          <td>Listado paginado de territorios con filtros</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/territorios/{id}</code></td>
+          <td>Detalle con todos los códigos</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/territorios/{id}/hijos</code></td>
+          <td>Hijos directos (navegación jerárquica)</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="partidos">Partidos</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Método</th>
+          <th>Ruta</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/partidos</code></td>
+          <td>Listado paginado de partidos con filtros</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/partidos/{id}</code></td>
+          <td>Detalle con agrupación (recode) expandida</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/partidos-recode</code></td>
+          <td>Listado paginado de agrupaciones de partidos</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/partidos-recode/{id}</code></td>
+          <td>Detalle de agrupación con lista de partidos asociados</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="resultados">Resultados</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Método</th>
+          <th>Ruta</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/resultados/totales-territorio</code></td>
+          <td>Totales territorio filtrables por múltiples criterios</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/resultados/votos-partido</code></td>
+          <td>Votos por partido filtrables</td>
+      </tr>
+      <tr>
+          <td>GET</td>
+          <td><code>/v1/resultados/combinados</code></td>
+          <td>Votos con partido, territorio y elección expandidos</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="paginación">Paginación</h2>
+<p>Todos los endpoints que devuelven listados (excepto <code>/v1/tipos-eleccion</code>) usan paginación.</p>
+<h3 id="parámetros">Parámetros</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Default</th>
+          <th>Mín</th>
+          <th>Máx</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>skip</code></td>
+          <td>int</td>
+          <td>0</td>
+          <td>0</td>
+          <td>—</td>
+          <td>Registros a saltar</td>
+      </tr>
+      <tr>
+          <td><code>limit</code></td>
+          <td>int</td>
+          <td>50</td>
+          <td>1</td>
+          <td>500</td>
+          <td>Registros por página</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="estructura-de-respuesta-paginada">Estructura de respuesta paginada</h3>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">254</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">50</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [...]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li><code>total</code>: número total de registros que cumplen los filtros.</li>
+<li><code>skip</code> / <code>limit</code>: eco de los parámetros enviados.</li>
+<li><code>data</code>: array con los registros de la página actual.</li>
+</ul>
+<h3 id="recorrido-completo">Recorrido completo</h3>
+<p>Para recorrer todos los registros se incrementa <code>skip</code> en cada petición:</p>
+<pre tabindex="0"><code>Página 1: ?skip=0&amp;limit=100
+Página 2: ?skip=100&amp;limit=100
+Página 3: ?skip=200&amp;limit=100
+...hasta que skip &gt;= total
+</code></pre><p>Cuando no hay coincidencias, la respuesta es <code>total=0</code> y <code>data=[]</code> (HTTP 200, no es error).</p>
+<h2 id="filtros">Filtros</h2>
+<h3 id="convenciones-generales">Convenciones generales</h3>
+<ul>
+<li>Todos los filtros son <strong>opcionales</strong>. Sin filtros se devuelven todos los registros.</li>
+<li>Los filtros de texto (<code>nombre</code>, <code>siglas</code>, <code>denominacion</code>, <code>agrupacion</code>) usan <strong>búsqueda parcial case-insensitive</strong> (ILIKE).</li>
+<li>Para filtrar por <strong>múltiples valores</strong>, se repite el parámetro: <code>?tipo_eleccion=G&amp;tipo_eleccion=A</code>.</li>
+</ul>
+<h3 id="filtros-por-endpoint">Filtros por endpoint</h3>
+<h4 id="v1elecciones"><code>/v1/elecciones</code></h4>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>tipo_eleccion</code></td>
+          <td>str (repetible)</td>
+          <td><code>G</code>, <code>A</code></td>
+          <td>Código del tipo de elección</td>
+      </tr>
+      <tr>
+          <td><code>year</code></td>
+          <td>str (repetible)</td>
+          <td><code>2019</code></td>
+          <td>Año de la elección</td>
+      </tr>
+      <tr>
+          <td><code>mes</code></td>
+          <td>str (repetible)</td>
+          <td><code>04</code></td>
+          <td>Mes (con cero a la izquierda)</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="v1territorios"><code>/v1/territorios</code></h4>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>tipo</code></td>
+          <td>str (repetible)</td>
+          <td><code>ccaa</code>, <code>provincia</code></td>
+          <td>Tipo de territorio</td>
+      </tr>
+      <tr>
+          <td><code>codigo_ccaa</code></td>
+          <td>str (repetible)</td>
+          <td><code>01</code></td>
+          <td>Código de comunidad autónoma</td>
+      </tr>
+      <tr>
+          <td><code>codigo_provincia</code></td>
+          <td>str (repetible)</td>
+          <td><code>28</code></td>
+          <td>Código de provincia</td>
+      </tr>
+      <tr>
+          <td><code>nombre</code></td>
+          <td>str</td>
+          <td><code>madrid</code></td>
+          <td>Búsqueda parcial por nombre</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="v1partidos"><code>/v1/partidos</code></h4>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>siglas</code></td>
+          <td>str</td>
+          <td><code>psoe</code></td>
+          <td>Búsqueda parcial por siglas</td>
+      </tr>
+      <tr>
+          <td><code>denominacion</code></td>
+          <td>str</td>
+          <td><code>socialista</code></td>
+          <td>Búsqueda parcial por nombre completo</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="v1partidos-recode"><code>/v1/partidos-recode</code></h4>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>agrupacion</code></td>
+          <td>str</td>
+          <td><code>PCE/IU</code></td>
+          <td>Búsqueda parcial por agrupación</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="v1eleccionesidtotales-territorio"><code>/v1/elecciones/{id}/totales-territorio</code></h4>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>territorio_id</code></td>
+          <td>int</td>
+          <td><code>20</code></td>
+          <td>ID de territorio específico</td>
+      </tr>
+      <tr>
+          <td><code>tipo_territorio</code></td>
+          <td>str (repetible)</td>
+          <td><code>provincia</code></td>
+          <td>Tipo de territorio</td>
+      </tr>
+      <tr>
+          <td><code>codigo_ccaa</code></td>
+          <td>str (repetible)</td>
+          <td><code>01</code></td>
+          <td>Código de comunidad autónoma</td>
+      </tr>
+      <tr>
+          <td><code>codigo_provincia</code></td>
+          <td>str (repetible)</td>
+          <td><code>28</code></td>
+          <td>Código de provincia</td>
+      </tr>
+      <tr>
+          <td><code>codigo_municipio</code></td>
+          <td>str (repetible)</td>
+          <td><code>079</code></td>
+          <td>Código de municipio</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="v1resultadostotales-territorio"><code>/v1/resultados/totales-territorio</code></h4>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>eleccion_id</code></td>
+          <td>int (repetible)</td>
+          <td><code>208</code></td>
+          <td>ID de elección</td>
+      </tr>
+      <tr>
+          <td><code>territorio_id</code></td>
+          <td>int (repetible)</td>
+          <td><code>20</code></td>
+          <td>ID de territorio</td>
+      </tr>
+      <tr>
+          <td><code>year</code></td>
+          <td>str (repetible)</td>
+          <td><code>2019</code></td>
+          <td>Año de la elección</td>
+      </tr>
+      <tr>
+          <td><code>tipo_eleccion</code></td>
+          <td>str (repetible)</td>
+          <td><code>G</code></td>
+          <td>Código del tipo</td>
+      </tr>
+      <tr>
+          <td><code>tipo_territorio</code></td>
+          <td>str (repetible)</td>
+          <td><code>provincia</code></td>
+          <td>Tipo de territorio</td>
+      </tr>
+      <tr>
+          <td><code>codigo_ccaa</code></td>
+          <td>str (repetible)</td>
+          <td><code>01</code></td>
+          <td>Código CCAA</td>
+      </tr>
+      <tr>
+          <td><code>codigo_provincia</code></td>
+          <td>str (repetible)</td>
+          <td><code>28</code></td>
+          <td>Código provincia</td>
+      </tr>
+      <tr>
+          <td><code>codigo_municipio</code></td>
+          <td>str (repetible)</td>
+          <td><code>079</code></td>
+          <td>Código municipio</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="v1resultadosvotos-partido-y-v1resultadoscombinados"><code>/v1/resultados/votos-partido</code> y <code>/v1/resultados/combinados</code></h4>
+<p>Los mismos filtros que <code>resultados/totales-territorio</code>, más:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Parámetro</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Descripción</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>partido_id</code></td>
+          <td>int (repetible)</td>
+          <td><code>9451</code></td>
+          <td>ID de partido</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="errores">Errores</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Código HTTP</th>
+          <th>Significado</th>
+          <th>Ejemplo</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>404</td>
+          <td>Recurso no encontrado</td>
+          <td><code>{&quot;detail&quot;: &quot;Elección no encontrada&quot;}</code></td>
+      </tr>
+      <tr>
+          <td>422</td>
+          <td>Error de validación</td>
+          <td><code>{&quot;detail&quot;: [{&quot;type&quot;: &quot;...&quot;, &quot;loc&quot;: [...], &quot;msg&quot;: &quot;...&quot;}]}</code></td>
+      </tr>
+  </tbody>
+</table>
+
+      </div>
+    </div>
+  </article>
+</main><footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">◆</span>
+        <span class="footer-title">EleccionesDB API</span>
+        <p class="footer-desc">API REST gratuita y abierta para consultar datos electorales de España.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Documentación</h4>
+          <ul>
+            <li><a href="/eleccionesdb-api/referencia/">Referencia API</a></li>
+            <li><a href="/eleccionesdb-api/ejemplos/">Ejemplos</a></li>
+            <li><a href="/eleccionesdb-api/datos/">Datos y fuentes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Proyecto</h4>
+          <ul>
+            <li><a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a></li>
+            <li><a href="https://hmeleiro.github.io/eleccionesdb-etl/" target="_blank" rel="noopener">eleccionesdb (ETL)</a></li>
+            <li><a href="https://github.com/hmeleiro/eleccionesdb-api" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a>. Contenido disponible bajo licencia abierta.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,160 @@
+{{ define "main" }}
+  {{/* Hero */}}
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">EleccionesDB API</h1>
+        <p class="hero-subtitle">API REST gratuita, abierta y sin autenticación para consultar datos electorales de España: elecciones generales y autonómicas desde 1977, con resultados a nivel de comunidad autónoma, provincia, municipio y sección censal.</p>
+        <div class="hero-actions">
+          <a href="{{ "referencia/" | relURL }}" class="btn btn-primary">Referencia API →</a>
+          <a href="{{ "ejemplos/" | relURL }}" class="btn btn-secondary">Ver ejemplos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{/* Inicio rápido */}}
+  <section class="home-section">
+    <div class="container">
+      {{ partial "section-header.html" (dict "title" "Inicio rápido" "description" "La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints son GET y devuelven JSON. No requiere autenticación.") }}
+      <div class="quickstart-tabs">
+        <div class="quickstart-example">
+          <h3>curl</h3>
+          <pre><code># Listar elecciones generales de 2019
+curl "https://api.spainelectoralproject.com/v1/elecciones?tipo_eleccion=G&year=2019"</code></pre>
+        </div>
+        <div class="quickstart-example">
+          <h3>Python</h3>
+          <pre><code>import requests
+
+resp = requests.get("https://api.spainelectoralproject.com/v1/elecciones", params={
+    "tipo_eleccion": "G",
+    "year": "2019"
+})
+data = resp.json()
+print(f"{data['total']} elecciones encontradas")
+for e in data["data"]:
+    print(f"  {e['fecha']} — {e['descripcion']}")</code></pre>
+        </div>
+        <div class="quickstart-example">
+          <h3>R</h3>
+          <pre><code>library(httr2)
+
+resp <- request("https://api.spainelectoralproject.com/v1/elecciones") |>
+  req_url_query(tipo_eleccion = "G", year = "2019") |>
+  req_perform() |>
+  resp_body_json()
+
+cat(resp$total, "elecciones encontradas\n")
+for (e in resp$data) {
+  cat("  ", e$fecha, "—", e$descripcion, "\n")
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{/* Recursos */}}
+  <section class="home-section">
+    <div class="container">
+      {{ partial "section-header.html" (dict "title" "Recursos disponibles" "description" "La API organiza los datos en cuatro recursos principales. Todos los listados usan paginación y admiten filtros opcionales.") }}
+      <div class="value-grid">
+        <div class="value-item">
+          <span class="value-icon">🗳️</span>
+          <h3>Elecciones</h3>
+          <p>Catálogo de convocatorias electorales: tipo (generales, autonómicas...), fecha, ámbito territorial.</p>
+          <p class="resource-endpoint"><code>/v1/elecciones</code></p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">🗺️</span>
+          <h3>Territorios</h3>
+          <p>Jerarquía territorial completa: comunidades autónomas → provincias → municipios → secciones censales.</p>
+          <p class="resource-endpoint"><code>/v1/territorios</code></p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">🏛️</span>
+          <h3>Partidos</h3>
+          <p>Partidos políticos con búsqueda por siglas y agrupaciones lógicas (recodes) para análisis longitudinal.</p>
+          <p class="resource-endpoint"><code>/v1/partidos</code></p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">📊</span>
+          <h3>Resultados</h3>
+          <p>Totales territoriales (censo, participación, votos), votos por partido y resultados combinados.</p>
+          <p class="resource-endpoint"><code>/v1/resultados</code></p>
+        </div>
+      </div>
+      <div class="section-cta">
+        <a href="{{ "referencia/" | relURL }}" class="btn btn-secondary">Ver referencia completa →</a>
+      </div>
+    </div>
+  </section>
+
+  {{/* Ejemplo de respuesta */}}
+  <section class="home-section">
+    <div class="container">
+      {{ partial "section-header.html" (dict "title" "Ejemplo de respuesta" "description" "Todas las respuestas paginadas siguen la misma estructura: total, skip, limit y data.") }}
+      <div class="response-example">
+        <p class="response-request"><code>GET /v1/elecciones?tipo_eleccion=G&year=2019&limit=2</code></p>
+        <pre><code>{
+  "total": 2,
+  "skip": 0,
+  "limit": 2,
+  "data": [
+    {
+      "id": 208,
+      "tipo_eleccion": "G",
+      "year": "2019",
+      "mes": "04",
+      "dia": "28",
+      "fecha": "2019-04-28",
+      "descripcion": "Elecciones Generales 2019",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-2019"
+    },
+    {
+      "id": 226,
+      "tipo_eleccion": "G",
+      "year": "2019",
+      "mes": "11",
+      "dia": "10",
+      "fecha": "2019-11-10",
+      "descripcion": "Elecciones Generales 2019",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-2019"
+    }
+  ]
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  {{/* Acceso rápido */}}
+  <section class="home-section">
+    <div class="container">
+      {{ partial "section-header.html" (dict "title" "Más información") }}
+      <div class="quicklinks-grid">
+        <a href="{{ "referencia/" | relURL }}" class="quicklink-card">
+          <span class="quicklink-icon">📖</span>
+          <h3>Referencia API</h3>
+          <p>Endpoints, parámetros y filtros</p>
+        </a>
+        <a href="{{ "ejemplos/" | relURL }}" class="quicklink-card">
+          <span class="quicklink-icon">💡</span>
+          <h3>Ejemplos</h3>
+          <p>Peticiones y respuestas reales</p>
+        </a>
+        <a href="{{ "datos/" | relURL }}" class="quicklink-card">
+          <span class="quicklink-icon">📊</span>
+          <h3>Datos y fuentes</h3>
+          <p>Cobertura, fuentes oficiales y descargas</p>
+        </a>
+        <a href="{{ .Site.Params.etlSite }}" class="quicklink-card" target="_blank" rel="noopener">
+          <span class="quicklink-icon">🗄️</span>
+          <h3>eleccionesdb</h3>
+          <p>Base de datos, modelo y pipeline ETL</p>
+        </a>
+      </div>
+    </div>
+  </section>
+{{ end }}

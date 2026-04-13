@@ -1,0 +1,41 @@
+baseURL = "https://hmeleiro.github.io/eleccionesdb-api/"
+languageCode = "es"
+defaultContentLanguage = "es"
+title = "EleccionesDB API"
+
+[build]
+  [build.buildStats]
+    enable = true
+
+[params]
+  description = "API REST gratuita y abierta para consultar datos electorales de España."
+  author = "Héctor Meleiro"
+  github = "https://github.com/hmeleiro/eleccionesdb-api"
+  parentProject = "https://spainelectoralproject.com/"
+  etlSite = "https://hmeleiro.github.io/eleccionesdb-etl/"
+
+[menus]
+  [[menus.main]]
+    name = "Inicio"
+    pageRef = "/"
+    weight = 10
+  [[menus.main]]
+    name = "Referencia API"
+    pageRef = "/referencia/"
+    weight = 20
+  [[menus.main]]
+    name = "Ejemplos"
+    pageRef = "/ejemplos/"
+    weight = 30
+  [[menus.main]]
+    name = "Datos y fuentes"
+    pageRef = "/datos/"
+    weight = 40
+
+[markup]
+  [markup.highlight]
+    style = "hrdark"
+    lineNos = false
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+  <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ejemplos de uso · EleccionesDB API</title>
+<meta name="description" content="Peticiones y respuestas reales de la API EleccionesDB." />
+<meta name="author" content="Héctor Meleiro" />
+
+
+<meta property="og:title" content="Ejemplos de uso" />
+<meta
+  property="og:description"
+  content="Peticiones y respuestas reales de la API EleccionesDB."
+/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/eleccionesdb-api/ejemplos/" />
+<meta property="og:site_name" content="EleccionesDB API" />
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+
+
+<link rel="stylesheet" href="/eleccionesdb-api/css/main.min.d666788fdc23143782a603dc60fca5f9f7ca9a4545d4a502c8d1d0da203d89bd.css" integrity="sha256-1mZ4j9wjFDeCpgPcYPyl&#43;ffKmkVF1KUCyNHQ2iA9ib0=" />
+</head>
+
+  <body><header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="site-logo">
+      <span class="logo-icon">◆</span>
+      <span class="logo-text">EleccionesDB API</span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span class="hamburger"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      <ul class="nav-list">
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/" class="nav-link">
+              Inicio
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/referencia/" class="nav-link">
+              Referencia API
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/ejemplos/" class="nav-link is-active">
+              Ejemplos
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/datos/" class="nav-link">
+              Datos y fuentes
+            </a>
+          </li>
+        
+        <li class="nav-item">
+          <a href="https://github.com/hmeleiro/eleccionesdb-api" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.getElementById("site-nav");
+    if (toggle && nav) {
+      toggle.addEventListener("click", function () {
+        const expanded = this.getAttribute("aria-expanded") === "true";
+        this.setAttribute("aria-expanded", !expanded);
+        nav.classList.toggle("is-open");
+      });
+    }
+  })();
+</script>
+<main id="content">
+  <article class="page-single">
+    <div class="container">
+      <div class="page-header">
+        <h1>Ejemplos de uso</h1>
+        
+          <p class="page-desc">Peticiones y respuestas reales de la API EleccionesDB.</p>
+        
+      </div>
+      <div class="page-content prose">
+        <p>Ejemplos reales de peticiones y respuestas de la API. Todos los ejemplos usan <code>https://api.spainelectoralproject.com</code> como base URL.</p>
+<h2 id="health-check">Health check</h2>
+<pre tabindex="0"><code>GET /health
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;status&#34;</span>: <span style="color:#a6be9d">&#34;ok&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;environment&#34;</span>: <span style="color:#a6be9d">&#34;production&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;database&#34;</span>: <span style="color:#a6be9d">&#34;ok&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="tipos-de-elección">Tipos de elección</h2>
+<p>Lista completa del catálogo (array simple, sin paginación).</p>
+<pre tabindex="0"><code>GET /v1/tipos-eleccion
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>[
+</span></span><span style="display:flex;"><span>  {<span style="color:#58a1dd">&#34;codigo&#34;</span>: <span style="color:#a6be9d">&#34;A&#34;</span>, <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Autómicas&#34;</span>},
+</span></span><span style="display:flex;"><span>  {<span style="color:#58a1dd">&#34;codigo&#34;</span>: <span style="color:#a6be9d">&#34;E&#34;</span>, <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Europeas&#34;</span>},
+</span></span><span style="display:flex;"><span>  {<span style="color:#58a1dd">&#34;codigo&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>, <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Congreso&#34;</span>},
+</span></span><span style="display:flex;"><span>  {<span style="color:#58a1dd">&#34;codigo&#34;</span>: <span style="color:#a6be9d">&#34;L&#34;</span>, <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Locales&#34;</span>},
+</span></span><span style="display:flex;"><span>  {<span style="color:#58a1dd">&#34;codigo&#34;</span>: <span style="color:#a6be9d">&#34;S&#34;</span>, <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Senado&#34;</span>}
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><h2 id="listado-de-elecciones-paginado">Listado de elecciones (paginado)</h2>
+<pre tabindex="0"><code>GET /v1/elecciones?limit=3
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">254</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">3</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;1977&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;06&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;dia&#34;</span>: <span style="color:#a6be9d">&#34;15&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;fecha&#34;</span>: <span style="color:#a6be9d">&#34;1977-06-15&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Generales 1977&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;ambito&#34;</span>: <span style="color:#a6be9d">&#34;Nacional&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;slug&#34;</span>: <span style="color:#a6be9d">&#34;elecciones-generales-1977&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">2</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;1979&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;03&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;dia&#34;</span>: <span style="color:#a6be9d">&#34;01&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;fecha&#34;</span>: <span style="color:#a6be9d">&#34;1979-03-01&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Generales 1979&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;ambito&#34;</span>: <span style="color:#a6be9d">&#34;Nacional&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;slug&#34;</span>: <span style="color:#a6be9d">&#34;elecciones-generales-1979&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">3</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;A&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;1979&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;04&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;dia&#34;</span>: <span style="color:#a6be9d">&#34;03&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;fecha&#34;</span>: <span style="color:#a6be9d">&#34;1979-04-03&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Autonómicas Navarra 1979&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;ambito&#34;</span>: <span style="color:#a6be9d">&#34;Autonómico&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;slug&#34;</span>: <span style="color:#a6be9d">&#34;elecciones-autonomicas-1979&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="elecciones-filtradas-por-tipo-y-año">Elecciones filtradas por tipo y año</h2>
+<p>Se pueden combinar varios filtros. Para múltiples valores del mismo filtro se repite el parámetro.</p>
+<pre tabindex="0"><code>GET /v1/elecciones?tipo_eleccion=G&amp;year=2019&amp;limit=5
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">2</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">5</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;2019&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;04&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;dia&#34;</span>: <span style="color:#a6be9d">&#34;28&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;fecha&#34;</span>: <span style="color:#a6be9d">&#34;2019-04-28&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Generales 2019&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;ambito&#34;</span>: <span style="color:#a6be9d">&#34;Nacional&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;slug&#34;</span>: <span style="color:#a6be9d">&#34;elecciones-generales-2019&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">226</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;2019&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;11&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;dia&#34;</span>: <span style="color:#a6be9d">&#34;10&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;fecha&#34;</span>: <span style="color:#a6be9d">&#34;2019-11-10&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Generales 2019&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;ambito&#34;</span>: <span style="color:#a6be9d">&#34;Nacional&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;slug&#34;</span>: <span style="color:#a6be9d">&#34;elecciones-generales-2019&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="detalle-de-una-elección">Detalle de una elección</h2>
+<p>Incluye el tipo de elección como objeto expandido.</p>
+<pre tabindex="0"><code>GET /v1/elecciones/208
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;2019&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;04&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;dia&#34;</span>: <span style="color:#a6be9d">&#34;28&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;fecha&#34;</span>: <span style="color:#a6be9d">&#34;2019-04-28&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;99&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;numero_vuelta&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Generales 2019&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;ambito&#34;</span>: <span style="color:#a6be9d">&#34;Nacional&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;slug&#34;</span>: <span style="color:#a6be9d">&#34;elecciones-generales-2019&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;tipo&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#58a1dd">&#34;codigo&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Congreso&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="territorios-por-tipo">Territorios por tipo</h2>
+<pre tabindex="0"><code>GET /v1/territorios?tipo=ccaa&amp;limit=3
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">19</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">3</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Andalucía&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;ccaa&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;01&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_distrito&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_seccion&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;parent_id&#34;</span>: <span style="color:#ff636f">null</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">2</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Aragón&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;ccaa&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;02&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_distrito&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_seccion&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;parent_id&#34;</span>: <span style="color:#ff636f">null</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">3</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Asturias&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;ccaa&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;03&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_distrito&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_seccion&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;parent_id&#34;</span>: <span style="color:#ff636f">null</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="navegación-jerárquica-de-territorios">Navegación jerárquica de territorios</h2>
+<p>Los hijos directos de un territorio (p. ej., provincias de Andalucía).</p>
+<pre tabindex="0"><code>GET /v1/territorios/1/hijos?limit=3
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">8</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">3</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">20</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Almería&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;provincia&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;01&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#a6be9d">&#34;04&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_distrito&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_seccion&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;parent_id&#34;</span>: <span style="color:#a6be9d">1</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">21</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Cádiz&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;provincia&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;01&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#a6be9d">&#34;11&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_distrito&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_seccion&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;parent_id&#34;</span>: <span style="color:#a6be9d">1</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">22</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Córdoba&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;provincia&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;01&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#a6be9d">&#34;14&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_distrito&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_seccion&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;parent_id&#34;</span>: <span style="color:#a6be9d">1</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="búsqueda-de-territorios-por-nombre">Búsqueda de territorios por nombre</h2>
+<pre tabindex="0"><code>GET /v1/territorios?nombre=madrid&amp;tipo=ccaa
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">50</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">13</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Comunidad de Madrid&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;ccaa&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;13&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_distrito&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;codigo_seccion&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;parent_id&#34;</span>: <span style="color:#ff636f">null</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="búsqueda-de-partidos-por-siglas">Búsqueda de partidos por siglas</h2>
+<pre tabindex="0"><code>GET /v1/partidos?siglas=psoe&amp;limit=3
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">345</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">3</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">9451</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;siglas&#34;</span>: <span style="color:#a6be9d">&#34;PSOE&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;denominacion&#34;</span>: <span style="color:#a6be9d">&#34;PARTIDO SOCIALISTA OBRERO ESPAÑOL&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;recode_id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;recode&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;agrupacion&#34;</span>: <span style="color:#a6be9d">&#34;PSOE&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;color&#34;</span>: <span style="color:#a6be9d">&#34;#E30613&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">9452</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;siglas&#34;</span>: <span style="color:#a6be9d">&#34;PSOE-A&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;denominacion&#34;</span>: <span style="color:#a6be9d">&#34;PARTIDO SOCIALISTA OBRERO ESPAÑOL DE ANDALUCÍA&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;recode_id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;recode&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;agrupacion&#34;</span>: <span style="color:#a6be9d">&#34;PSOE&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;color&#34;</span>: <span style="color:#a6be9d">&#34;#E30613&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">9453</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;siglas&#34;</span>: <span style="color:#a6be9d">&#34;PSC-PSOE&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;denominacion&#34;</span>: <span style="color:#a6be9d">&#34;PARTIT DELS SOCIALISTES DE CATALUNYA&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;recode_id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;recode&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;agrupacion&#34;</span>: <span style="color:#a6be9d">&#34;PSOE&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;color&#34;</span>: <span style="color:#a6be9d">&#34;#E30613&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="resultados-totales-territoriales">Resultados: totales territoriales</h2>
+<p>Totales de participación para las Generales de abril de 2019 en Madrid (provincia).</p>
+<pre tabindex="0"><code>GET /v1/resultados/totales-territorio?eleccion_id=208&amp;tipo_territorio=provincia&amp;codigo_provincia=28
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">50</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;censo&#34;</span>: <span style="color:#a6be9d">4727940</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votantes&#34;</span>: <span style="color:#a6be9d">3603490</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos_validos&#34;</span>: <span style="color:#a6be9d">3571793</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos_nulos&#34;</span>: <span style="color:#a6be9d">31697</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos_blancos&#34;</span>: <span style="color:#a6be9d">13543</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="resultados-votos-por-partido">Resultados: votos por partido</h2>
+<p>Votos en las mismas elecciones y territorio, ordenados por votos (descendente).</p>
+<pre tabindex="0"><code>GET /v1/resultados/votos-partido?eleccion_id=208&amp;tipo_territorio=provincia&amp;codigo_provincia=28&amp;limit=5
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">21</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">5</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido_id&#34;</span>: <span style="color:#a6be9d">9451</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos&#34;</span>: <span style="color:#a6be9d">1094925</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;electos&#34;</span>: <span style="color:#a6be9d">12</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido_id&#34;</span>: <span style="color:#a6be9d">15233</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos&#34;</span>: <span style="color:#a6be9d">832812</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;electos&#34;</span>: <span style="color:#a6be9d">9</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido_id&#34;</span>: <span style="color:#a6be9d">14965</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos&#34;</span>: <span style="color:#a6be9d">618517</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;electos&#34;</span>: <span style="color:#a6be9d">7</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido_id&#34;</span>: <span style="color:#a6be9d">14946</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos&#34;</span>: <span style="color:#a6be9d">534819</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;electos&#34;</span>: <span style="color:#a6be9d">5</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido_id&#34;</span>: <span style="color:#a6be9d">14893</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos&#34;</span>: <span style="color:#a6be9d">335038</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;electos&#34;</span>: <span style="color:#a6be9d">3</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="resultados-combinados">Resultados combinados</h2>
+<p>Vista desnormalizada con partido (+ recode), territorio y elección expandidos.</p>
+<pre tabindex="0"><code>GET /v1/resultados/combinados?eleccion_id=208&amp;tipo_territorio=provincia&amp;codigo_provincia=28&amp;limit=2
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;total&#34;</span>: <span style="color:#a6be9d">21</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">2</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido_id&#34;</span>: <span style="color:#a6be9d">9451</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos&#34;</span>: <span style="color:#a6be9d">1094925</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;electos&#34;</span>: <span style="color:#a6be9d">12</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">9451</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;siglas&#34;</span>: <span style="color:#a6be9d">&#34;PSOE&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;denominacion&#34;</span>: <span style="color:#a6be9d">&#34;PARTIDO SOCIALISTA OBRERO ESPAÑOL&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;recode_id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;recode&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#58a1dd">&#34;agrupacion&#34;</span>: <span style="color:#a6be9d">&#34;PSOE&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#58a1dd">&#34;color&#34;</span>: <span style="color:#a6be9d">&#34;#E30613&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Madrid&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;provincia&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;13&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#a6be9d">&#34;28&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;2019&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;04&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Generales 2019&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido_id&#34;</span>: <span style="color:#a6be9d">15233</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;votos&#34;</span>: <span style="color:#a6be9d">832812</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;electos&#34;</span>: <span style="color:#a6be9d">9</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;partido&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">15233</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;siglas&#34;</span>: <span style="color:#a6be9d">&#34;PP&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;denominacion&#34;</span>: <span style="color:#a6be9d">&#34;PARTIDO POPULAR&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;recode_id&#34;</span>: <span style="color:#a6be9d">2</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;recode&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">2</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#58a1dd">&#34;agrupacion&#34;</span>: <span style="color:#a6be9d">&#34;PP&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#58a1dd">&#34;color&#34;</span>: <span style="color:#a6be9d">&#34;#0056A0&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;territorio&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">33</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;nombre&#34;</span>: <span style="color:#a6be9d">&#34;Madrid&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;tipo&#34;</span>: <span style="color:#a6be9d">&#34;provincia&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: <span style="color:#a6be9d">&#34;13&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#a6be9d">&#34;28&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;eleccion&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;id&#34;</span>: <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: <span style="color:#a6be9d">&#34;G&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;year&#34;</span>: <span style="color:#a6be9d">&#34;2019&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;mes&#34;</span>: <span style="color:#a6be9d">&#34;04&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Elecciones Generales 2019&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+      </div>
+    </div>
+  </article>
+</main><footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">◆</span>
+        <span class="footer-title">EleccionesDB API</span>
+        <p class="footer-desc">API REST gratuita y abierta para consultar datos electorales de España.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Documentación</h4>
+          <ul>
+            <li><a href="/eleccionesdb-api/referencia/">Referencia API</a></li>
+            <li><a href="/eleccionesdb-api/ejemplos/">Ejemplos</a></li>
+            <li><a href="/eleccionesdb-api/datos/">Datos y fuentes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Proyecto</h4>
+          <ul>
+            <li><a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a></li>
+            <li><a href="https://hmeleiro.github.io/eleccionesdb-etl/" target="_blank" rel="noopener">eleccionesdb (ETL)</a></li>
+            <li><a href="https://github.com/hmeleiro/eleccionesdb-api" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a>. Contenido disponible bajo licencia abierta.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

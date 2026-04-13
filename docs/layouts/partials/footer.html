@@ -1,0 +1,32 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">◆</span>
+        <span class="footer-title">{{ .Site.Title }}</span>
+        <p class="footer-desc">{{ .Site.Params.description }}</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Documentación</h4>
+          <ul>
+            <li><a href="{{ "referencia/" | relURL }}">Referencia API</a></li>
+            <li><a href="{{ "ejemplos/" | relURL }}">Ejemplos</a></li>
+            <li><a href="{{ "datos/" | relURL }}">Datos y fuentes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Proyecto</h4>
+          <ul>
+            {{ with .Site.Params.parentProject }}<li><a href="{{ . }}" target="_blank" rel="noopener">Spain Electoral Project</a></li>{{ end }}
+            {{ with .Site.Params.etlSite }}<li><a href="{{ . }}" target="_blank" rel="noopener">eleccionesdb (ETL)</a></li>{{ end }}
+            {{ with .Site.Params.github }}<li><a href="{{ . }}" target="_blank" rel="noopener">GitHub</a></li>{{ end }}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© {{ now.Year }} <a href="{{ .Site.Params.parentProject }}" target="_blank" rel="noopener">Spain Electoral Project</a>. Contenido disponible bajo licencia abierta.</p>
+    </div>
+  </div>
+</footer>

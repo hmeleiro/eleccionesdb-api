@@ -1,19 +1,20 @@
 ---
 title: "Referencia de la API"
+description: "Catálogo completo de endpoints, parámetros, filtros y estructura de respuestas."
 ---
 
 ## Información general
 
 | Propiedad | Valor |
 |---|---|
-| Base URL | `http://{host}:{port}` (depende del despliegue) |
+| Base URL | `https://api.spainelectoralproject.com/v1` |
 | Versión | 1.0.0 |
 | Especificación | OpenAPI 3.1.0 |
 | Métodos HTTP | Solo `GET` (API de solo lectura) |
 | Autenticación | Ninguna |
 | Formato respuesta | JSON (`application/json`) |
 
-La documentación interactiva (Swagger UI) está disponible en `/docs` una vez desplegada la API.
+La documentación interactiva (Swagger UI) está disponible en [`/docs`](https://api.spainelectoralproject.com/docs) donde puedes explorar y probar todos los endpoints directamente desde el navegador.
 
 ## Endpoints
 

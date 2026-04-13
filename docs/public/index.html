@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es">
+  <head>
+	<meta name="generator" content="Hugo 0.158.0"><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EleccionesDB API</title>
+<meta name="description" content="API REST gratuita y abierta para consultar datos electorales de España." />
+<meta name="author" content="Héctor Meleiro" />
+
+
+<meta property="og:title" content="EleccionesDB API" />
+<meta
+  property="og:description"
+  content="API REST gratuita y abierta para consultar datos electorales de España."
+/>
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://localhost:1313/eleccionesdb-api/" />
+<meta property="og:site_name" content="EleccionesDB API" />
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+
+
+<link rel="stylesheet" href="/eleccionesdb-api/css/main.min.d666788fdc23143782a603dc60fca5f9f7ca9a4545d4a502c8d1d0da203d89bd.css" integrity="sha256-1mZ4j9wjFDeCpgPcYPyl&#43;ffKmkVF1KUCyNHQ2iA9ib0=" />
+</head>
+
+  <body><header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="site-logo">
+      <span class="logo-icon">◆</span>
+      <span class="logo-text">EleccionesDB API</span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span class="hamburger"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      <ul class="nav-list">
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/" class="nav-link is-active">
+              Inicio
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/referencia/" class="nav-link">
+              Referencia API
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/ejemplos/" class="nav-link">
+              Ejemplos
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/datos/" class="nav-link">
+              Datos y fuentes
+            </a>
+          </li>
+        
+        <li class="nav-item">
+          <a href="https://github.com/hmeleiro/eleccionesdb-api" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.getElementById("site-nav");
+    if (toggle && nav) {
+      toggle.addEventListener("click", function () {
+        const expanded = this.getAttribute("aria-expanded") === "true";
+        this.setAttribute("aria-expanded", !expanded);
+        nav.classList.toggle("is-open");
+      });
+    }
+  })();
+</script>
+<main id="content">
+  
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">EleccionesDB API</h1>
+        <p class="hero-subtitle">API REST gratuita, abierta y sin autenticación para consultar datos electorales de España: elecciones generales y autonómicas desde 1977, con resultados a nivel de comunidad autónoma, provincia, municipio y sección censal.</p>
+        <div class="hero-actions">
+          <a href="/eleccionesdb-api/referencia/" class="btn btn-primary">Referencia API →</a>
+          <a href="/eleccionesdb-api/ejemplos/" class="btn btn-secondary">Ver ejemplos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="home-section">
+    <div class="container">
+      
+<div class="section-header">
+  <h2 class="section-title">Inicio rápido</h2>
+  
+    <p class="section-desc">La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints son GET y devuelven JSON. No requiere autenticación.</p>
+  
+</div>
+
+      <div class="quickstart-tabs">
+        <div class="quickstart-example">
+          <h3>curl</h3>
+          <pre><code># Listar elecciones generales de 2019
+curl "https://api.spainelectoralproject.com/v1/elecciones?tipo_eleccion=G&year=2019"</code></pre>
+        </div>
+        <div class="quickstart-example">
+          <h3>Python</h3>
+          <pre><code>import requests
+
+resp = requests.get("https://api.spainelectoralproject.com/v1/elecciones", params={
+    "tipo_eleccion": "G",
+    "year": "2019"
+})
+data = resp.json()
+print(f"{data['total']} elecciones encontradas")
+for e in data["data"]:
+    print(f"  {e['fecha']} — {e['descripcion']}")</code></pre>
+        </div>
+        <div class="quickstart-example">
+          <h3>R</h3>
+          <pre><code>library(httr2)
+
+resp &lt;- request("https://api.spainelectoralproject.com/v1/elecciones") |>
+  req_url_query(tipo_eleccion = "G", year = "2019") |>
+  req_perform() |>
+  resp_body_json()
+
+cat(resp$total, "elecciones encontradas\n")
+for (e in resp$data) {
+  cat("  ", e$fecha, "—", e$descripcion, "\n")
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="home-section">
+    <div class="container">
+      
+<div class="section-header">
+  <h2 class="section-title">Recursos disponibles</h2>
+  
+    <p class="section-desc">La API organiza los datos en cuatro recursos principales. Todos los listados usan paginación y admiten filtros opcionales.</p>
+  
+</div>
+
+      <div class="value-grid">
+        <div class="value-item">
+          <span class="value-icon">🗳️</span>
+          <h3>Elecciones</h3>
+          <p>Catálogo de convocatorias electorales: tipo (generales, autonómicas...), fecha, ámbito territorial.</p>
+          <p class="resource-endpoint"><code>/v1/elecciones</code></p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">🗺️</span>
+          <h3>Territorios</h3>
+          <p>Jerarquía territorial completa: comunidades autónomas → provincias → municipios → secciones censales.</p>
+          <p class="resource-endpoint"><code>/v1/territorios</code></p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">🏛️</span>
+          <h3>Partidos</h3>
+          <p>Partidos políticos con búsqueda por siglas y agrupaciones lógicas (recodes) para análisis longitudinal.</p>
+          <p class="resource-endpoint"><code>/v1/partidos</code></p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">📊</span>
+          <h3>Resultados</h3>
+          <p>Totales territoriales (censo, participación, votos), votos por partido y resultados combinados.</p>
+          <p class="resource-endpoint"><code>/v1/resultados</code></p>
+        </div>
+      </div>
+      <div class="section-cta">
+        <a href="/eleccionesdb-api/referencia/" class="btn btn-secondary">Ver referencia completa →</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="home-section">
+    <div class="container">
+      
+<div class="section-header">
+  <h2 class="section-title">Ejemplo de respuesta</h2>
+  
+    <p class="section-desc">Todas las respuestas paginadas siguen la misma estructura: total, skip, limit y data.</p>
+  
+</div>
+
+      <div class="response-example">
+        <p class="response-request"><code>GET /v1/elecciones?tipo_eleccion=G&year=2019&limit=2</code></p>
+        <pre><code>{
+  "total": 2,
+  "skip": 0,
+  "limit": 2,
+  "data": [
+    {
+      "id": 208,
+      "tipo_eleccion": "G",
+      "year": "2019",
+      "mes": "04",
+      "dia": "28",
+      "fecha": "2019-04-28",
+      "descripcion": "Elecciones Generales 2019",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-2019"
+    },
+    {
+      "id": 226,
+      "tipo_eleccion": "G",
+      "year": "2019",
+      "mes": "11",
+      "dia": "10",
+      "fecha": "2019-11-10",
+      "descripcion": "Elecciones Generales 2019",
+      "ambito": "Nacional",
+      "slug": "elecciones-generales-2019"
+    }
+  ]
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="home-section">
+    <div class="container">
+      
+<div class="section-header">
+  <h2 class="section-title">Más información</h2>
+  
+</div>
+
+      <div class="quicklinks-grid">
+        <a href="/eleccionesdb-api/referencia/" class="quicklink-card">
+          <span class="quicklink-icon">📖</span>
+          <h3>Referencia API</h3>
+          <p>Endpoints, parámetros y filtros</p>
+        </a>
+        <a href="/eleccionesdb-api/ejemplos/" class="quicklink-card">
+          <span class="quicklink-icon">💡</span>
+          <h3>Ejemplos</h3>
+          <p>Peticiones y respuestas reales</p>
+        </a>
+        <a href="/eleccionesdb-api/datos/" class="quicklink-card">
+          <span class="quicklink-icon">📊</span>
+          <h3>Datos y fuentes</h3>
+          <p>Cobertura, fuentes oficiales y descargas</p>
+        </a>
+        <a href="https://hmeleiro.github.io/eleccionesdb-etl/" class="quicklink-card" target="_blank" rel="noopener">
+          <span class="quicklink-icon">🗄️</span>
+          <h3>eleccionesdb</h3>
+          <p>Base de datos, modelo y pipeline ETL</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main><footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">◆</span>
+        <span class="footer-title">EleccionesDB API</span>
+        <p class="footer-desc">API REST gratuita y abierta para consultar datos electorales de España.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Documentación</h4>
+          <ul>
+            <li><a href="/eleccionesdb-api/referencia/">Referencia API</a></li>
+            <li><a href="/eleccionesdb-api/ejemplos/">Ejemplos</a></li>
+            <li><a href="/eleccionesdb-api/datos/">Datos y fuentes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Proyecto</h4>
+          <ul>
+            <li><a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a></li>
+            <li><a href="https://hmeleiro.github.io/eleccionesdb-etl/" target="_blank" rel="noopener">eleccionesdb (ETL)</a></li>
+            <li><a href="https://github.com/hmeleiro/eleccionesdb-api" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a>. Contenido disponible bajo licencia abierta.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
