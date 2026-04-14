@@ -47,7 +47,7 @@ app.add_middleware(
         "https://spainelectoralproject.com",
         "http://localhost:1313",
     ],
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
