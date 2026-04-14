@@ -46,6 +46,8 @@ logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/v1/auth", tags=["Autenticación"])
 
+_ip_limiter = RateLimiter(max_calls=5, period_seconds=60)
+_email_limiter = RateLimiter(max_calls=3, period_seconds=60)
 
 _RECOVER_ACCESS_TOKEN_EXPIRY_HOURS = 1
 
