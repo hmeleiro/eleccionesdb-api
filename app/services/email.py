@@ -75,9 +75,8 @@ class EmailService:
             logger.error("Error de red al enviar email a %s: %s", to_email, exc)
             return False
 
-        @staticmethod
-        def _build_html(name: str, url: str) -> str:
-                return f"""\
+    def _build_html(self, name: str, url: str) -> str:
+        return f"""\
 <!DOCTYPE html>
 <html lang='es'>
 <head>
@@ -137,8 +136,7 @@ class EmailService:
 </body>
 </html>"""
 
-    @staticmethod
-    def _build_text(name: str, url: str) -> str:
+    def _build_text(self, name: str, url: str) -> str:
         return (
             f"Hola {name},\n\n"
             f"Gracias por registrarte en Elecciones DB API.\n\n"
