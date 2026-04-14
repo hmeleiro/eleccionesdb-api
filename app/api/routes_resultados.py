@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
+from app.auth.dependencies import get_current_developer
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -29,6 +30,7 @@ def list_totales_territorio(
     codigo_provincia: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) provincia"),
     codigo_municipio: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) municipio"),
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Totales territorio (censo, participación, votos blancos/nulos…) con filtros."""
     return crud.get_totales_territorio(
@@ -61,6 +63,7 @@ def list_votos_partido(
     codigo_provincia: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) provincia"),
     codigo_municipio: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) municipio"),
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Votos por partido y territorio con filtros opcionales."""
     return crud.get_votos_partido(
@@ -94,6 +97,7 @@ def list_resultados_combinados(
     codigo_provincia: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) provincia"),
     codigo_municipio: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) municipio"),
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Votos con partido+recode, territorio y elección expandidos. Ideal para análisis cruzado."""
     return crud.get_resultados_combinados(

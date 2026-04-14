@@ -12,7 +12,10 @@ from app.api import (
     routes_partidos,
     routes_resultados,
     routes_cache,
+    routes_auth,
+    routes_developers,
 )
+from app.auth.database import init_auth_db
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -23,6 +26,7 @@ async def lifespan(app: FastAPI):
     logger.info("Base de datos: %s@%s:%s/%s", settings.DB_USER, settings.DB_HOST, settings.DB_PORT, settings.DB_NAME)
     if settings.DB_SCHEMA:
         logger.info("Esquema BD: %s", settings.DB_SCHEMA)
+    init_auth_db()
     yield
     logger.info("Elecciones DB API apagándose")
 
@@ -49,6 +53,8 @@ app.include_router(routes_territorios.router)
 app.include_router(routes_partidos.router)
 app.include_router(routes_resultados.router)
 app.include_router(routes_cache.router)
+app.include_router(routes_auth.router)
+app.include_router(routes_developers.router)
 
 # ─── Cache middleware ───────────────────────────────────
 

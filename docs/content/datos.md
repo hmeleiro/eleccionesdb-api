@@ -55,6 +55,22 @@ Los datos siguen un **esquema estrella** con:
 
 Para más detalles, consulta el [modelo de datos](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html) de eleccionesdb.
 
+## Paquete R
+
+El paquete [`eleccionesdb`](https://hmeleiro.github.io/eleccionesdb-r/) permite consultar esta API directamente desde R. Devuelve tibbles listos para análisis, gestiona la paginación automáticamente y aplana las estructuras JSON anidadas.
+
+```r
+# Instalación
+remotes::install_github("hmeleiro/eleccionesdb-r")
+
+# Ejemplo rápido
+library(eleccionesdb)
+elecciones <- edb_elecciones(tipo_eleccion = "G")
+resultados <- edb_resultados_combinados(eleccion_id = 208, tipo_territorio = "provincia")
+```
+
+Más información y ejemplos en la [documentación del paquete](https://hmeleiro.github.io/eleccionesdb-r/).
+
 ## Descarga directa de datos
 
 Además de consumir los datos a través de esta API, puedes descargar la base de datos completa en tres formatos:
@@ -74,3 +90,4 @@ Consulta la sección de [descargas](https://hmeleiro.github.io/eleccionesdb-etl/
 - [**Modelo de datos**](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html) — Diagrama E/R y descripción de tablas
 - [**Descargas**](https://hmeleiro.github.io/eleccionesdb-etl/descargas.html) — Parquet, SQLite y CSV
 - [**Código fuente del ETL**](https://github.com/hmeleiro/eleccionesdb-etl) — Repositorio en GitHub
+- [**`eleccionesdb` — Paquete R**](https://hmeleiro.github.io/eleccionesdb-r/) — Cliente R para consultar la API

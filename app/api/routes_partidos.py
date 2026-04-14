@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from app.auth.dependencies import get_current_developer
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -23,6 +24,7 @@ def list_partidos(
     pagination: PaginationParams = Depends(),
     siglas: Optional[str] = Query(default=None, description="Buscar por siglas (parcial, sin distinguir mayúsculas)"),
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Lista de partidos con filtro opcional por siglas y paginación."""
     return crud.get_partidos(
@@ -34,7 +36,7 @@ def list_partidos(
 
 
 @router.get("/partidos/{partido_id}", response_model=PartidoDetail)
-def get_partido(partido_id: int, db: Session = Depends(get_db)):
+def get_partido(partido_id: int, db: Session = Depends(get_db), developer=Depends(get_current_developer)):
     """Detalle de un partido con su recode/agrupación expandida."""
     obj = crud.get_partido(db, partido_id)
     if not obj:
@@ -49,6 +51,7 @@ def list_partidos_recode(
     pagination: PaginationParams = Depends(),
     agrupacion: Optional[str] = Query(default=None, description="Filtrar por agrupación (parcial)"),
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Lista de agrupaciones de partidos (recodes) con paginación."""
     return crud.get_partidos_recode(
@@ -60,7 +63,7 @@ def list_partidos_recode(
 
 
 @router.get("/partidos-recode/{partido_recode_id}", response_model=PartidoRecodeDetail)
-def get_partido_recode(partido_recode_id: int, db: Session = Depends(get_db)):
+def get_partido_recode(partido_recode_id: int, db: Session = Depends(get_db), developer=Depends(get_current_developer)):
     """Detalle de una agrupación con la lista de partidos asociados."""
     obj = crud.get_partido_recode(db, partido_recode_id)
     if not obj:

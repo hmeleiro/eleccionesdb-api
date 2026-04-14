@@ -28,7 +28,19 @@ class Settings(BaseSettings):
     CACHE_MAX_CATALOGS: int = 64
     CACHE_MAX_REFERENCE: int = 512
     CACHE_MAX_RESULTS: int = 2048
+    # ── Autenticación y API keys ─────────────────────────
+    AUTH_DB_URL: str = "sqlite:///data/auth.db"
 
+    # ── Resend (email transaccional) ─────────────────────
+    RESEND_API_KEY: str = ""
+    RESEND_FROM_EMAIL: str = "noreply@example.com"
+    APP_BASE_URL: str = "http://localhost:8000"
+
+    # ── Verificación y rate limiting ─────────────────────
+    VERIFICATION_TOKEN_EXPIRY_HOURS: int = 24
+    API_KEY_ROTATION_GRACE_HOURS: int = 1
+    RATE_LIMIT_REGISTER_PER_IP: int = 5     # máx registros por IP/hora
+    RATE_LIMIT_REGISTER_PER_EMAIL: int = 3  # máx intentos por email/hora
     @computed_field  # type: ignore[prop-decorator]
     @property
     def DATABASE_URL(self) -> str:

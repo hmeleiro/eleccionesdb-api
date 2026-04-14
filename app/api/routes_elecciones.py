@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from app.auth.dependencies import get_current_developer
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -15,13 +16,13 @@ router = APIRouter(prefix="/v1", tags=["Elecciones"])
 # ─── Tipos de elección ──────────────────────────────────
 
 @router.get("/tipos-eleccion", response_model=list[TipoEleccionSchema])
-def list_tipos_eleccion(db: Session = Depends(get_db)):
+def list_tipos_eleccion(db: Session = Depends(get_db), developer=Depends(get_current_developer)):
     """Lista todos los tipos de elección (catálogo pequeño, sin paginación)."""
     return crud.get_tipos_eleccion(db)
 
 
 @router.get("/tipos-eleccion/{codigo}", response_model=TipoEleccionSchema)
-def get_tipo_eleccion(codigo: str, db: Session = Depends(get_db)):
+def get_tipo_eleccion(codigo: str, db: Session = Depends(get_db), developer=Depends(get_current_developer)):
     """Detalle de un tipo de elección por su código."""
     obj = crud.get_tipo_eleccion(db, codigo)
     if not obj:
@@ -38,6 +39,7 @@ def list_elecciones(
     year: Optional[list[str]] = Query(default=None, description="Filtrar por año (4 dígitos). Acepta múltiples valores."),
     ambito: Optional[list[str]] = Query(default=None, description="Filtrar por ámbito. Acepta múltiples valores."),
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Lista de elecciones con filtros opcionales y paginación."""
     return crud.get_elecciones(
@@ -51,7 +53,7 @@ def list_elecciones(
 
 
 @router.get("/elecciones/{eleccion_id}", response_model=EleccionDetail)
-def get_eleccion(eleccion_id: int, db: Session = Depends(get_db)):
+def get_eleccion(eleccion_id: int, db: Session = Depends(get_db), developer=Depends(get_current_developer)):
     """Detalle completo de una elección con tipo expandido."""
     obj = crud.get_eleccion(db, eleccion_id)
     if not obj:
@@ -65,7 +67,6 @@ def get_eleccion(eleccion_id: int, db: Session = Depends(get_db)):
     "/elecciones/{eleccion_id}/totales-territorio",
     response_model=PaginatedResponse[TotalTerritorioSchema],
 )
-def list_totales_territorio_eleccion(
     eleccion_id: int,
     pagination: PaginationParams = Depends(),
     territorio_id: Optional[list[int]] = Query(default=None, description="Filtrar por territorio(s)"),
@@ -74,6 +75,7 @@ def list_totales_territorio_eleccion(
     codigo_provincia: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) provincia"),
     codigo_municipio: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) municipio"),
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Totales territorio de una elección concreta, con filtros opcionales."""
     return crud.get_totales_territorio_eleccion(
@@ -93,10 +95,10 @@ def list_totales_territorio_eleccion(
     "/elecciones/{eleccion_id}/totales-territorio/{territorio_id}",
     response_model=ResultadoCompletoSchema,
 )
-def get_resultado_completo(
     eleccion_id: int,
     territorio_id: int,
     db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
 ):
     """Resultado completo: totales territorio + desglose de votos por partido."""
     resultado = crud.get_resultado_completo(db, eleccion_id, territorio_id)

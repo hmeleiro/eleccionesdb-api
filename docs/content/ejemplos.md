@@ -1,3 +1,31 @@
+## Autenticación por API key
+
+Todos los endpoints de `/v1/*` requieren el header `X-API-Key`.
+
+### Ejemplo de petición autenticada
+
+```bash
+curl -H "X-API-Key: TU_API_KEY" https://api.spainelectoralproject.com/v1/elecciones?limit=1
+```
+
+### Ejemplo de error 401
+
+Si la clave es inválida, revocada o falta:
+
+```json
+{
+  "detail": "API key requerida"
+}
+```
+
+o
+
+```json
+{
+  "detail": "API key inválida o revocada"
+}
+```
+
 ---
 title: "Ejemplos de uso"
 description: "Peticiones y respuestas reales de la API EleccionesDB."
@@ -491,3 +519,23 @@ GET /v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codigo_p
   ]
 }
 ```
+
+## Desde R
+
+Si trabajas con R, puedes usar el paquete [`eleccionesdb`](https://hmeleiro.github.io/eleccionesdb-r/) para consultar la API sin construir peticiones HTTP manualmente:
+
+```r
+library(eleccionesdb)
+
+# Elecciones generales
+generales <- edb_elecciones(tipo_eleccion = "G")
+
+# Resultados combinados (votos + info territorial) de las generales de abril 2019 en Madrid
+resultados <- edb_resultados_combinados(
+  eleccion_id = 208,
+  tipo_territorio = "provincia",
+  codigo_provincia = "28"
+)
+```
+
+Más información en la [documentación del paquete](https://hmeleiro.github.io/eleccionesdb-r/).

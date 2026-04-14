@@ -5,6 +5,37 @@ Desarrollada con **FastAPI** + **SQLAlchemy** + **PostgreSQL**.
 
 ---
 
+## Autenticación por API Key
+
+Todos los endpoints de `/v1/*` requieren autenticación mediante API key, excepto `/v1/auth/*` (registro, verificación, gestión de clave) y `/health`.
+
+### Registro y obtención de API key
+
+1. Regístrate en `/v1/auth/register` con tu email y datos de desarrollador.
+2. Recibirás un email de verificación. Haz clic en el enlace para activar tu cuenta.
+3. Tras verificar el email, se mostrará tu API key (guárdala, solo se muestra una vez).
+4. Puedes rotar o revocar tu clave desde los endpoints de `/v1/developers`.
+
+### Cómo usar la API key
+
+Incluye el header `X-API-Key` en todas tus peticiones:
+
+```bash
+curl -H "X-API-Key: TU_API_KEY" https://api.eleccionesdb.es/v1/elecciones
+```
+
+Si la clave es inválida, revocada o falta, la API responderá con 401 Unauthorized.
+
+### Seguridad
+
+- Las claves se almacenan de forma segura (hash SHA-256, solo se muestra el valor completo una vez).
+- Puedes rotar tu clave (la anterior funcionará durante un periodo de gracia).
+- Todas las acciones quedan auditadas.
+
+---
+
+---
+
 ## Estructura del proyecto
 
 ```
@@ -35,28 +66,46 @@ docker-compose.yml
 
 ---
 
-## Endpoints (15 en total)
 
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| GET | `/health` | Estado de la app + check BD |
-| GET | `/v1/tipos-eleccion` | Catálogo de tipos de elección |
-| GET | `/v1/tipos-eleccion/{codigo}` | Detalle de un tipo de elección |
-| GET | `/v1/elecciones` | Lista paginada de las elecciones disponibles |
-| GET | `/v1/elecciones/{id}` | Detalle con atributo tipo expandido |
-| GET | `/v1/elecciones/{id}/totales-territorio` | Totales territorio de una elección |
-| GET | `/v1/elecciones/{id}/totales-territorio/{territorio_id}` | Totales territorio + votos por partido |
-| GET | `/v1/territorios` | Lista con filtros (tipo, CCAA, nombre) |
-| GET | `/v1/territorios/{id}` | Detalle con todos los códigos |
-| GET | `/v1/territorios/{id}/hijos` | Hijos directos (jerarquía) |
-| GET | `/v1/partidos` | Lista con filtro por siglas |
-| GET | `/v1/partidos/{id}` | Detalle con recode expandido |
-| GET | `/v1/partidos-recode` | Agrupaciones de partidos |
-| GET | `/v1/partidos-recode/{id}` | Detalle con partidos asociados |
-| GET | `/v1/resultados/totales-territorio` | Totales territorio |
-| GET | `/v1/resultados/votos-partido` | Votos por partido/territorio |
+## Endpoints
+
+> **Nota:** Todos los endpoints de `/v1/*` requieren autenticación por API key, excepto `/v1/auth/*` y `/health`.
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| GET | `/health` | Estado de la app + check BD | Pública |
+| POST | `/v1/auth/register` | Registro de desarrollador | Pública |
+| GET | `/v1/auth/verify` | Verificación de email | Pública |
+| POST | `/v1/auth/resend-verification` | Reenvío de email de verificación | Pública |
+| GET | `/v1/developers/me` | Perfil del desarrollador | API key |
+| POST | `/v1/developers/me/api-keys/rotate` | Rotar API key | API key |
+| POST | `/v1/developers/me/api-keys/revoke` | Revocar API key | API key |
+| GET | `/v1/tipos-eleccion` | Catálogo de tipos de elección | API key |
+| GET | `/v1/tipos-eleccion/{codigo}` | Detalle de un tipo de elección | API key |
+| GET | `/v1/elecciones` | Lista paginada de las elecciones disponibles | API key |
+| GET | `/v1/elecciones/{id}` | Detalle con atributo tipo expandido | API key |
+| GET | `/v1/elecciones/{id}/totales-territorio` | Totales territorio de una elección | API key |
+| GET | `/v1/elecciones/{id}/totales-territorio/{territorio_id}` | Totales territorio + votos por partido | API key |
+| GET | `/v1/territorios` | Lista con filtros (tipo, CCAA, nombre) | API key |
+| GET | `/v1/territorios/{id}` | Detalle con todos los códigos | API key |
+| GET | `/v1/territorios/{id}/hijos` | Hijos directos (jerarquía) | API key |
+| GET | `/v1/partidos` | Lista con filtro por siglas | API key |
+| GET | `/v1/partidos/{id}` | Detalle con recode expandido | API key |
+| GET | `/v1/partidos-recode` | Agrupaciones de partidos | API key |
+| GET | `/v1/partidos-recode/{id}` | Detalle con partidos asociados | API key |
+| GET | `/v1/resultados/totales-territorio` | Totales territorio | API key |
+| GET | `/v1/resultados/votos-partido` | Votos por partido/territorio | API key |
+| GET | `/v1/resultados/combinados` | Resultados combinados (votos + partido + territorio + elección) | API key |
 
 Todos los listados soportan paginación: `?skip=0&limit=50` (máx 500).
+
+---
+
+## Clientes
+
+| Lenguaje | Paquete | Instalación |
+|----------|---------|-------------|
+| **R** | [`eleccionesdb`](https://hmeleiro.github.io/eleccionesdb-r/) | `remotes::install_github("hmeleiro/eleccionesdb-r")` |
 
 ---
 

@@ -2,15 +2,15 @@
 <html lang="es">
   <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ejemplos de uso · EleccionesDB API</title>
-<meta name="description" content="Peticiones y respuestas reales de la API EleccionesDB." />
+<title> · EleccionesDB API</title>
+<meta name="description" content="API REST gratuita y abierta para consultar datos electorales de España." />
 <meta name="author" content="Héctor Meleiro" />
 
 
-<meta property="og:title" content="Ejemplos de uso" />
+<meta property="og:title" content="" />
 <meta
   property="og:description"
-  content="Peticiones y respuestas reales de la API EleccionesDB."
+  content="API REST gratuita y abierta para consultar datos electorales de España."
 />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://localhost:1313/eleccionesdb-api/ejemplos/" />
@@ -92,13 +92,27 @@
   <article class="page-single">
     <div class="container">
       <div class="page-header">
-        <h1>Ejemplos de uso</h1>
-        
-          <p class="page-desc">Peticiones y respuestas reales de la API EleccionesDB.</p>
+        <h1></h1>
         
       </div>
       <div class="page-content prose">
-        <p>Ejemplos reales de peticiones y respuestas de la API. Todos los ejemplos usan <code>https://api.spainelectoralproject.com</code> como base URL.</p>
+        <h2 id="autenticación-por-api-key">Autenticación por API key</h2>
+<p>Todos los endpoints de <code>/v1/*</code> requieren el header <code>X-API-Key</code>.</p>
+<h3 id="ejemplo-de-petición-autenticada">Ejemplo de petición autenticada</h3>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -H <span style="color:#a6be9d">&#34;X-API-Key: TU_API_KEY&#34;</span> https://api.spainelectoralproject.com/v1/elecciones?limit<span style="color:#ff636f">=</span><span style="color:#a6be9d">1</span>
+</span></span></code></pre></div><h3 id="ejemplo-de-error-401">Ejemplo de error 401</h3>
+<p>Si la clave es inválida, revocada o falta:</p>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;detail&#34;</span>: <span style="color:#a6be9d">&#34;API key requerida&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>o</p>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;detail&#34;</span>: <span style="color:#a6be9d">&#34;API key inválida o revocada&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="description-peticiones-y-respuestas-reales-de-la-api-eleccionesdb">title: &ldquo;Ejemplos de uso&rdquo;
+description: &ldquo;Peticiones y respuestas reales de la API EleccionesDB.&rdquo;</h2>
+<p>Ejemplos reales de peticiones y respuestas de la API. Todos los ejemplos usan <code>https://api.spainelectoralproject.com</code> como base URL.</p>
 <h2 id="health-check">Health check</h2>
 <pre tabindex="0"><code>GET /health
 </code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
@@ -495,7 +509,21 @@
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>  ]
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div>
+</span></span></code></pre></div><h2 id="desde-r">Desde R</h2>
+<p>Si trabajas con R, puedes usar el paquete <a href="https://hmeleiro.github.io/eleccionesdb-r/"><code>eleccionesdb</code></a> para consultar la API sin construir peticiones HTTP manualmente:</p>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#58a1dd">library</span>(<span style="color:#58a1dd">eleccionesdb</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#828b96;font-style:italic"># Elecciones generales</span>
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">generales</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">edb_elecciones</span>(<span style="color:#58a1dd">tipo_eleccion</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">&#34;G&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#828b96;font-style:italic"># Resultados combinados (votos + info territorial) de las generales de abril 2019 en Madrid</span>
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">resultados</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">edb_resultados_combinados</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">eleccion_id</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">208</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">tipo_territorio</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">&#34;provincia&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">codigo_provincia</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">&#34;28&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Más información en la <a href="https://hmeleiro.github.io/eleccionesdb-r/">documentación del paquete</a>.</p>
+
       </div>
     </div>
   </article>

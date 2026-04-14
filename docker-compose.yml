@@ -9,6 +9,8 @@ services:
     ports:
       - "8000:8000"
     restart: unless-stopped
+    volumes:
+      - auth-data:/app/data
 
     # ─── Conectividad con la BD del host ────────────────
     # En Windows/Mac, Docker Desktop resuelve host.docker.internal
@@ -17,3 +19,6 @@ services:
     # con una BD que corre en el mismo host.
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+volumes:
+  auth-data:

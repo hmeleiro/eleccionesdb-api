@@ -10,10 +10,36 @@ Documentación funcional para construir un paquete de R que consuma esta API.
 | Versión | 1.0.0 |
 | Especificación | OpenAPI 3.1.0 |
 | Métodos HTTP | Solo `GET` (API de solo lectura) |
-| Autenticación | Ninguna |
+| Autenticación | API key (header `X-API-Key`) |
 | Rate limiting | Ninguno |
 | Formato respuesta | JSON (`application/json`) |
 | Idioma datos | Español (nombres de campos, mensajes de error, datos) |
+
+
+## Autenticación
+
+Todos los endpoints de `/v1/*` requieren autenticación mediante API key, excepto `/v1/auth/*` (registro, verificación, gestión de clave) y `/health`.
+
+Obtén tu clave registrándote en `/v1/auth/register` y verificando tu email. Incluye el header `X-API-Key` en todas tus peticiones:
+
+```r
+httr2::request("https://api.spainelectoralproject.com/v1/elecciones") %>%
+  req_headers(`X-API-Key` = "TU_API_KEY")
+```
+
+Si la clave es inválida, revocada o falta, la API responderá con:
+
+```json
+{"detail": "API key requerida"}
+```
+
+o
+
+```json
+{"detail": "API key inválida o revocada"}
+```
+
+---
 
 ## 2. Endpoints — Catálogo completo
 
@@ -308,5 +334,5 @@ Cuando un filtro no coincide con nada, NO es un error. Se devuelve:
 6. **Campos null → NA**: jsonlite convierte `null` a `NA` automáticamente.
 7. **max limit = 500**: Respetar el límite máximo para no provocar errores 422.
 8. **Códigos son strings**: `codigo_ccaa`, `year`, `mes`, `dia` son **strings, no integers** (conservan ceros a la izquierda).
-9. **No hay auth**: No se necesita token ni API key.
+9. **API key obligatoria**: Todos los endpoints de `/v1/*` requieren el header `X-API-Key` (excepto `/v1/auth/*` y `/health`).
 10. **Endpoint combinados**: Para análisis exploratorio rápido, `/resultados/combinados` devuelve todo en una sola llamada (partido+recode+territorio+elección), evitando múltiples joins en R.

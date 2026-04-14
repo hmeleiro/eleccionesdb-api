@@ -8,6 +8,8 @@ from app.schemas.pagination import PaginationParams, PaginatedResponse
 from app.schemas.territorios import TerritorioList, TerritorioDetail
 from app import crud
 
+from app.auth.dependencies import get_current_developer
+
 router = APIRouter(prefix="/v1", tags=["Territorios"])
 
 
@@ -21,6 +23,7 @@ def list_territorios(
     codigo_circunscripcion: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) circunscripción"),
     nombre: Optional[str] = Query(default=None, description="Buscar por nombre (parcial, sin distinguir mayúsculas)"),
     db: Session = Depends(get_db),
+    _developer=Depends(get_current_developer),
 ):
     """Lista de territorios con filtros opcionales y paginación."""
     return crud.get_territorios(
@@ -37,7 +40,8 @@ def list_territorios(
 
 
 @router.get("/territorios/{territorio_id}", response_model=TerritorioDetail)
-def get_territorio(territorio_id: int, db: Session = Depends(get_db)):
+def get_territorio(territorio_id: int, db: Session = Depends(get_db),
+    _developer=Depends(get_current_developer),):
     """Detalle completo de un territorio con todos sus códigos."""
     obj = crud.get_territorio(db, territorio_id)
     if not obj:
@@ -50,6 +54,7 @@ def list_hijos_territorio(
     territorio_id: int,
     pagination: PaginationParams = Depends(),
     db: Session = Depends(get_db),
+    _developer=Depends(get_current_developer),
 ):
     """Lista los hijos directos de un territorio (navegación jerárquica)."""
     parent = crud.get_territorio(db, territorio_id)

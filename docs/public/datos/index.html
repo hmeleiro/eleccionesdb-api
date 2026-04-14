@@ -189,6 +189,16 @@
 <li><strong>2 tablas CERA</strong>: resumen y votos de residentes ausentes.</li>
 </ul>
 <p>Para más detalles, consulta el <a href="https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html">modelo de datos</a> de eleccionesdb.</p>
+<h2 id="paquete-r">Paquete R</h2>
+<p>El paquete <a href="https://hmeleiro.github.io/eleccionesdb-r/"><code>eleccionesdb</code></a> permite consultar esta API directamente desde R. Devuelve tibbles listos para análisis, gestiona la paginación automáticamente y aplana las estructuras JSON anidadas.</p>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#828b96;font-style:italic"># Instalación</span>
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">remotes</span><span style="color:#ff636f">::</span><span style="color:#58a1dd">install_github</span>(<span style="color:#a6be9d">&#34;hmeleiro/eleccionesdb-r&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#828b96;font-style:italic"># Ejemplo rápido</span>
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">library</span>(<span style="color:#58a1dd">eleccionesdb</span>)
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">elecciones</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">edb_elecciones</span>(<span style="color:#58a1dd">tipo_eleccion</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">&#34;G&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">resultados</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">edb_resultados_combinados</span>(<span style="color:#58a1dd">eleccion_id</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">208</span>, <span style="color:#58a1dd">tipo_territorio</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">&#34;provincia&#34;</span>)
+</span></span></code></pre></div><p>Más información y ejemplos en la <a href="https://hmeleiro.github.io/eleccionesdb-r/">documentación del paquete</a>.</p>
 <h2 id="descarga-directa-de-datos">Descarga directa de datos</h2>
 <p>Además de consumir los datos a través de esta API, puedes descargar la base de datos completa en tres formatos:</p>
 <table>
@@ -225,6 +235,7 @@
 <li><a href="https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html"><strong>Modelo de datos</strong></a> — Diagrama E/R y descripción de tablas</li>
 <li><a href="https://hmeleiro.github.io/eleccionesdb-etl/descargas.html"><strong>Descargas</strong></a> — Parquet, SQLite y CSV</li>
 <li><a href="https://github.com/hmeleiro/eleccionesdb-etl"><strong>Código fuente del ETL</strong></a> — Repositorio en GitHub</li>
+<li><a href="https://hmeleiro.github.io/eleccionesdb-r/"><strong><code>eleccionesdb</code> — Paquete R</strong></a> — Cliente R para consultar la API</li>
 </ul>
 
       </div>

@@ -3,18 +3,53 @@ title: "Referencia de la API"
 description: "Catálogo completo de endpoints, parámetros, filtros y estructura de respuestas."
 ---
 
-## Información general
 
-| Propiedad | Valor |
-|---|---|
-| Base URL | `https://api.spainelectoralproject.com/v1` |
-| Versión | 1.0.0 |
-| Especificación | OpenAPI 3.1.0 |
-| Métodos HTTP | Solo `GET` (API de solo lectura) |
-| Autenticación | Ninguna |
-| Formato respuesta | JSON (`application/json`) |
+<div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; padding: 2.5rem 2rem 2rem 2rem; max-width: 700px; margin: 0 auto 2.5rem auto;">
+  <h1 style="color: #2d5bff; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Referencia de la API</h1>
+  <p style="font-size: 1.1rem; color: #1a1a2e; margin-bottom: 1.5rem;">Catálogo completo de endpoints, parámetros, filtros y estructura de respuestas.</p>
+</div>
 
-La documentación interactiva (Swagger UI) está disponible en [`/docs`](https://api.spainelectoralproject.com/docs) donde puedes explorar y probar todos los endpoints directamente desde el navegador.
+<div style="background: #f1f5ff; border-left: 4px solid #2d5bff; padding: 1.5em 1.5em 1em 1.5em; border-radius: 8px; margin-bottom: 2em;">
+  <strong style="color: #2d5bff; font-size: 1.1em;">Información general</strong>
+  <ul style="font-size: 1.05rem; color: #1a1a2e; margin: 0.5em 0 0 0;">
+    <li><b>Base URL:</b> <code>https://api.spainelectoralproject.com/v1</code></li>
+    <li><b>Versión:</b> 1.0.0</li>
+    <li><b>Especificación:</b> OpenAPI 3.1.0</li>
+    <li><b>Métodos HTTP:</b> Solo <code>GET</code> (API de solo lectura)</li>
+    <li><b>Autenticación:</b> API key (header <code>X-API-Key</code>)</li>
+    <li><b>Formato respuesta:</b> JSON (<code>application/json</code>)</li>
+  </ul>
+</div>
+
+<div style="background: #eaf1fb; border-left: 4px solid #2d5bff; padding: 1.2em 1.5em 1em 1.5em; border-radius: 8px; margin-bottom: 2em;">
+  <strong style="color: #2d5bff; font-size: 1.1em;">Autenticación</strong><br>
+  Todos los endpoints de <code>/v1/*</code> requieren autenticación mediante API key, excepto <code>/v1/auth/*</code> (registro, verificación, gestión de clave) y <code>/health</code>.<br><br>
+  Obtén tu clave registrándote en <code>/v1/auth/register</code> y verificando tu email. Incluye el header <code>X-API-Key</code> en todas tus peticiones:
+</div>
+
+```bash
+curl -H "X-API-Key: TU_API_KEY" https://api.spainelectoralproject.com/v1/elecciones
+```
+
+Si la clave es inválida, revocada o falta, la API responderá con:
+
+```json
+{
+  "detail": "API key requerida"
+}
+```
+
+o
+
+```json
+{
+  "detail": "API key inválida o revocada"
+}
+```
+
+<div style="color: #9ca3af; font-size: 0.98rem; text-align: center; margin-top: 2.5rem;">Spain Electoral Project &mdash; API</div>
+
+---
 
 ## Endpoints
 
