@@ -32,7 +32,7 @@
 
   <body><header class="site-header">
   <div class="container header-inner">
-    <a href="/" class="site-logo">
+    <a href="https://hmeleiro.github.io/eleccionesdb-api/" class="site-logo">
       <span class="logo-icon">◆</span>
       <span class="logo-text">EleccionesDB API</span>
     </a>
@@ -111,7 +111,7 @@
 <div class="section-header">
   <h2 class="section-title">Inicio rápido</h2>
   
-    <p class="section-desc">La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints son GET y devuelven JSON. No requiere autenticación.</p>
+    <p class="section-desc">La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints requieren autenticación mediante API key. Incluye tu clave en el header &lt;code&gt;X-API-Key&lt;/code&gt;.</p>
   
 </div>
 
@@ -119,7 +119,7 @@
         <div class="quickstart-example">
           <h3>curl</h3>
           <pre><code># Listar elecciones generales de 2019
-curl "https://api.spainelectoralproject.com/v1/elecciones?tipo_eleccion=G&year=2019"</code></pre>
+curl -X 'GET' 'https://spainelectoralproject.com/v1/tipos-eleccion' -H 'X-API-Key: API_KEY'"</code></pre>
         </div>
         <div class="quickstart-example">
           <h3>Python</h3>

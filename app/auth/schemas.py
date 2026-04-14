@@ -1,12 +1,23 @@
+from __future__ import annotations
 """
 Esquemas Pydantic para el sistema de autenticación y gestión de API keys.
 """
 
-from __future__ import annotations
-
 import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr
+
+# ─── Recuperar acceso ──────────────────────────────────
+
+class RecoverAccessRequest(BaseModel):
+    email: EmailStr
+
+class RecoverAccessResponse(BaseModel):
+    message: str
+
+class RestoreSessionResponse(BaseModel):
+    message: str
+    api_key: str | None = None
 
 
 # ─── Registro ────────────────────────────────────────────

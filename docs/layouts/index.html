@@ -16,12 +16,12 @@
   {{/* Inicio rápido */}}
   <section class="home-section">
     <div class="container">
-      {{ partial "section-header.html" (dict "title" "Inicio rápido" "description" "La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints son GET y devuelven JSON. No requiere autenticación.") }}
+      {{ partial "section-header.html" (dict "title" "Inicio rápido" "description" "La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints requieren autenticación mediante API key. Incluye tu clave en el header <code>X-API-Key</code>.") }}
       <div class="quickstart-tabs">
         <div class="quickstart-example">
           <h3>curl</h3>
           <pre><code># Listar elecciones generales de 2019
-curl "https://api.spainelectoralproject.com/v1/elecciones?tipo_eleccion=G&year=2019"</code></pre>
+curl -X 'GET' 'https://spainelectoralproject.com/v1/tipos-eleccion' -H 'X-API-Key: API_KEY'"</code></pre>
         </div>
         <div class="quickstart-example">
           <h3>Python</h3>

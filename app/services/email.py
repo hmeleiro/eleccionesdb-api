@@ -129,7 +129,7 @@ class EmailService:
         <p>Hola {name},</p>
         <p>Gracias por registrarte en la API de datos electorales de España.<br>
         Para activar tu cuenta y recibir tu API key, confirma tu dirección de email haciendo clic en el siguiente botón:</p>
-        <a href='{url}' class='button'>Verificar email</a>
+        <a href='{url}' class='button' style='color: #fff;'>Verificar email</a>
         <p class='meta'>Si no solicitaste este registro, puedes ignorar este mensaje.<br>El enlace expira en 24 horas.</p>
         <div class='footer'>Spain Electoral Project &mdash; API</div>
     </div>

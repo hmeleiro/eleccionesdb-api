@@ -1,11 +1,28 @@
-"""
-Endpoints de registro, verificación de email y reenvío de verificación.
-"""
+from fastapi import Request
+
+def _get_client_ip(request: Request) -> str:
+    """Obtiene la IP del cliente, respetando X-Forwarded-For si existe."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+from app.auth.schemas import (
+    RegisterRequest,
+    RegisterResponse,
+    ResendVerificationRequest,
+    ResendVerificationResponse,
+    RecoverAccessRequest,
+    RecoverAccessResponse,
+    RestoreSessionResponse,
+)
 
 import logging
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+
+from fastapi import Request
+from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
 from app.auth import crud
@@ -16,55 +33,111 @@ from app.auth.schemas import (
     RegisterResponse,
     ResendVerificationRequest,
     ResendVerificationResponse,
+    RecoverAccessRequest,
+    RecoverAccessResponse,
+    RestoreSessionResponse,
 )
 from app.auth.service import generate_api_key, generate_verification_token, hash_token
 from app.config import settings
 from app.services.email import email_service
+import secrets
 
 logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/v1/auth", tags=["Autenticación"])
 
-# Rate limiters (una instancia por tipo, viven durante la vida de la app)
-_ip_limiter = RateLimiter(
-    max_calls=settings.RATE_LIMIT_REGISTER_PER_IP,
-    period_seconds=3600,
-)
-_email_limiter = RateLimiter(
-    max_calls=settings.RATE_LIMIT_REGISTER_PER_EMAIL,
-    period_seconds=3600,
-)
 
-# Cooldown para reenvío de verificación (segundos)
-_RESEND_COOLDOWN_SECONDS = 120
+_RECOVER_ACCESS_TOKEN_EXPIRY_HOURS = 1
 
-
-# ─── Helpers ─────────────────────────────────────────────
-
-def _get_client_ip(request: Request) -> str:
-    """Obtiene la IP del cliente, respetando X-Forwarded-For si existe."""
-    forwarded = request.headers.get("x-forwarded-for")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
-
-
-def _send_verification_email_task(
-    to_email: str, developer_name: str, verification_url: str
-) -> None:
-    """Tarea de background para enviar el email de verificación."""
-    success = email_service.send_verification_email(to_email, developer_name, verification_url)
-    if not success:
-        logger.error(
-            "Fallo al enviar email de verificación a %s — el usuario puede solicitar reenvío",
-            to_email,
-        )
-
-
-def _build_verification_url(token: str) -> str:
+def _build_restore_session_url(token: str) -> str:
     base = settings.APP_BASE_URL.rstrip("/")
     root = settings.ROOT_PATH.rstrip("/")
-    return f"{base}{root}/v1/auth/verify?token={token}"
+    return f"{base}{root}/v1/auth/restore-session?token={token}"
+
+@router.post("/recover-access", response_model=RecoverAccessResponse, include_in_schema=True)
+def recover_access(
+    body: RecoverAccessRequest,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_auth_db),
+):
+    """Permite recuperar acceso si el usuario ha perdido todas sus API keys."""
+    generic_message = "Si el email está registrado y activo, recibirás un enlace para restaurar el acceso."
+    developer = crud.get_developer_by_email(db, body.email.lower())
+    if not developer or developer.status != "active":
+        return RecoverAccessResponse(message=generic_message)
+
+    # Generar token de acceso temporal (reutilizamos EmailVerificationToken)
+    full_token, token_hash = generate_verification_token()
+    expires_at = datetime.now(timezone.utc) + timedelta(hours=_RECOVER_ACCESS_TOKEN_EXPIRY_HOURS)
+    crud.create_verification_token(
+        db,
+        developer_id=developer.id,
+        token_hash=token_hash,
+        expires_at=expires_at,
+    )
+
+    restore_url = _build_restore_session_url(full_token)
+    # Reutilizamos el email de verificación pero con otro texto
+    background_tasks.add_task(
+        email_service.send_verification_email,
+        developer.email,
+        developer.name,
+        restore_url,
+    )
+
+    crud.create_audit_entry(
+        db,
+        developer_id=developer.id,
+        event_type="recover_access",
+    )
+
+    return RecoverAccessResponse(message=generic_message)
+
+
+@router.get("/restore-session", response_model=RestoreSessionResponse, response_class=HTMLResponse, include_in_schema=True)
+def restore_session(
+    token: str,
+    request: Request,
+    db: Session = Depends(get_auth_db),
+):
+    """Permite restaurar sesión y generar una nueva API key usando un enlace temporal enviado por email."""
+    token_hash = hash_token(token)
+    db_token = crud.get_valid_verification_token(db, token_hash)
+    if not db_token:
+        return HTMLResponse(
+            content=_VERIFY_ERROR_HTML.format(
+                message="El enlace de restauración no es válido o ha expirado."
+            ),
+            status_code=400,
+        )
+    developer = crud.get_developer_by_id(db, db_token.developer_id)
+    if not developer or developer.status != "active":
+        return HTMLResponse(
+            content=_VERIFY_ERROR_HTML.format(message="Cuenta no encontrada o inactiva."),
+            status_code=400,
+        )
+    # Marcar token como usado
+    crud.mark_token_used(db, db_token)
+    # Generar nueva API key
+    full_key, prefix, key_hash = generate_api_key()
+    crud.create_api_key(
+        db,
+        developer_id=developer.id,
+        key_prefix=prefix,
+        key_hash=key_hash,
+        label="recovery",
+    )
+    client_ip = _get_client_ip(request)
+    crud.create_audit_entry(
+        db,
+        developer_id=developer.id,
+        event_type="key_created_recovery",
+        ip_address=client_ip,
+        details=f"prefix={prefix}",
+    )
+    base_url = settings.APP_BASE_URL.rstrip("/")
+    html = _VERIFY_HTML_TEMPLATE.format(api_key=full_key, base_url=base_url)
+    return HTMLResponse(content=html, status_code=200)
 
 
 # ─── Registro ────────────────────────────────────────────
