@@ -21,16 +21,17 @@
         <div class="quickstart-example">
           <h3>curl</h3>
           <pre><code># Listar elecciones generales de 2019
-curl -X 'GET' 'https://spainelectoralproject.com/v1/tipos-eleccion' -H 'X-API-Key: API_KEY'"</code></pre>
+curl -X 'GET' 'https://spainelectoralproject.com/v1/tipos-eleccion' -H 'X-API-Key: TU_API_KEY'"</code></pre>
         </div>
         <div class="quickstart-example">
           <h3>Python</h3>
           <pre><code>import requests
 
-resp = requests.get("https://api.spainelectoralproject.com/v1/elecciones", params={
-    "tipo_eleccion": "G",
-    "year": "2019"
-})
+resp = requests.get(
+    "https://api.spainelectoralproject.com/v1/elecciones",
+    headers={"X-API-Key": "TU_API_KEY"},
+    params={"tipo_eleccion": "G", "year": "2019"}
+)
 data = resp.json()
 print(f"{data['total']} elecciones encontradas")
 for e in data["data"]:
@@ -41,6 +42,7 @@ for e in data["data"]:
           <pre><code>library(httr2)
 
 resp <- request("https://api.spainelectoralproject.com/v1/elecciones") |>
+  req_headers("X-API-Key" = "TU_API_KEY") |>
   req_url_query(tipo_eleccion = "G", year = "2019") |>
   req_perform() |>
   resp_body_json()

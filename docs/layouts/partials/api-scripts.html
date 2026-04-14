@@ -1,0 +1,6 @@
+{{/*
+  api-scripts.html — Incluye el JS del cliente API usando Hugo Pipes.
+  Uso: {{ partial "api-scripts.html" . }}
+*/}}
+{{ $js := resources.Get "js/api-client.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

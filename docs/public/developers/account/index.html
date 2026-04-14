@@ -2,18 +2,18 @@
 <html lang="es">
   <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=51438&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Categories · EleccionesDB API</title>
-<meta name="description" content="API REST gratuita y abierta para consultar datos electorales de España." />
+<title>Panel de cuenta · EleccionesDB API</title>
+<meta name="description" content="Consulta tu perfil de desarrollador y gestiona tus API keys." />
 <meta name="author" content="Héctor Meleiro" />
 
 
-<meta property="og:title" content="Categories" />
+<meta property="og:title" content="Panel de cuenta" />
 <meta
   property="og:description"
-  content="API REST gratuita y abierta para consultar datos electorales de España."
+  content="Consulta tu perfil de desarrollador y gestiona tus API keys."
 />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/categories/" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/developers/account/" />
 <meta property="og:site_name" content="EleccionesDB API" />
 
 
@@ -95,17 +95,57 @@
   })();
 </script>
 <main id="content">
-  <section class="list-page">
+  <article class="page-single">
     <div class="container">
       <div class="page-header">
-        <h1>Categories</h1>
+        <h1>Panel de cuenta</h1>
+        
+          <p class="page-desc">Consulta tu perfil de desarrollador y gestiona tus API keys.</p>
         
       </div>
-      <div class="page-content prose">
-        
+      <div class="page-content">
+        <div class="api-section" id="api-account">
+<div class="api-key-entry">
+<h2>Tu API key</h2>
+<p>Introduce tu API key para acceder a tu perfil y gestionar tus claves. La clave se guarda temporalmente en la sesión del navegador y se elimina al cerrar la pestaña.</p>
+<div class="api-form__group">
+<label for="account-api-key-input" class="api-form__label">API key</label>
+<div class="api-key-entry__row">
+<input type="password" id="account-api-key-input" class="api-form__input" placeholder="sep_xxxxxxxxxxxxxxxx">
+<button type="button" id="account-save-key" class="btn btn-primary btn-sm">Guardar en sesión</button>
+<button type="button" id="account-logout" class="btn btn-secondary btn-sm">Cerrar sesión</button>
+</div>
+</div>
+</div>
+<div id="account-feedback" class="api-feedback" hidden></div>
+<div class="api-account-actions">
+<h2>Gestión de cuenta</h2>
+<div class="api-account-actions__grid">
+<div class="api-account-action-card">
+<h3>Ver perfil</h3>
+<p>Consulta tu información de desarrollador y el estado de tu API key activa.</p>
+<button type="button" id="account-load-profile" class="btn btn-secondary">Cargar perfil</button>
+</div>
+<div class="api-account-action-card">
+<h3>Rotar API key</h3>
+<p>Genera una nueva API key. La clave actual será revocada tras un periodo de gracia.</p>
+<button type="button" id="account-rotate" class="btn btn-secondary">Rotar clave</button>
+</div>
+<div class="api-account-action-card">
+<h3>Revocar API keys</h3>
+<p>Revoca inmediatamente <strong>todas</strong> tus API keys activas. Perderás el acceso y tendrás que <a href="../recover/">restaurarlo por email</a>.</p>
+<button type="button" id="account-revoke" class="btn btn-secondary api-btn-danger">Revocar todas</button>
+</div>
+</div>
+</div>
+<div id="account-key-container" hidden></div>
+<div id="account-profile" hidden></div>
+<p class="api-form__footer"><a href="../">Volver a Desarrolladores</a> · <a href="../recover/">Recuperar acceso</a></p>
+</div>
+
       </div>
     </div>
-  </section>
+  </article>
 </main><footer class="site-footer">
   <div class="container">
     <div class="footer-inner">
@@ -139,5 +179,10 @@
     </div>
   </div>
 </footer>
+
+  
+
+<script src="/eleccionesdb-api/js/api-client.min.3dc05f95f09c807bd322eae3217722454adc37b3ab45e96c45931d96ed805fcc.js" integrity="sha256-PcBflfCcgHvTIurjIXciRUrcN7OrRelsRZMdlu2AX8w=" defer></script>
+
 </body>
 </html>

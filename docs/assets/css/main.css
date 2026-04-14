@@ -697,3 +697,247 @@ pre code {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   API / Developers Section
+   ============================================================ */
+
+/* --- API actions (landing page) ----------------------------- */
+.api-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin: var(--space-6) 0;
+}
+
+/* --- Forms ------------------------------------------------- */
+.api-section {
+  max-width: 36rem;
+}
+
+.api-form {
+  margin: var(--space-6) 0;
+}
+
+.api-form__group {
+  margin-bottom: var(--space-5);
+}
+
+.api-form__label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+
+.api-form__label .required {
+  color: #dc2626;
+}
+
+.api-form__input {
+  display: block;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.api-form__input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.api-form__textarea {
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.api-form__footer {
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* --- Feedback blocks --------------------------------------- */
+.api-feedback {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  margin: var(--space-4) 0;
+  border: 1px solid transparent;
+}
+
+.api-feedback p {
+  margin: 0;
+}
+
+.api-feedback--success {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.api-feedback--error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.api-feedback--loading {
+  background: var(--color-accent-soft);
+  border-color: #c7d2fe;
+  color: var(--color-accent);
+}
+
+/* --- API key display --------------------------------------- */
+.api-key-display {
+  margin: var(--space-4) 0;
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 2px solid #f59e0b;
+  border-radius: var(--radius-md);
+}
+
+.api-key-display__warning {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: var(--space-3);
+}
+
+.api-key-display__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.api-key-display__value {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  background: var(--color-bg);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  word-break: break-all;
+}
+
+/* --- API key entry (account page) -------------------------- */
+.api-key-entry {
+  margin-bottom: var(--space-8);
+}
+
+.api-key-entry h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-2);
+}
+
+.api-key-entry p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.api-key-entry__row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.api-key-entry__row .api-form__input {
+  flex: 1;
+  min-width: 14rem;
+}
+
+/* --- Account actions --------------------------------------- */
+.api-account-actions {
+  margin: var(--space-8) 0;
+}
+
+.api-account-actions h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-4);
+}
+
+.api-account-actions__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--space-4);
+}
+
+.api-account-action-card {
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.api-account-action-card h3 {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-2);
+}
+
+.api-account-action-card p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.api-btn-danger {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+.api-btn-danger:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #991b1b;
+}
+
+/* --- Profile display --------------------------------------- */
+.api-profile-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  margin: var(--space-4) 0;
+}
+
+.api-profile-list dt {
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* --- Small button variant ---------------------------------- */
+.btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs);
+}
+
+/* --- Account section full width ----------------------------- */
+.api-section#api-account {
+  max-width: 48rem;
+}
+
+/* --- Responsive for API ------------------------------------ */
+@media (max-width: 30rem) {
+  .api-key-entry__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .api-key-display__row {
+    flex-direction: column;
+  }
+
+  .api-account-actions__grid {
+    grid-template-columns: 1fr;
+  }
+}

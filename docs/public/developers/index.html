@@ -2,18 +2,18 @@
 <html lang="es">
   <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=51438&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Categories · EleccionesDB API</title>
-<meta name="description" content="API REST gratuita y abierta para consultar datos electorales de España." />
+<title>Desarrolladores · EleccionesDB API</title>
+<meta name="description" content="Accede programáticamente a datos electorales y de opinión pública en España." />
 <meta name="author" content="Héctor Meleiro" />
 
 
-<meta property="og:title" content="Categories" />
+<meta property="og:title" content="Desarrolladores" />
 <meta
   property="og:description"
-  content="API REST gratuita y abierta para consultar datos electorales de España."
+  content="Accede programáticamente a datos electorales y de opinión pública en España."
 />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/categories/" />
+<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/developers/" />
 <meta property="og:site_name" content="EleccionesDB API" />
 
 
@@ -68,7 +68,7 @@
           </li>
         
           <li class="nav-item">
-            <a href="/eleccionesdb-api/developers/" class="nav-link">
+            <a href="/eleccionesdb-api/developers/" class="nav-link is-active">
               Desarrolladores
             </a>
           </li>
@@ -98,11 +98,39 @@
   <section class="list-page">
     <div class="container">
       <div class="page-header">
-        <h1>Categories</h1>
+        <h1>Desarrolladores</h1>
+        
+          <p class="page-desc">Accede programáticamente a datos electorales y de opinión pública en España.</p>
         
       </div>
       <div class="page-content prose">
-        
+        <h2 id="acceso-a-la-api-de-eleccionesdb">Acceso a la API de eleccionesdb</h2>
+<p>La API de eleccionesdb permite acceder de forma programática a los datos electorales de España. Está diseñada para investigadores, periodistas y desarrolladores que quieran integrar estos datos en sus proyectos.</p>
+<h3 id="qué-puedo-hacer-con-la-api">¿Qué puedo hacer con la API?</h3>
+<ul>
+<li>Consultar resultados electorales históricos</li>
+<li>Acceder a datos armonizados de encuestas del CIS</li>
+<li>Integrar datos en aplicaciones, dashboards o investigaciones</li>
+</ul>
+<h3 id="cómo-empiezo">¿Cómo empiezo?</h3>
+<p>Para utilizar la API necesitas una <strong>API key</strong>. El proceso es sencillo:</p>
+<ol>
+<li><strong>Regístrate</strong> como desarrollador proporcionando tu email, nombre, organización y uso previsto</li>
+<li><strong>Verifica tu email</strong> mediante el enlace que recibirás</li>
+<li><strong>Obtén tu API key</strong> y empieza a hacer peticiones</li>
+</ol>
+<div class="api-actions">
+<a href="register/" class="btn btn-primary">Registrarse</a>
+<a href="account/" class="btn btn-secondary">Panel de cuenta</a>
+</div>
+<h3 id="has-perdido-tu-api-key">¿Has perdido tu API key?</h3>
+<p>Si has perdido el acceso a tu cuenta o tus claves, puedes <a href="recover/">recuperar tu acceso</a> mediante un enlace temporal enviado a tu email.</p>
+<h3 id="documentación">Documentación</h3>
+<p>La documentación completa de los endpoints está disponible en la <a href="https://api.spainelectoralproject.com/docs">documentación de la API</a>.</p>
+<h3 id="autenticación">Autenticación</h3>
+<p>Todas las peticiones a la API requieren autenticación mediante el header <code>X-API-Key</code>:</p>
+<pre tabindex="0"><code>X-API-Key: tu_api_key_aquí
+</code></pre>
       </div>
     </div>
   </section>

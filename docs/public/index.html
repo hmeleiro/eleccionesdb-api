@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es">
   <head>
-	<meta name="generator" content="Hugo 0.158.0"><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
+	<meta name="generator" content="Hugo 0.158.0"><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=51438&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>EleccionesDB API</title>
 <meta name="description" content="API REST gratuita y abierta para consultar datos electorales de España." />
@@ -14,7 +14,7 @@
   content="API REST gratuita y abierta para consultar datos electorales de España."
 />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://localhost:1313/eleccionesdb-api/" />
+<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/" />
 <meta property="og:site_name" content="EleccionesDB API" />
 
 
@@ -27,10 +27,10 @@
 
 
 
-<link rel="stylesheet" href="/eleccionesdb-api/css/main.min.d666788fdc23143782a603dc60fca5f9f7ca9a4545d4a502c8d1d0da203d89bd.css" integrity="sha256-1mZ4j9wjFDeCpgPcYPyl&#43;ffKmkVF1KUCyNHQ2iA9ib0=" />
+<link rel="stylesheet" href="/eleccionesdb-api/css/main.min.dfc5163e5add54dbadd7d12164c4802c0673b198eea11f297a2d1e2b37d681b7.css" integrity="sha256-38UWPlrdVNut19EhZMSALAZzsZjuoR8pei0eKzfWgbc=" />
 </head>
 
-  <body><header class="site-header">
+  <body data-api-base="https://api.spainelectoralproject.com"><header class="site-header">
   <div class="container header-inner">
     <a href="https://hmeleiro.github.io/eleccionesdb-api/" class="site-logo">
       <span class="logo-icon">◆</span>
@@ -65,6 +65,12 @@
           <li class="nav-item">
             <a href="/eleccionesdb-api/datos/" class="nav-link">
               Datos y fuentes
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a href="/eleccionesdb-api/developers/" class="nav-link">
+              Desarrolladores
             </a>
           </li>
         
@@ -111,7 +117,7 @@
 <div class="section-header">
   <h2 class="section-title">Inicio rápido</h2>
   
-    <p class="section-desc">La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints requieren autenticación mediante API key. Incluye tu clave en el header &lt;code&gt;X-API-Key&lt;/code&gt;.</p>
+    <p class="section-desc">La URL base de la API es https://api.spainelectoralproject.com/v1. Todos los endpoints requieren autenticación mediante API key. Incluye tu clave en el header <code>X-API-Key</code>.</p>
   
 </div>
 
@@ -119,16 +125,17 @@
         <div class="quickstart-example">
           <h3>curl</h3>
           <pre><code># Listar elecciones generales de 2019
-curl -X 'GET' 'https://spainelectoralproject.com/v1/tipos-eleccion' -H 'X-API-Key: API_KEY'"</code></pre>
+curl -X 'GET' 'https://spainelectoralproject.com/v1/tipos-eleccion' -H 'X-API-Key: TU_API_KEY'"</code></pre>
         </div>
         <div class="quickstart-example">
           <h3>Python</h3>
           <pre><code>import requests
 
-resp = requests.get("https://api.spainelectoralproject.com/v1/elecciones", params={
-    "tipo_eleccion": "G",
-    "year": "2019"
-})
+resp = requests.get(
+    "https://api.spainelectoralproject.com/v1/elecciones",
+    headers={"X-API-Key": "TU_API_KEY"},
+    params={"tipo_eleccion": "G", "year": "2019"}
+)
 data = resp.json()
 print(f"{data['total']} elecciones encontradas")
 for e in data["data"]:
@@ -139,6 +146,7 @@ for e in data["data"]:
           <pre><code>library(httr2)
 
 resp &lt;- request("https://api.spainelectoralproject.com/v1/elecciones") |>
+  req_headers("X-API-Key" = "TU_API_KEY") |>
   req_url_query(tipo_eleccion = "G", year = "2019") |>
   req_perform() |>
   resp_body_json()
@@ -289,6 +297,7 @@ for (e in resp$data) {
             <li><a href="/eleccionesdb-api/referencia/">Referencia API</a></li>
             <li><a href="/eleccionesdb-api/ejemplos/">Ejemplos</a></li>
             <li><a href="/eleccionesdb-api/datos/">Datos y fuentes</a></li>
+            <li><a href="/eleccionesdb-api/developers/">Desarrolladores</a></li>
           </ul>
         </div>
         <div class="footer-col">

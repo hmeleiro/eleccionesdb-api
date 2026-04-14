@@ -2,6 +2,6 @@
 <div class="section-header">
   <h2 class="section-title">{{ .title }}</h2>
   {{ with .description }}
-    <p class="section-desc">{{ . }}</p>
+    <p class="section-desc">{{ . | safeHTML }}</p>
   {{ end }}
 </div>

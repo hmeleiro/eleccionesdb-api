@@ -2,18 +2,18 @@
 <html lang="es">
   <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=51438&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Categories · EleccionesDB API</title>
-<meta name="description" content="API REST gratuita y abierta para consultar datos electorales de España." />
+<title>Recuperar acceso · EleccionesDB API</title>
+<meta name="description" content="Solicita un enlace temporal para restaurar tu acceso a la API." />
 <meta name="author" content="Héctor Meleiro" />
 
 
-<meta property="og:title" content="Categories" />
+<meta property="og:title" content="Recuperar acceso" />
 <meta
   property="og:description"
-  content="API REST gratuita y abierta para consultar datos electorales de España."
+  content="Solicita un enlace temporal para restaurar tu acceso a la API."
 />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/categories/" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/developers/recover/" />
 <meta property="og:site_name" content="EleccionesDB API" />
 
 
@@ -95,17 +95,31 @@
   })();
 </script>
 <main id="content">
-  <section class="list-page">
+  <article class="page-single">
     <div class="container">
       <div class="page-header">
-        <h1>Categories</h1>
+        <h1>Recuperar acceso</h1>
+        
+          <p class="page-desc">Solicita un enlace temporal para restaurar tu acceso a la API.</p>
         
       </div>
-      <div class="page-content prose">
-        
+      <div class="page-content">
+        <div class="api-section">
+<p>Si has perdido tu API key o no puedes acceder a tu cuenta, introduce tu email y te enviaremos un enlace temporal para restaurar tu acceso.</p>
+<form id="api-recover-form" class="api-form" novalidate>
+<div class="api-form__group">
+<label for="recover-email" class="api-form__label">Email <span class="required">*</span></label>
+<input type="email" id="recover-email" name="email" class="api-form__input" required placeholder="tu@email.com" autocomplete="email">
+</div>
+<div id="recover-feedback" class="api-feedback" hidden></div>
+<button type="submit" class="btn btn-primary">Recuperar acceso</button>
+</form>
+<p class="api-form__footer">¿No tienes cuenta? <a href="../register/">Regístrate</a>.</p>
+</div>
+
       </div>
     </div>
-  </section>
+  </article>
 </main><footer class="site-footer">
   <div class="container">
     <div class="footer-inner">
@@ -139,5 +153,10 @@
     </div>
   </div>
 </footer>
+
+  
+
+<script src="/eleccionesdb-api/js/api-client.min.3dc05f95f09c807bd322eae3217722454adc37b3ab45e96c45931d96ed805fcc.js" integrity="sha256-PcBflfCcgHvTIurjIXciRUrcN7OrRelsRZMdlu2AX8w=" defer></script>
+
 </body>
 </html>
