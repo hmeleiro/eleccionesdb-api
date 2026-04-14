@@ -67,6 +67,7 @@ def get_eleccion(eleccion_id: int, db: Session = Depends(get_db), developer=Depe
     "/elecciones/{eleccion_id}/totales-territorio",
     response_model=PaginatedResponse[TotalTerritorioSchema],
 )
+def get_totales_territorio_eleccion(
     eleccion_id: int,
     pagination: PaginationParams = Depends(),
     territorio_id: Optional[list[int]] = Query(default=None, description="Filtrar por territorio(s)"),
@@ -95,7 +96,8 @@ def get_eleccion(eleccion_id: int, db: Session = Depends(get_db), developer=Depe
     "/elecciones/{eleccion_id}/totales-territorio/{territorio_id}",
     response_model=ResultadoCompletoSchema,
 )
-    eleccion_id: int,
+def get_resultado_completo_eleccion(
+eleccion_id: int,
     territorio_id: int,
     db: Session = Depends(get_db),
     developer=Depends(get_current_developer),
