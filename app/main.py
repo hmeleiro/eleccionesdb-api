@@ -2,6 +2,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
 from app.config import settings
@@ -37,6 +38,17 @@ app = FastAPI(
     version="1.0.0",
     root_path=settings.ROOT_PATH,
     lifespan=lifespan,
+)
+
+# ─── CORS ───────────────────────────────────────────────
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://spainelectoralproject.com",
+        "http://localhost:1313",
+    ],
+    allow_methods=["GET"],
+    allow_headers=["*"],
 )
 
 # ─── Routers ────────────────────────────────────────────
