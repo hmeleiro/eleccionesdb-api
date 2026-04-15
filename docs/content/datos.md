@@ -13,14 +13,14 @@ La API da acceso a los datos de [eleccionesdb](https://hmeleiro.github.io/elecci
 |---|---|---|
 | **Congreso** (Generales) | `G` | 1977 – actualidad |
 | **Andalucía** | `A` | 1982 – actualidad |
-| **Aragón** | `A` | 1983 – actualidad |
+| **Aragón** | `A` | 2011 – 2023 |
 | **Asturias** | `A` | 1983 – actualidad |
-| **Baleares** | `A` | 1983 – actualidad |
-| **Canarias** | `A` | 1983 – actualidad |
-| **Castilla y León** | `A` | 1983 – actualidad |
-| **Cataluña** | `A` | 1980 – actualidad |
-| **Comunidad Valenciana** | `A` | 1983 – actualidad |
-| **Comunidad de Madrid** | `A` | 1983 – actualidad |
+| **Baleares** | `A` | 1983 – 2023 |
+| **Canarias** | `A` | 1983 – 2023 |
+| **Castilla y León** | `A` | 1983 – 2022 |
+| **Cataluña** | `A` | 1980 – 2023 |
+| **Comunidad Valenciana** | `A` | 1983 – 2023 |
+| **Comunidad de Madrid** | `A` | 1983 – 2023 |
 
 ### Niveles territoriales
 
@@ -35,15 +35,15 @@ La disponibilidad de cada nivel varía según la comunidad y la convocatoria.
 
 ## Fuentes de datos
 
-Los datos provienen de **fuentes oficiales** de cada comunidad autónoma:
+Los datos provienen de **fuentes oficiales**:
 
 - **Portales de datos abiertos** autonómicos y estatales
 - **APIs institucionales**: Junta de Andalucía, PARCAN (Canarias), etc.
 - **Institutos estadísticos**: IBESTAT (Baleares), ISTAC (Canarias), SADEI (Asturias), etc.
 - **Paquetes R**: [`infoelectoral`](https://github.com/rOpenSpain/infoelectoral) para datos del Ministerio del Interior
-- **Datos históricos a nivel de mesa**: [Spanish Electoral Archive (SEA)](https://gipeyop.uv.es/gipeyop/sea.html) del GIPEYOP (Universitat de València)
+- [**Spanish Electoral Archive (SEA)**](https://gipeyop.uv.es/gipeyop/sea.html) del GIPEYOP (Universitat de València) para otros procesos electorales que no estaban disponibles por fuentes oficiales directas.
 
-Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la [documentación de fuentes de datos](https://hmeleiro.github.io/eleccionesdb-etl/fuentes.html) del proyecto eleccionesdb.
+Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la [documentación de fuentes de datos](https://hmeleiro.github.io/eleccionesdb-etl/fuentes) del proyecto eleccionesdb.
 
 ## Modelo de datos
 
