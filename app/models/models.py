@@ -63,6 +63,7 @@ class Eleccion(Base):
     tipo = relationship("TipoEleccion", back_populates="elecciones")
     resumenes = relationship("ResumenTerritorial", back_populates="eleccion")
     votos = relationship("VotoTerritorial", back_populates="eleccion")
+    fuente = relationship("EleccionFuente", back_populates="eleccion", uselist=False)
 
 
 
@@ -160,4 +161,19 @@ class VotoTerritorial(Base):
     eleccion = relationship("Eleccion", back_populates="votos")
     territorio = relationship("Territorio")
     partido = relationship("Partido")
+
+
+# ─────────────────────────────────────────────────────────
+# 8. elecciones_fuentes
+# ─────────────────────────────────────────────────────────
+
+class EleccionFuente(Base):
+    __tablename__ = "elecciones_fuentes"
+
+    eleccion_id = sa.Column(sa.Integer, sa.ForeignKey("elecciones.id"), primary_key=True)
+    fuente = sa.Column(sa.String(255), nullable=False)
+    url_fuente = sa.Column(sa.String(500), nullable=False)
+    observaciones = sa.Column(sa.Text, nullable=True)
+
+    eleccion = relationship("Eleccion", back_populates="fuente")
 

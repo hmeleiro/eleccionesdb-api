@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas.pagination import PaginationParams, PaginatedResponse
-from app.schemas.elecciones import TipoEleccionSchema, EleccionList, EleccionDetail
+from app.schemas.elecciones import TipoEleccionSchema, EleccionList, EleccionDetail, EleccionFuenteSchema
 from app.schemas.resultados import TotalTerritorioSchema, ResultadoCompletoSchema
 from app import crud
 
@@ -58,6 +58,15 @@ def get_eleccion(eleccion_id: int, db: Session = Depends(get_db), developer=Depe
     obj = crud.get_eleccion(db, eleccion_id)
     if not obj:
         raise HTTPException(status_code=404, detail="Elección no encontrada")
+    return obj
+
+
+@router.get("/elecciones/{eleccion_id}/fuente", response_model=EleccionFuenteSchema)
+def get_eleccion_fuente(eleccion_id: int, db: Session = Depends(get_db), developer=Depends(get_current_developer)):
+    """Fuente oficial de los datos de una elección."""
+    obj = crud.get_eleccion_fuente(db, eleccion_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Fuente no encontrada para esta elección")
     return obj
 
 

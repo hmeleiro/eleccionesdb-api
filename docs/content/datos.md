@@ -11,16 +11,25 @@ La API da acceso a los datos de [eleccionesdb](https://hmeleiro.github.io/elecci
 
 | Tipo | Código | Cobertura temporal aprox. |
 |---|---|---|
-| **Congreso** (Generales) | `G` | 1977 – actualidad |
-| **Andalucía** | `A` | 1982 – actualidad |
-| **Aragón** | `A` | 2011 – 2023 |
-| **Asturias** | `A` | 1983 – actualidad |
+| **Congreso** | `G` | 1977 – 2023 |
+| **Municipales** | `L` | 1979 – 2023 |
+| **Andalucía** | `A` | 1982 – 2022 |
+| **Aragón** | `A` | 2007 – 2023 |
+| **Asturias** | `A` | 1983 – 2023 |
 | **Baleares** | `A` | 1983 – 2023 |
 | **Canarias** | `A` | 1983 – 2023 |
+| **Cantabria** | `A` | 1983 – 2023 |
 | **Castilla y León** | `A` | 1983 – 2022 |
+| **Castilla-La Mancha** | `A` | 1983 – 2023 |
 | **Cataluña** | `A` | 1980 – 2023 |
 | **Comunidad Valenciana** | `A` | 1983 – 2023 |
+| **Extremadura** | `A` | 1983 – 2023 |
+| **Galicia** | `A` | 1981 – 2024 |
 | **Comunidad de Madrid** | `A` | 1983 – 2023 |
+| **Región de Murcia** | `A` | 1983 – 2023 |
+| **Comunidad Foral de Navarra** | `A` | 1979 – 2023 |
+| **País Vasco** | `A` | 1980 – 2024 |
+| **La Rioja** | `A` | 1983 – 2023 |
 
 ### Niveles territoriales
 

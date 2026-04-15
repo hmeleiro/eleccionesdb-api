@@ -17,6 +17,7 @@ from app.models.models import (
     Partido,
     ResumenTerritorial,
     VotoTerritorial,
+    EleccionFuente,
 )
 
 
@@ -99,6 +100,14 @@ def get_eleccion(db: Session, eleccion_id: int) -> Optional[Eleccion]:
         db.query(Eleccion)
         .options(joinedload(Eleccion.tipo))
         .filter(Eleccion.id == eleccion_id)
+        .first()
+    )
+
+
+def get_eleccion_fuente(db: Session, eleccion_id: int) -> Optional[EleccionFuente]:
+    return (
+        db.query(EleccionFuente)
+        .filter(EleccionFuente.eleccion_id == eleccion_id)
         .first()
     )
 

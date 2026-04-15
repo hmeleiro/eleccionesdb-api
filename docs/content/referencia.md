@@ -67,6 +67,7 @@ o
 | GET | `/v1/tipos-eleccion/{codigo}` | Detalle de un tipo de elección |
 | GET | `/v1/elecciones` | Listado paginado de elecciones con filtros |
 | GET | `/v1/elecciones/{id}` | Detalle de una elección con tipo expandido |
+| GET | `/v1/elecciones/{id}/fuente` | Fuente oficial de los datos de una elección |
 | GET | `/v1/elecciones/{id}/totales-territorio` | Totales territorio de una elección (paginado, con filtros) |
 | GET | `/v1/elecciones/{id}/totales-territorio/{territorio_id}` | Resultado completo: totales + votos por partido |
 

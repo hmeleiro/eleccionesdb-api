@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es">
-  <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=51438&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
+  <head><script src="/eleccionesdb-api/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=eleccionesdb-api/livereload" data-no-instant defer></script><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Datos y fuentes · EleccionesDB API</title>
 <meta name="description" content="Cobertura, fuentes oficiales y opciones de descarga de los datos electorales." />
@@ -13,7 +13,7 @@
   content="Cobertura, fuentes oficiales y opciones de descarga de los datos electorales."
 />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:51438/eleccionesdb-api/datos/" />
+<meta property="og:url" content="http://localhost:1313/eleccionesdb-api/datos/" />
 <meta property="og:site_name" content="EleccionesDB API" />
 
 
@@ -117,54 +117,99 @@
   </thead>
   <tbody>
       <tr>
-          <td><strong>Congreso</strong> (Generales)</td>
+          <td><strong>Congreso</strong></td>
           <td><code>G</code></td>
-          <td>1977 – actualidad</td>
+          <td>1977 – 2023</td>
+      </tr>
+      <tr>
+          <td><strong>Municipales</strong></td>
+          <td><code>L</code></td>
+          <td>1979 – 2023</td>
       </tr>
       <tr>
           <td><strong>Andalucía</strong></td>
           <td><code>A</code></td>
-          <td>1982 – actualidad</td>
+          <td>1982 – 2022</td>
       </tr>
       <tr>
           <td><strong>Aragón</strong></td>
           <td><code>A</code></td>
-          <td>1983 – actualidad</td>
+          <td>2007 – 2023</td>
       </tr>
       <tr>
           <td><strong>Asturias</strong></td>
           <td><code>A</code></td>
-          <td>1983 – actualidad</td>
+          <td>1983 – 2023</td>
       </tr>
       <tr>
           <td><strong>Baleares</strong></td>
           <td><code>A</code></td>
-          <td>1983 – actualidad</td>
+          <td>1983 – 2023</td>
       </tr>
       <tr>
           <td><strong>Canarias</strong></td>
           <td><code>A</code></td>
-          <td>1983 – actualidad</td>
+          <td>1983 – 2023</td>
+      </tr>
+      <tr>
+          <td><strong>Cantabria</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – 2023</td>
       </tr>
       <tr>
           <td><strong>Castilla y León</strong></td>
           <td><code>A</code></td>
-          <td>1983 – actualidad</td>
+          <td>1983 – 2022</td>
+      </tr>
+      <tr>
+          <td><strong>Castilla-La Mancha</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – 2023</td>
       </tr>
       <tr>
           <td><strong>Cataluña</strong></td>
           <td><code>A</code></td>
-          <td>1980 – actualidad</td>
+          <td>1980 – 2023</td>
       </tr>
       <tr>
           <td><strong>Comunidad Valenciana</strong></td>
           <td><code>A</code></td>
-          <td>1983 – actualidad</td>
+          <td>1983 – 2023</td>
+      </tr>
+      <tr>
+          <td><strong>Extremadura</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – 2023</td>
+      </tr>
+      <tr>
+          <td><strong>Galicia</strong></td>
+          <td><code>A</code></td>
+          <td>1981 – 2024</td>
       </tr>
       <tr>
           <td><strong>Comunidad de Madrid</strong></td>
           <td><code>A</code></td>
-          <td>1983 – actualidad</td>
+          <td>1983 – 2023</td>
+      </tr>
+      <tr>
+          <td><strong>Región de Murcia</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – 2023</td>
+      </tr>
+      <tr>
+          <td><strong>Comunidad Foral de Navarra</strong></td>
+          <td><code>A</code></td>
+          <td>1979 – 2023</td>
+      </tr>
+      <tr>
+          <td><strong>País Vasco</strong></td>
+          <td><code>A</code></td>
+          <td>1980 – 2024</td>
+      </tr>
+      <tr>
+          <td><strong>La Rioja</strong></td>
+          <td><code>A</code></td>
+          <td>1983 – 2023</td>
       </tr>
   </tbody>
 </table>
@@ -178,15 +223,15 @@
 </ul>
 <p>La disponibilidad de cada nivel varía según la comunidad y la convocatoria.</p>
 <h2 id="fuentes-de-datos">Fuentes de datos</h2>
-<p>Los datos provienen de <strong>fuentes oficiales</strong> de cada comunidad autónoma:</p>
+<p>Los datos provienen de <strong>fuentes oficiales</strong>:</p>
 <ul>
 <li><strong>Portales de datos abiertos</strong> autonómicos y estatales</li>
 <li><strong>APIs institucionales</strong>: Junta de Andalucía, PARCAN (Canarias), etc.</li>
 <li><strong>Institutos estadísticos</strong>: IBESTAT (Baleares), ISTAC (Canarias), SADEI (Asturias), etc.</li>
 <li><strong>Paquetes R</strong>: <a href="https://github.com/rOpenSpain/infoelectoral"><code>infoelectoral</code></a> para datos del Ministerio del Interior</li>
-<li><strong>Datos históricos a nivel de mesa</strong>: <a href="https://gipeyop.uv.es/gipeyop/sea.html">Spanish Electoral Archive (SEA)</a> del GIPEYOP (Universitat de València)</li>
+<li><a href="https://gipeyop.uv.es/gipeyop/sea.html"><strong>Spanish Electoral Archive (SEA)</strong></a> del GIPEYOP (Universitat de València) para otros procesos electorales que no estaban disponibles por fuentes oficiales directas.</li>
 </ul>
-<p>Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la <a href="https://hmeleiro.github.io/eleccionesdb-etl/fuentes.html">documentación de fuentes de datos</a> del proyecto eleccionesdb.</p>
+<p>Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la <a href="https://hmeleiro.github.io/eleccionesdb-etl/fuentes">documentación de fuentes de datos</a> del proyecto eleccionesdb.</p>
 <h2 id="modelo-de-datos">Modelo de datos</h2>
 <p>Los datos siguen un <strong>esquema estrella</strong> con:</p>
 <ul>

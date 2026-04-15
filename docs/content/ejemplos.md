@@ -182,6 +182,23 @@ GET /v1/elecciones/208
 }
 ```
 
+## Fuente de una elección
+
+Devuelve la fuente oficial de los datos de una elección. Responde 404 si la elección no tiene fuente registrada.
+
+```
+GET /v1/elecciones/208/fuente
+```
+
+```json
+{
+  "eleccion_id": 1,
+  "fuente": "Ministerio del Interior (Infoelectoral)",
+  "url_fuente": "https://infoelectoral.interior.gob.es/",
+  "observaciones": "Paquete R infoelectoral"
+}
+```
+
 ## Territorios por tipo
 
 ```

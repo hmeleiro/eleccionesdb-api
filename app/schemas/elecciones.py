@@ -46,3 +46,14 @@ class EleccionDetail(BaseModel):
     ambito: str | None = None
     slug: str | None = None
     tipo: TipoEleccionSchema | None = None
+
+
+# ─── Fuentes de elecciones ──────────────────────────────
+
+class EleccionFuenteSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    eleccion_id: int
+    fuente: str
+    url_fuente: str
+    observaciones: str | None = None
