@@ -134,6 +134,70 @@
   }
 
   /* --------------------------------------------------------- */
+  /*  Reenvío de verificación — helper inline                   */
+  /* --------------------------------------------------------- */
+
+  /**
+   * Muestra en el bloque de feedback un aviso con botón para reenviar
+   * el email de verificación cuando la cuenta ya existe en estado pendiente.
+   */
+  async function showResendVerificationPrompt(feedbackId, email) {
+    const el = document.getElementById(feedbackId);
+    if (!el) return;
+    el.className = "api-feedback api-feedback--warning";
+    el.innerHTML = "";
+
+    const p = document.createElement("p");
+    p.textContent =
+      "Ya existe un registro pendiente de verificación con este email. ¿Quieres que te reenviemos el correo de verificación?";
+    el.appendChild(p);
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-secondary btn-sm";
+    btn.textContent = "Reenviar correo de verificación";
+    btn.addEventListener("click", async function () {
+      btn.disabled = true;
+      btn.textContent = "Enviando…";
+      try {
+        const res = await request("/v1/auth/resend-verification", {
+          method: "POST",
+          body: { email: email },
+        });
+        if (res.ok) {
+          el.className = "api-feedback api-feedback--success";
+          el.innerHTML = "";
+          const msg = document.createElement("p");
+          msg.textContent =
+            "Correo de verificación reenviado. Revisa tu bandeja de entrada.";
+          el.appendChild(msg);
+        } else {
+          btn.disabled = false;
+          btn.textContent = "Reenviar correo de verificación";
+          const msg = document.createElement("p");
+          msg.className = "api-feedback__error";
+          msg.textContent = errorMsg(
+            res,
+            "No se pudo reenviar el correo. Inténtalo de nuevo.",
+          );
+          el.appendChild(msg);
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Reenviar correo de verificación";
+        const msg = document.createElement("p");
+        msg.className = "api-feedback__error";
+        msg.textContent =
+          "No se pudo conectar con el servidor. Inténtalo de nuevo.";
+        el.appendChild(msg);
+      }
+    });
+
+    el.appendChild(btn);
+    el.hidden = false;
+  }
+
+  /* --------------------------------------------------------- */
   /*  Registro  — /developers/register/                         */
   /* --------------------------------------------------------- */
 
@@ -168,6 +232,13 @@
             "Registro enviado correctamente. Revisa tu correo electrónico para verificar tu cuenta.",
           );
           form.reset();
+        } else if (
+          res.status === 409 &&
+          typeof res.data?.detail === "string" &&
+          res.data.detail.includes("pendiente")
+        ) {
+          const emailValue = payload.email;
+          showResendVerificationPrompt("register-feedback", emailValue);
         } else if (res.status === 422) {
           showFeedback(
             "register-feedback",

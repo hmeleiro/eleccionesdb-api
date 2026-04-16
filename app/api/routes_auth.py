@@ -50,6 +50,12 @@ _ip_limiter = RateLimiter(max_calls=5, period_seconds=60)
 _email_limiter = RateLimiter(max_calls=3, period_seconds=60)
 
 _RECOVER_ACCESS_TOKEN_EXPIRY_HOURS = 1
+_RESEND_COOLDOWN_SECONDS = 120
+
+def _build_verification_url(token: str) -> str:
+    base = settings.APP_BASE_URL.rstrip("/")
+    root = settings.ROOT_PATH.rstrip("/")
+    return f"{base}{root}/v1/auth/verify?token={token}"
 
 def _build_restore_session_url(token: str) -> str:
     base = settings.APP_BASE_URL.rstrip("/")
@@ -204,7 +210,7 @@ def register(
     # Enviar email en background
     verification_url = _build_verification_url(full_token)
     background_tasks.add_task(
-        _send_verification_email_task,
+        email_service.send_verification_email,
         developer.email,
         developer.name,
         verification_url,
@@ -441,7 +447,7 @@ def resend_verification(
     # Enviar en background
     verification_url = _build_verification_url(full_token)
     background_tasks.add_task(
-        _send_verification_email_task,
+        email_service.send_verification_email,
         developer.email,
         developer.name,
         verification_url,
