@@ -1,3 +1,8 @@
+---
+title: "Ejemplos de uso"
+description: "Peticiones y respuestas reales de la API EleccionesDB."
+---
+
 ## Autenticación por API key
 
 Todos los endpoints de `/v1/*` requieren el header `X-API-Key`.
@@ -25,11 +30,6 @@ o
   "detail": "API key inválida o revocada"
 }
 ```
-
----
-title: "Ejemplos de uso"
-description: "Peticiones y respuestas reales de la API EleccionesDB."
----
 
 Ejemplos reales de peticiones y respuestas de la API. Todos los ejemplos usan `https://api.spainelectoralproject.com` como base URL.
 
