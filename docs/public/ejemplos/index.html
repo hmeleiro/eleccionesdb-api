@@ -230,6 +230,15 @@ description: &ldquo;Peticiones y respuestas reales de la API EleccionesDB.&rdquo
 </span></span><span style="display:flex;"><span>    <span style="color:#58a1dd">&#34;descripcion&#34;</span>: <span style="color:#a6be9d">&#34;Congreso&#34;</span>
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="fuente-de-una-elección">Fuente de una elección</h2>
+<p>Devuelve la fuente oficial de los datos de una elección. Responde 404 si la elección no tiene fuente registrada.</p>
+<pre tabindex="0"><code>GET /v1/elecciones/208/fuente
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: <span style="color:#a6be9d">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;fuente&#34;</span>: <span style="color:#a6be9d">&#34;Ministerio del Interior (Infoelectoral)&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;url_fuente&#34;</span>: <span style="color:#a6be9d">&#34;https://infoelectoral.interior.gob.es/&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;observaciones&#34;</span>: <span style="color:#a6be9d">&#34;Paquete R infoelectoral&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="territorios-por-tipo">Territorios por tipo</h2>
 <pre tabindex="0"><code>GET /v1/territorios?tipo=ccaa&amp;limit=3
 </code></pre><div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{

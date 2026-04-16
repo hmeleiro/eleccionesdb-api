@@ -44,7 +44,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://hmeleiro.github.io/eleccionesdb-api/",
+        "https://hmeleiro.github.io",
         "http://localhost:1313",
     ],
     allow_methods=["GET", "POST"],
