@@ -41,6 +41,13 @@ class Settings(BaseSettings):
     API_KEY_ROTATION_GRACE_HOURS: int = 1
     RATE_LIMIT_REGISTER_PER_IP: int = 5     # máx registros por IP/hora
     RATE_LIMIT_REGISTER_PER_EMAIL: int = 3  # máx intentos por email/hora
+
+    # ── Panel de administrador ────────────────────────────
+    ADMIN_EMAIL: str = ""
+    ADMIN_PASSWORD: str = ""
+    ADMIN_JWT_SECRET: str = "change-me-in-production"
+    ADMIN_JWT_EXPIRE_HOURS: int = 8
+
     @computed_field  # type: ignore[prop-decorator]
     @property
     def DATABASE_URL(self) -> str:

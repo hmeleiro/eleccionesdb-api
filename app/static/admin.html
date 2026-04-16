@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Elecciones DB API</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body { background: #f8f9fa; }
+    #login-screen { max-width: 400px; margin: 100px auto; }
+    #app-screen { display: none; }
+    .status-badge { font-size: .75rem; }
+    .audit-log-entry { font-size: .82rem; }
+    .table-hover tbody tr { cursor: pointer; }
+    #detail-panel { display: none; }
+    .key-prefix { font-family: monospace; font-size: .85rem; }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ─────────────────────────────────────────── -->
+<div id="login-screen" class="card shadow-sm p-4">
+  <h4 class="mb-3 text-center">Panel de Administración</h4>
+  <div id="login-error" class="alert alert-danger d-none"></div>
+  <form id="login-form">
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" id="login-email" class="form-control" required autocomplete="username">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Contraseña</label>
+      <input type="password" id="login-password" class="form-control" required autocomplete="current-password">
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Entrar</button>
+  </form>
+</div>
+
+<!-- ── APP ───────────────────────────────────────────── -->
+<div id="app-screen">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-dark px-3 mb-4">
+    <span class="navbar-brand mb-0 h5"><i class="bi bi-person-badge me-2"></i>Elecciones DB — Admin</span>
+    <div class="ms-auto d-flex align-items-center gap-3">
+      <span class="text-white-50 small" id="admin-email-label"></span>
+      <button class="btn btn-sm btn-outline-light" id="logout-btn">
+        <i class="bi bi-box-arrow-right me-1"></i>Salir
+      </button>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- ── Lista ───────────────────────────────────── -->
+      <div class="col-lg-7" id="list-col">
+        <div class="card shadow-sm mb-3">
+          <div class="card-header d-flex align-items-center gap-2">
+            <i class="bi bi-people"></i>
+            <strong>Cuentas de desarrollador</strong>
+            <span class="badge bg-secondary ms-auto" id="total-badge">–</span>
+          </div>
+          <div class="card-body pb-2">
+            <div class="row g-2 mb-2">
+              <div class="col-md-4">
+                <input type="text" id="filter-email" class="form-control form-control-sm" placeholder="Buscar por email…">
+              </div>
+              <div class="col-md-3">
+                <select id="filter-status" class="form-select form-select-sm">
+                  <option value="">— Todos los estados —</option>
+                  <option value="pending">pending</option>
+                  <option value="active">active</option>
+                  <option value="suspended">suspended</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <input type="date" id="filter-from" class="form-control form-control-sm" title="Desde">
+              </div>
+              <div class="col-md-2">
+                <input type="date" id="filter-to" class="form-control form-control-sm" title="Hasta">
+              </div>
+              <div class="col-md-1">
+                <button class="btn btn-sm btn-secondary w-100" id="filter-clear-btn" title="Limpiar filtros">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover table-sm mb-0" id="dev-table">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th><th>Email</th><th>Nombre</th><th>Estado</th><th>Registrado</th>
+                </tr>
+              </thead>
+              <tbody id="dev-tbody">
+                <tr><td colspan="5" class="text-center py-3 text-muted">Cargando…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-secondary" id="prev-btn" disabled>
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span class="small" id="page-label">Página 1</span>
+            <button class="btn btn-sm btn-outline-secondary" id="next-btn" disabled>
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Detalle ─────────────────────────────────── -->
+      <div class="col-lg-5" id="detail-panel">
+        <div class="card shadow-sm">
+          <div class="card-header d-flex align-items-center gap-2">
+            <i class="bi bi-person-circle"></i>
+            <strong id="detail-name">–</strong>
+            <span id="detail-status-badge" class="ms-auto badge"></span>
+          </div>
+          <div class="card-body">
+            <dl class="row mb-0" id="detail-fields"></dl>
+
+            <!-- Acciones -->
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <button class="btn btn-sm btn-success" id="action-activate">
+                <i class="bi bi-check-circle me-1"></i>Activar
+              </button>
+              <button class="btn btn-sm btn-warning" id="action-suspend">
+                <i class="bi bi-pause-circle me-1"></i>Suspender
+              </button>
+              <button class="btn btn-sm btn-secondary" id="action-revoke">
+                <i class="bi bi-key me-1"></i>Revocar claves
+              </button>
+              <button class="btn btn-sm btn-danger ms-auto" id="action-delete">
+                <i class="bi bi-trash me-1"></i>Eliminar
+              </button>
+            </div>
+
+            <div id="action-feedback" class="alert mt-2 d-none py-2 small"></div>
+
+            <!-- Claves API -->
+            <h6 class="mt-4 mb-1"><i class="bi bi-key-fill me-1"></i>Claves API</h6>
+            <div id="keys-section" class="small"></div>
+
+            <!-- Audit log -->
+            <h6 class="mt-4 mb-1"><i class="bi bi-journal-text me-1"></i>Audit log <span class="text-muted fw-normal">(últimas 50)</span></h6>
+            <div id="audit-section" style="max-height:260px;overflow-y:auto;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Confirm modal -->
+<div class="modal fade" id="confirm-modal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body" id="confirm-body">¿Estás seguro?</div>
+      <div class="modal-footer py-2">
+        <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-sm btn-danger" id="confirm-ok">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ── State ──────────────────────────────────────────── */
+let TOKEN = localStorage.getItem('admin_token') || '';
+let currentPage = 1;
+let totalPages = 1;
+let selectedId = null;
+let confirmCallback = null;
+
+/* ── Helpers ────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+
+function statusBadge(s) {
+  const map = { active: 'success', pending: 'warning text-dark', suspended: 'danger' };
+  return `<span class="badge bg-${map[s] || 'secondary'} status-badge">${s}</span>`;
+}
+
+function fmtDate(iso) {
+  if (!iso) return '–';
+  return new Date(iso).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(path, {
+    ...opts,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${TOKEN}`,
+      ...(opts.headers || {}),
+    },
+  });
+  if (res.status === 401) { logout(); return null; }
+  return res;
+}
+
+/* ── Bootstrap modal helper ─────────────────────────── */
+function confirm(msg, cb) {
+  $('confirm-body').textContent = msg;
+  confirmCallback = cb;
+  bootstrap.Modal.getOrCreateInstance($('confirm-modal')).show();
+}
+
+$('confirm-ok').addEventListener('click', () => {
+  bootstrap.Modal.getInstance($('confirm-modal')).hide();
+  if (confirmCallback) confirmCallback();
+});
+
+/* ── Auth ───────────────────────────────────────────── */
+async function login(e) {
+  e.preventDefault();
+  const email = $('login-email').value.trim();
+  const password = $('login-password').value;
+  const res = await fetch('/admin/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    TOKEN = data.access_token;
+    localStorage.setItem('admin_token', TOKEN);
+    showApp(email);
+  } else {
+    $('login-error').textContent = 'Credenciales incorrectas';
+    $('login-error').classList.remove('d-none');
+  }
+}
+
+function logout() {
+  localStorage.removeItem('admin_token');
+  TOKEN = '';
+  $('app-screen').style.display = 'none';
+  $('login-screen').style.display = '';
+}
+
+function showApp(email) {
+  $('login-screen').style.display = 'none';
+  $('app-screen').style.display = 'block';
+  $('admin-email-label').textContent = email || parseEmailFromToken();
+  loadDevelopers();
+}
+
+function parseEmailFromToken() {
+  try {
+    return JSON.parse(atob(TOKEN.split('.')[1])).email || '';
+  } catch { return ''; }
+}
+
+$('login-form').addEventListener('submit', login);
+$('logout-btn').addEventListener('click', logout);
+
+/* ── Developer list ─────────────────────────────────── */
+async function loadDevelopers(page = 1) {
+  currentPage = page;
+  const email = $('filter-email').value.trim();
+  const status = $('filter-status').value;
+  const from = $('filter-from').value;
+  const to = $('filter-to').value;
+
+  const params = new URLSearchParams({ page, per_page: 25 });
+  if (email)  params.set('email', email);
+  if (status) params.set('status', status);
+  if (from)   params.set('date_from', from);
+  if (to)     params.set('date_to', to);
+
+  const res = await apiFetch(`/admin/api/developers?${params}`);
+  if (!res) return;
+  const data = await res.json();
+  renderTable(data);
+}
+
+function renderTable({ items, total, page, pages }) {
+  totalPages = pages;
+  $('total-badge').textContent = `${total} cuenta${total !== 1 ? 's' : ''}`;
+  $('page-label').textContent = `Página ${page} / ${pages || 1}`;
+  $('prev-btn').disabled = page <= 1;
+  $('next-btn').disabled = page >= pages;
+
+  const tbody = $('dev-tbody');
+  if (!items.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3 text-muted">Sin resultados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = items.map(d => `
+    <tr data-id="${d.id}" class="${selectedId === d.id ? 'table-primary' : ''}">
+      <td class="text-muted">${d.id}</td>
+      <td>${escHtml(d.email)}</td>
+      <td>${escHtml(d.name)}</td>
+      <td>${statusBadge(d.status)}</td>
+      <td class="text-muted">${fmtDate(d.created_at)}</td>
+    </tr>`).join('');
+
+  tbody.querySelectorAll('tr[data-id]').forEach(row => {
+    row.addEventListener('click', () => loadDetail(+row.dataset.id));
+  });
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* Filters */
+let filterDebounce;
+['filter-email','filter-status','filter-from','filter-to'].forEach(id => {
+  $(id).addEventListener('input', () => {
+    clearTimeout(filterDebounce);
+    filterDebounce = setTimeout(() => loadDevelopers(1), 300);
+  });
+});
+$('filter-clear-btn').addEventListener('click', () => {
+  ['filter-email','filter-status','filter-from','filter-to'].forEach(id => {
+    $(id).value = '';
+  });
+  loadDevelopers(1);
+});
+$('prev-btn').addEventListener('click', () => loadDevelopers(currentPage - 1));
+$('next-btn').addEventListener('click', () => loadDevelopers(currentPage + 1));
+
+/* ── Developer detail ───────────────────────────────── */
+async function loadDetail(id) {
+  selectedId = id;
+  // highlight selected row
+  document.querySelectorAll('#dev-tbody tr').forEach(r => {
+    r.classList.toggle('table-primary', +r.dataset.id === id);
+  });
+
+  const res = await apiFetch(`/admin/api/developers/${id}`);
+  if (!res || !res.ok) return;
+  const dev = await res.json();
+  renderDetail(dev);
+}
+
+function renderDetail(dev) {
+  $('detail-panel').style.display = 'block';
+  $('detail-name').textContent = dev.name;
+  $('detail-status-badge').className = `ms-auto badge bg-${
+    {active:'success',pending:'warning text-dark',suspended:'danger'}[dev.status] || 'secondary'}`;
+  $('detail-status-badge').textContent = dev.status;
+
+  $('detail-fields').innerHTML = `
+    <dt class="col-4">Email</dt><dd class="col-8">${escHtml(dev.email)}</dd>
+    <dt class="col-4">Organización</dt><dd class="col-8">${escHtml(dev.organization || '–')}</dd>
+    <dt class="col-4">Uso previsto</dt><dd class="col-8">${escHtml(dev.intended_use || '–')}</dd>
+    <dt class="col-4">Email verif.</dt><dd class="col-8">${dev.email_verified ? '<span class="text-success">Sí</span>' : '<span class="text-danger">No</span>'}</dd>
+    <dt class="col-4">Registrado</dt><dd class="col-8">${fmtDate(dev.created_at)}</dd>
+    <dt class="col-4">Actualizado</dt><dd class="col-8">${fmtDate(dev.updated_at)}</dd>
+  `;
+
+  /* API keys */
+  if (!dev.api_keys.length) {
+    $('keys-section').innerHTML = '<span class="text-muted">Sin claves</span>';
+  } else {
+    $('keys-section').innerHTML = `<table class="table table-sm table-bordered mb-0">
+      <thead class="table-light"><tr><th>Prefijo</th><th>Activa</th><th>Creada</th><th>Último uso</th><th>Revocada</th></tr></thead>
+      <tbody>${dev.api_keys.map(k => `
+        <tr>
+          <td class="key-prefix">${escHtml(k.key_prefix)}…</td>
+          <td>${k.is_active ? '<i class="bi bi-check-circle-fill text-success"></i>' : '<i class="bi bi-x-circle-fill text-danger"></i>'}</td>
+          <td>${fmtDate(k.created_at)}</td>
+          <td>${fmtDate(k.last_used_at)}</td>
+          <td>${fmtDate(k.revoked_at)}</td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  /* Audit log */
+  if (!dev.audit_log.length) {
+    $('audit-section').innerHTML = '<span class="text-muted small">Sin registros</span>';
+  } else {
+    $('audit-section').innerHTML = dev.audit_log.map(e => `
+      <div class="audit-log-entry border-start border-2 ps-2 mb-1">
+        <span class="text-muted">${fmtDate(e.created_at)}</span>
+        <span class="badge bg-light text-dark border ms-1">${escHtml(e.event_type)}</span>
+        ${e.ip_address ? `<span class="text-muted ms-1">${escHtml(e.ip_address)}</span>` : ''}
+        ${e.details ? `<div class="text-muted">${escHtml(e.details)}</div>` : ''}
+      </div>`).join('');
+  }
+
+  $('action-feedback').className = 'alert mt-2 d-none py-2 small';
+  $('action-activate').style.display = dev.status !== 'active' ? '' : 'none';
+  $('action-suspend').style.display  = dev.status !== 'suspended' ? '' : 'none';
+}
+
+function showFeedback(msg, type = 'success') {
+  const el = $('action-feedback');
+  el.textContent = msg;
+  el.className = `alert alert-${type} mt-2 py-2 small`;
+}
+
+/* ── Actions ────────────────────────────────────────── */
+$('action-activate').addEventListener('click', () => {
+  confirm('¿Activar esta cuenta?', async () => {
+    const res = await apiFetch(`/admin/api/developers/${selectedId}/status`, {
+      method: 'PATCH', body: JSON.stringify({ status: 'active' }),
+    });
+    if (res?.ok) { showFeedback('Cuenta activada'); loadDevelopers(currentPage); loadDetail(selectedId); }
+    else showFeedback('Error al activar', 'danger');
+  });
+});
+
+$('action-suspend').addEventListener('click', () => {
+  confirm('¿Suspender esta cuenta?', async () => {
+    const res = await apiFetch(`/admin/api/developers/${selectedId}/status`, {
+      method: 'PATCH', body: JSON.stringify({ status: 'suspended' }),
+    });
+    if (res?.ok) { showFeedback('Cuenta suspendida'); loadDevelopers(currentPage); loadDetail(selectedId); }
+    else showFeedback('Error al suspender', 'danger');
+  });
+});
+
+$('action-revoke').addEventListener('click', () => {
+  confirm('¿Revocar todas las claves API de este desarrollador?', async () => {
+    const res = await apiFetch(`/admin/api/developers/${selectedId}/api-keys/revoke`, { method: 'POST' });
+    if (res?.ok) { const d = await res.json(); showFeedback(`${d.revoked} clave(s) revocada(s)`); loadDetail(selectedId); }
+    else showFeedback('Error al revocar', 'danger');
+  });
+});
+
+$('action-delete').addEventListener('click', () => {
+  confirm('¿Eliminar permanentemente esta cuenta y todos sus datos?', async () => {
+    const res = await apiFetch(`/admin/api/developers/${selectedId}`, { method: 'DELETE' });
+    if (res?.ok) {
+      $('detail-panel').style.display = 'none';
+      selectedId = null;
+      loadDevelopers(currentPage);
+    } else showFeedback('Error al eliminar', 'danger');
+  });
+});
+
+/* ── Init ───────────────────────────────────────────── */
+if (TOKEN) {
+  showApp();
+}
+</script>
+</body>
+</html>

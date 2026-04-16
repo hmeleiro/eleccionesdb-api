@@ -85,3 +85,12 @@ class AuditLog(AuthBase):
     ip_address = Column(String(45), nullable=True)
     details = Column(Text, nullable=True)
     created_at = Column(DateTime, default=_utcnow, nullable=False)
+
+
+class AdminUser(AuthBase):
+    __tablename__ = "admin_users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    password_hash = Column(String(255), nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)

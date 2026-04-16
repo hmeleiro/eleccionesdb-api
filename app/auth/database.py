@@ -67,6 +67,37 @@ def init_auth_db():
         ApiKey,
         EmailVerificationToken,
         AuditLog,
+        AdminUser,
     )
     AuthBase.metadata.create_all(bind=auth_engine)
     logger.info("Auth DB inicializada [%s]", _db_url)
+
+
+def init_admin_user():
+    """Crea el usuario administrador desde ADMIN_EMAIL + ADMIN_PASSWORD si no existe."""
+    from sqlalchemy import select as sa_select
+    from app.auth.models import AdminUser  # noqa: F401
+    from app.auth.admin_service import hash_password
+
+    if not settings.ADMIN_EMAIL or not settings.ADMIN_PASSWORD:
+        logger.info("ADMIN_EMAIL / ADMIN_PASSWORD no configurados: panel de admin deshabilitado")
+        return
+
+    db = AuthSessionLocal()
+    try:
+        existing = db.execute(
+            sa_select(AdminUser).where(AdminUser.email == settings.ADMIN_EMAIL)
+        ).scalar_one_or_none()
+
+        if existing is None:
+            admin = AdminUser(
+                email=settings.ADMIN_EMAIL,
+                password_hash=hash_password(settings.ADMIN_PASSWORD),
+            )
+            db.add(admin)
+            db.commit()
+            logger.info("Usuario admin creado: %s", settings.ADMIN_EMAIL)
+        else:
+            logger.info("Usuario admin ya existe: %s", settings.ADMIN_EMAIL)
+    finally:
+        db.close()

@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
 from app.config import settings
+from fastapi.staticfiles import StaticFiles
+
 from app.api import (
     routes_health,
     routes_elecciones,
@@ -15,8 +17,9 @@ from app.api import (
     routes_cache,
     routes_auth,
     routes_developers,
+    routes_admin,
 )
-from app.auth.database import init_auth_db
+from app.auth.database import init_auth_db, init_admin_user
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -28,6 +31,7 @@ async def lifespan(app: FastAPI):
     if settings.DB_SCHEMA:
         logger.info("Esquema BD: %s", settings.DB_SCHEMA)
     init_auth_db()
+    init_admin_user()
     yield
     logger.info("Elecciones DB API apagándose")
 
@@ -47,7 +51,7 @@ app.add_middleware(
         "https://hmeleiro.github.io",
         "http://localhost:1313",
     ],
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
 
@@ -67,6 +71,7 @@ app.include_router(routes_resultados.router)
 app.include_router(routes_cache.router)
 app.include_router(routes_auth.router)
 app.include_router(routes_developers.router)
+app.include_router(routes_admin.router)
 
 # ─── Cache middleware ───────────────────────────────────
 
