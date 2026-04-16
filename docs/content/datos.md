@@ -62,7 +62,7 @@ Los datos siguen un **esquema estrella** con:
 - **2 tablas de hechos principales**: resumen territorial (censo, participación, votos válidos/blancos/nulos) y votos territoriales (votos y representantes electos por partido).
 - **2 tablas CERA**: resumen y votos de residentes ausentes.
 
-Para más detalles, consulta el [modelo de datos](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html) de eleccionesdb.
+Para más detalles, consulta el [modelo de datos](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos/) de eleccionesdb.
 
 ## Paquete R
 
@@ -90,13 +90,13 @@ Además de consumir los datos a través de esta API, puedes descargar la base de
 | **SQLite** | Consultas SQL, exploración relacional | Esquema completo con PKs, FKs e índices |
 | **CSV** | Uso rápido, hojas de cálculo | Tablas de hechos pre-joineadas con dimensiones |
 
-Consulta la sección de [descargas](https://hmeleiro.github.io/eleccionesdb-etl/descargas.html) del proyecto eleccionesdb.
+Consulta la sección de [descargas](https://hmeleiro.github.io/eleccionesdb-etl/descargas/) del proyecto eleccionesdb.
 
 ## Enlaces
 
 - [**eleccionesdb — Web del proyecto**](https://hmeleiro.github.io/eleccionesdb-etl/) — Documentación completa de la base de datos
-- [**Fuentes de datos**](https://hmeleiro.github.io/eleccionesdb-etl/fuentes.html) — Listado detallado por comunidad
-- [**Modelo de datos**](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos.html) — Diagrama E/R y descripción de tablas
-- [**Descargas**](https://hmeleiro.github.io/eleccionesdb-etl/descargas.html) — Parquet, SQLite y CSV
-- [**Código fuente del ETL**](https://github.com/hmeleiro/eleccionesdb-etl) — Repositorio en GitHub
+- [**Código fuente del ETL**](https://github.com/hmeleiro/eleccionesdb-etl/) — Repositorio en GitHub
+- [**Fuentes de datos**](https://hmeleiro.github.io/eleccionesdb-etl/fuentes/) — Listado detallado por comunidad
+- [**Modelo de datos**](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos/) — Diagrama E/R y descripción de tablas
+- [**Descargas**](https://hmeleiro.github.io/eleccionesdb-etl/descargas/) — Parquet, SQLite y CSV
 - [**`eleccionesdb` — Paquete R**](https://hmeleiro.github.io/eleccionesdb-r/) — Cliente R para consultar la API
