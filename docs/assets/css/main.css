@@ -162,6 +162,11 @@ pre code {
   font-size: inherit;
 }
 
+/* Override Chroma inline color (e.g. hrdark generates dark text on dark bg) */
+.highlight pre {
+  color: #e5e7eb !important;
+}
+
 /* --- Layout ------------------------------------------------ */
 .container {
   max-width: var(--container-max);
