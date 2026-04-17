@@ -31,7 +31,7 @@
 
   <body data-api-base="https://api.spainelectoralproject.com"><header class="site-header">
   <div class="container header-inner">
-    <a href="https://hmeleiro.github.io/eleccionesdb-api/" class="site-logo">
+    <a href="https://eleccionesdb-api.spainelectoralproject.com/" class="site-logo">
       <span class="logo-icon">◆</span>
       <span class="logo-text">EleccionesDB API</span>
     </a>
@@ -105,7 +105,7 @@
       </div>
       <div class="page-content prose">
         <h2 id="cobertura">Cobertura</h2>
-<p>La API da acceso a los datos de <a href="https://hmeleiro.github.io/eleccionesdb-etl/">eleccionesdb</a>, una base de datos relacional con resultados electorales de España.</p>
+<p>La API da acceso a los datos de <a href="https://eleccionesdb.spainelectoralproject.com/">eleccionesdb</a>, una base de datos relacional con resultados electorales de España.</p>
 <h3 id="ámbitos-electorales">Ámbitos electorales</h3>
 <table>
   <thead>
@@ -231,7 +231,7 @@
 <li><strong>Paquetes R</strong>: <a href="https://github.com/rOpenSpain/infoelectoral"><code>infoelectoral</code></a> para datos del Ministerio del Interior</li>
 <li><a href="https://gipeyop.uv.es/gipeyop/sea.html"><strong>Spanish Electoral Archive (SEA)</strong></a> del GIPEYOP (Universitat de València) para otros procesos electorales que no estaban disponibles por fuentes oficiales directas.</li>
 </ul>
-<p>Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la <a href="https://hmeleiro.github.io/eleccionesdb-etl/fuentes">documentación de fuentes de datos</a> del proyecto eleccionesdb.</p>
+<p>Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la <a href="https://eleccionesdb.spainelectoralproject.com/fuentes">documentación de fuentes de datos</a> del proyecto eleccionesdb.</p>
 <h2 id="modelo-de-datos">Modelo de datos</h2>
 <p>Los datos siguen un <strong>esquema estrella</strong> con:</p>
 <ul>
@@ -239,9 +239,9 @@
 <li><strong>2 tablas de hechos principales</strong>: resumen territorial (censo, participación, votos válidos/blancos/nulos) y votos territoriales (votos y representantes electos por partido).</li>
 <li><strong>2 tablas CERA</strong>: resumen y votos de residentes ausentes.</li>
 </ul>
-<p>Para más detalles, consulta el <a href="https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos/">modelo de datos</a> de eleccionesdb.</p>
+<p>Para más detalles, consulta el <a href="https://eleccionesdb.spainelectoralproject.com/modelo-datos/">modelo de datos</a> de eleccionesdb.</p>
 <h2 id="paquete-r">Paquete R</h2>
-<p>El paquete <a href="https://hmeleiro.github.io/eleccionesdb-r/"><code>eleccionesdb</code></a> permite consultar esta API directamente desde R. Devuelve tibbles listos para análisis, gestiona la paginación automáticamente y aplana las estructuras JSON anidadas.</p>
+<p>El paquete <a href="https://eleccionesdb-r.spainelectoralproject.com/"><code>eleccionesdb</code></a> permite consultar esta API directamente desde R. Devuelve tibbles listos para análisis, gestiona la paginación automáticamente y aplana las estructuras JSON anidadas.</p>
 <div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#828b96;font-style:italic"># Instalación</span>
 </span></span><span style="display:flex;"><span><span style="color:#58a1dd">remotes</span><span style="color:#ff636f">::</span><span style="color:#58a1dd">install_github</span>(<span style="color:#a6be9d">&#34;hmeleiro/eleccionesdb-r&#34;</span>)
 </span></span><span style="display:flex;"><span>
@@ -249,7 +249,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#58a1dd">library</span>(<span style="color:#58a1dd">eleccionesdb</span>)
 </span></span><span style="display:flex;"><span><span style="color:#58a1dd">elecciones</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">edb_elecciones</span>(<span style="color:#58a1dd">tipo_eleccion</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">&#34;G&#34;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#58a1dd">resultados</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">edb_resultados_combinados</span>(<span style="color:#58a1dd">eleccion_id</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">208</span>, <span style="color:#58a1dd">tipo_territorio</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">&#34;provincia&#34;</span>)
-</span></span></code></pre></div><p>Más información y ejemplos en la <a href="https://hmeleiro.github.io/eleccionesdb-r/">documentación del paquete</a>.</p>
+</span></span></code></pre></div><p>Más información y ejemplos en la <a href="https://eleccionesdb-r.spainelectoralproject.com/">documentación del paquete</a>.</p>
 <h2 id="descarga-directa-de-datos">Descarga directa de datos</h2>
 <p>Además de consumir los datos a través de esta API, puedes descargar la base de datos completa en tres formatos:</p>
 <table>
@@ -278,15 +278,15 @@
       </tr>
   </tbody>
 </table>
-<p>Consulta la sección de <a href="https://hmeleiro.github.io/eleccionesdb-etl/descargas/">descargas</a> del proyecto eleccionesdb.</p>
+<p>Consulta la sección de <a href="https://eleccionesdb.spainelectoralproject.com/descargas/">descargas</a> del proyecto eleccionesdb.</p>
 <h2 id="enlaces">Enlaces</h2>
 <ul>
-<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/"><strong>eleccionesdb — Web del proyecto</strong></a> — Documentación completa de la base de datos</li>
+<li><a href="https://eleccionesdb.spainelectoralproject.com/"><strong>eleccionesdb — Web del proyecto</strong></a> — Documentación completa de la base de datos</li>
 <li><a href="https://github.com/hmeleiro/eleccionesdb-etl/"><strong>Código fuente del ETL</strong></a> — Repositorio en GitHub</li>
-<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/fuentes/"><strong>Fuentes de datos</strong></a> — Listado detallado por comunidad</li>
-<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos/"><strong>Modelo de datos</strong></a> — Diagrama E/R y descripción de tablas</li>
-<li><a href="https://hmeleiro.github.io/eleccionesdb-etl/descargas/"><strong>Descargas</strong></a> — Parquet, SQLite y CSV</li>
-<li><a href="https://hmeleiro.github.io/eleccionesdb-r/"><strong><code>eleccionesdb</code> — Paquete R</strong></a> — Cliente R para consultar la API</li>
+<li><a href="https://eleccionesdb.spainelectoralproject.com/fuentes/"><strong>Fuentes de datos</strong></a> — Listado detallado por comunidad</li>
+<li><a href="https://eleccionesdb.spainelectoralproject.com/modelo-datos/"><strong>Modelo de datos</strong></a> — Diagrama E/R y descripción de tablas</li>
+<li><a href="https://eleccionesdb.spainelectoralproject.com/descargas/"><strong>Descargas</strong></a> — Parquet, SQLite y CSV</li>
+<li><a href="https://eleccionesdb-r.spainelectoralproject.com/"><strong><code>eleccionesdb</code> — Paquete R</strong></a> — Cliente R para consultar la API</li>
 </ul>
 
       </div>
@@ -314,7 +314,7 @@
           <h4>Proyecto</h4>
           <ul>
             <li><a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a></li>
-            <li><a href="https://hmeleiro.github.io/eleccionesdb-etl/" target="_blank" rel="noopener">eleccionesdb (ETL)</a></li>
+            <li><a href="https://eleccionesdb.spainelectoralproject.com/" target="_blank" rel="noopener">eleccionesdb (ETL)</a></li>
             <li><a href="https://github.com/hmeleiro/eleccionesdb-api" target="_blank" rel="noopener">GitHub</a></li>
           </ul>
         </div>

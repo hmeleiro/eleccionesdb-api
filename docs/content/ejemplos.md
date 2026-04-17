@@ -539,7 +539,7 @@ GET /v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codigo_p
 
 ## Desde R
 
-Si trabajas con R, puedes usar el paquete [`eleccionesdb`](https://hmeleiro.github.io/eleccionesdb-r/) para consultar la API sin construir peticiones HTTP manualmente:
+Si trabajas con R, puedes usar el paquete [`eleccionesdb`](https://eleccionesdb-r.spainelectoralproject.com/) para consultar la API sin construir peticiones HTTP manualmente:
 
 ```r
 library(eleccionesdb)
@@ -555,4 +555,4 @@ resultados <- edb_resultados_combinados(
 )
 ```
 
-Más información en la [documentación del paquete](https://hmeleiro.github.io/eleccionesdb-r/).
+Más información en la [documentación del paquete](https://eleccionesdb-r.spainelectoralproject.com/).

@@ -1,6 +1,6 @@
 # Elecciones DB API
 
-API REST para realizar consultas a [eleccionesdb](https://hmeleiro.github.io/eleccionesdb-etl/), una base de datos de resultados electorales de España.  
+API REST para realizar consultas a [eleccionesdb](https://eleccionesdb.spainelectoralproject.com/), una base de datos de resultados electorales de España.  
 Desarrollada con **FastAPI** + **SQLAlchemy** + **PostgreSQL**.
 
 ---
@@ -105,7 +105,7 @@ Todos los listados soportan paginación: `?skip=0&limit=50` (máx 500).
 
 | Lenguaje | Paquete | Instalación |
 |----------|---------|-------------|
-| **R** | [`eleccionesdb`](https://hmeleiro.github.io/eleccionesdb-r/) | `remotes::install_github("hmeleiro/eleccionesdb-r")` |
+| **R** | [`eleccionesdb`](https://eleccionesdb-r.spainelectoralproject.com/) | `remotes::install_github("hmeleiro/eleccionesdb-r")` |
 
 ---
 

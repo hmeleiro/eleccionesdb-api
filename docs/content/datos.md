@@ -5,7 +5,7 @@ description: "Cobertura, fuentes oficiales y opciones de descarga de los datos e
 
 ## Cobertura
 
-La API da acceso a los datos de [eleccionesdb](https://hmeleiro.github.io/eleccionesdb-etl/), una base de datos relacional con resultados electorales de España.
+La API da acceso a los datos de [eleccionesdb](https://eleccionesdb.spainelectoralproject.com/), una base de datos relacional con resultados electorales de España.
 
 ### Ámbitos electorales
 
@@ -52,7 +52,7 @@ Los datos provienen de **fuentes oficiales**:
 - **Paquetes R**: [`infoelectoral`](https://github.com/rOpenSpain/infoelectoral) para datos del Ministerio del Interior
 - [**Spanish Electoral Archive (SEA)**](https://gipeyop.uv.es/gipeyop/sea.html) del GIPEYOP (Universitat de València) para otros procesos electorales que no estaban disponibles por fuentes oficiales directas.
 
-Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la [documentación de fuentes de datos](https://hmeleiro.github.io/eleccionesdb-etl/fuentes) del proyecto eleccionesdb.
+Para el listado completo y detallado de fuentes por comunidad autónoma, consulta la [documentación de fuentes de datos](https://eleccionesdb.spainelectoralproject.com/fuentes) del proyecto eleccionesdb.
 
 ## Modelo de datos
 
@@ -62,11 +62,11 @@ Los datos siguen un **esquema estrella** con:
 - **2 tablas de hechos principales**: resumen territorial (censo, participación, votos válidos/blancos/nulos) y votos territoriales (votos y representantes electos por partido).
 - **2 tablas CERA**: resumen y votos de residentes ausentes.
 
-Para más detalles, consulta el [modelo de datos](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos/) de eleccionesdb.
+Para más detalles, consulta el [modelo de datos](https://eleccionesdb.spainelectoralproject.com/modelo-datos/) de eleccionesdb.
 
 ## Paquete R
 
-El paquete [`eleccionesdb`](https://hmeleiro.github.io/eleccionesdb-r/) permite consultar esta API directamente desde R. Devuelve tibbles listos para análisis, gestiona la paginación automáticamente y aplana las estructuras JSON anidadas.
+El paquete [`eleccionesdb`](https://eleccionesdb-r.spainelectoralproject.com/) permite consultar esta API directamente desde R. Devuelve tibbles listos para análisis, gestiona la paginación automáticamente y aplana las estructuras JSON anidadas.
 
 ```r
 # Instalación
@@ -78,7 +78,7 @@ elecciones <- edb_elecciones(tipo_eleccion = "G")
 resultados <- edb_resultados_combinados(eleccion_id = 208, tipo_territorio = "provincia")
 ```
 
-Más información y ejemplos en la [documentación del paquete](https://hmeleiro.github.io/eleccionesdb-r/).
+Más información y ejemplos en la [documentación del paquete](https://eleccionesdb-r.spainelectoralproject.com/).
 
 ## Descarga directa de datos
 
@@ -90,13 +90,13 @@ Además de consumir los datos a través de esta API, puedes descargar la base de
 | **SQLite** | Consultas SQL, exploración relacional | Esquema completo con PKs, FKs e índices |
 | **CSV** | Uso rápido, hojas de cálculo | Tablas de hechos pre-joineadas con dimensiones |
 
-Consulta la sección de [descargas](https://hmeleiro.github.io/eleccionesdb-etl/descargas/) del proyecto eleccionesdb.
+Consulta la sección de [descargas](https://eleccionesdb.spainelectoralproject.com/descargas/) del proyecto eleccionesdb.
 
 ## Enlaces
 
-- [**eleccionesdb — Web del proyecto**](https://hmeleiro.github.io/eleccionesdb-etl/) — Documentación completa de la base de datos
+- [**eleccionesdb — Web del proyecto**](https://eleccionesdb.spainelectoralproject.com/) — Documentación completa de la base de datos
 - [**Código fuente del ETL**](https://github.com/hmeleiro/eleccionesdb-etl/) — Repositorio en GitHub
-- [**Fuentes de datos**](https://hmeleiro.github.io/eleccionesdb-etl/fuentes/) — Listado detallado por comunidad
-- [**Modelo de datos**](https://hmeleiro.github.io/eleccionesdb-etl/modelo-datos/) — Diagrama E/R y descripción de tablas
-- [**Descargas**](https://hmeleiro.github.io/eleccionesdb-etl/descargas/) — Parquet, SQLite y CSV
-- [**`eleccionesdb` — Paquete R**](https://hmeleiro.github.io/eleccionesdb-r/) — Cliente R para consultar la API
+- [**Fuentes de datos**](https://eleccionesdb.spainelectoralproject.com/fuentes/) — Listado detallado por comunidad
+- [**Modelo de datos**](https://eleccionesdb.spainelectoralproject.com/modelo-datos/) — Diagrama E/R y descripción de tablas
+- [**Descargas**](https://eleccionesdb.spainelectoralproject.com/descargas/) — Parquet, SQLite y CSV
+- [**`eleccionesdb` — Paquete R**](https://eleccionesdb-r.spainelectoralproject.com/) — Cliente R para consultar la API
