@@ -13,7 +13,6 @@ title = "EleccionesDB API"
   github = "https://github.com/hmeleiro/eleccionesdb-api"
   parentProject = "https://spainelectoralproject.com/"
   etlSite = "https://eleccionesdb.spainelectoralproject.com/"
-  # URL base de la API. Cambiar a "http://localhost:8000" para desarrollo local.
   apiBaseURL = "https://api.spainelectoralproject.com"
 
 [menus]

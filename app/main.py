@@ -1,7 +1,7 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
@@ -27,6 +27,11 @@ logger = logging.getLogger("uvicorn.error")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Elecciones DB API arrancando  [env=%s, cache=%s]", settings.APP_ENV, settings.CACHE_ENABLED)
+    if settings.ADMIN_JWT_SECRET == "change-me-in-production" and settings.APP_ENV != "development":
+        logger.warning(
+            "\u26a0 ADMIN_JWT_SECRET tiene el valor por defecto. "
+            "Cámbialo en producción para garantizar la seguridad del panel de administración."
+        )
     logger.info("Base de datos: %s@%s:%s/%s", settings.DB_USER, settings.DB_HOST, settings.DB_PORT, settings.DB_NAME)
     if settings.DB_SCHEMA:
         logger.info("Esquema BD: %s", settings.DB_SCHEMA)
@@ -51,6 +56,18 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
+
+
+# ─── Security headers ──────────────────────────────────
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response: Response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
 
 # ─── Routers ────────────────────────────────────────────
 

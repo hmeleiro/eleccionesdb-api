@@ -30,11 +30,13 @@ class DeveloperAccount(AuthBase):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String(255), unique=True, nullable=False, index=True)
-    name = Column(String(255), nullable=False)
     organization = Column(String(255), nullable=True)
     intended_use = Column(Text, nullable=True)
     email_verified = Column(Boolean, default=False, nullable=False)
     status = Column(String(20), default="pending", nullable=False)  # pending | active | suspended
+    privacy_accepted_at = Column(DateTime, nullable=True)
+    marketing_consent = Column(Boolean, default=False, nullable=False)
+    marketing_consent_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=_utcnow, nullable=False)
     updated_at = Column(DateTime, default=_utcnow, onupdate=_utcnow, nullable=False)
 

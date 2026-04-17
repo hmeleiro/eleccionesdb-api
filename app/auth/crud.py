@@ -19,15 +19,19 @@ def create_developer(
     db: Session,
     *,
     email: str,
-    name: str,
     organization: str | None = None,
     intended_use: str | None = None,
+    privacy_accepted_at: datetime | None = None,
+    marketing_consent: bool = False,
+    marketing_consent_at: datetime | None = None,
 ) -> DeveloperAccount:
     dev = DeveloperAccount(
         email=email,
-        name=name,
         organization=organization,
         intended_use=intended_use,
+        privacy_accepted_at=privacy_accepted_at,
+        marketing_consent=marketing_consent,
+        marketing_consent_at=marketing_consent_at,
     )
     db.add(dev)
     db.commit()
@@ -196,3 +200,127 @@ def create_audit_entry(
     db.add(entry)
     db.commit()
     return entry
+
+
+# ─── Anonimización y exportación de datos ────────────────
+
+def anonymize_developer(db: Session, developer: DeveloperAccount) -> None:
+    """Anonimiza los datos personales de un desarrollador (derecho de supresión RGPD).
+
+    Preserva la estructura del registro para mantener integridad referencial
+    y el audit log (interés legítimo de seguridad), pero elimina todos los
+    datos identificativos.
+    """
+    import hashlib
+
+    anon_hash = hashlib.sha256(developer.email.encode()).hexdigest()[:12]
+    developer.email = f"deleted-{anon_hash}@anonymous.invalid"
+    developer.organization = None
+    developer.intended_use = None
+    developer.status = "deleted"
+    developer.marketing_consent = False
+    developer.marketing_consent_at = None
+    developer.updated_at = _utcnow()
+
+    # Revocar todas las API keys activas
+    active_keys = get_active_keys_for_developer(db, developer.id)
+    for key in active_keys:
+        revoke_api_key(db, key, immediate=True)
+
+    db.commit()
+
+
+def get_developer_data_export(db: Session, developer: DeveloperAccount) -> dict:
+    """Recopila todos los datos personales de un desarrollador para exportación (portabilidad RGPD)."""
+    keys = (
+        db.query(ApiKey)
+        .filter(ApiKey.developer_id == developer.id)
+        .order_by(ApiKey.created_at.desc())
+        .all()
+    )
+
+    audit_entries = (
+        db.query(AuditLog)
+        .filter(AuditLog.developer_id == developer.id)
+        .order_by(AuditLog.created_at.desc())
+        .all()
+    )
+
+    return {
+        "account": {
+            "id": developer.id,
+            "email": developer.email,
+            "organization": developer.organization,
+            "intended_use": developer.intended_use,
+            "email_verified": developer.email_verified,
+            "status": developer.status,
+            "privacy_accepted_at": developer.privacy_accepted_at.isoformat() if developer.privacy_accepted_at else None,
+            "marketing_consent": developer.marketing_consent,
+            "marketing_consent_at": developer.marketing_consent_at.isoformat() if developer.marketing_consent_at else None,
+            "created_at": developer.created_at.isoformat(),
+            "updated_at": developer.updated_at.isoformat(),
+        },
+        "api_keys": [
+            {
+                "key_prefix": k.key_prefix,
+                "label": k.label,
+                "is_active": k.is_active,
+                "created_at": k.created_at.isoformat(),
+                "expires_at": k.expires_at.isoformat() if k.expires_at else None,
+                "revoked_at": k.revoked_at.isoformat() if k.revoked_at else None,
+                "last_used_at": k.last_used_at.isoformat() if k.last_used_at else None,
+            }
+            for k in keys
+        ],
+        "audit_log": [
+            {
+                "event_type": e.event_type,
+                "ip_address": e.ip_address,
+                "details": e.details,
+                "created_at": e.created_at.isoformat(),
+            }
+            for e in audit_entries
+        ],
+    }
+
+
+# ─── Limpieza de datos ──────────────────────────────────
+
+def cleanup_expired_tokens(db: Session) -> int:
+    """Elimina tokens de verificación expirados o ya usados. Devuelve el nº eliminados."""
+    now = _utcnow()
+    expired = (
+        db.query(EmailVerificationToken)
+        .filter(
+            (EmailVerificationToken.expires_at < now)
+            | (EmailVerificationToken.used_at.isnot(None))
+        )
+        .all()
+    )
+    count = len(expired)
+    for token in expired:
+        db.delete(token)
+    if count:
+        db.commit()
+    return count
+
+
+def cleanup_old_audit_logs(db: Session, months: int = 12) -> int:
+    """Anonimiza IPs en entradas de audit log anteriores a `months` meses. Devuelve el nº afectados."""
+    from dateutil.relativedelta import relativedelta
+
+    cutoff = _utcnow() - relativedelta(months=months)
+    old_entries = (
+        db.query(AuditLog)
+        .filter(
+            AuditLog.created_at < cutoff,
+            AuditLog.ip_address.isnot(None),
+        )
+        .all()
+    )
+    count = len(old_entries)
+    for entry in old_entries:
+        entry.ip_address = None
+    if count:
+        db.commit()
+    return count

@@ -1,0 +1,105 @@
+# Política de privacidad
+
+Última actualización: [FECHA]
+
+## 1. Responsable del tratamiento
+
+El responsable del tratamiento de los datos personales es:
+
+**[NOMBRE COMPLETO O DENOMINACIÓN DEL PROYECTO / TITULAR]**  
+NIF/CIF: [NIF/CIF]  
+Domicilio: [DIRECCIÓN O, SI NO QUIERES PUBLICARLA, INDICA AL MENOS PAÍS/PROVINCIA Y UN MEDIO DE CONTACTO]  
+Correo electrónico de contacto: [EMAIL DE CONTACTO]
+
+## 2. Qué datos recogemos
+
+Tratamos los datos que el usuario nos facilita a través del formulario de registro y del uso de la API, en particular:
+
+- nombre,
+- dirección de correo electrónico,
+- identificadores de cuenta,
+- credenciales o identificadores asociados a la API,
+- información técnica y registros de uso de la API, como fecha y hora de acceso, IP, endpoint utilizado, errores y eventos de seguridad.
+
+No solicitamos categorías especiales de datos personales.
+
+## 3. Finalidades del tratamiento
+
+Tratamos los datos personales para las siguientes finalidades:
+
+- gestionar el registro de usuarios,
+- crear y administrar cuentas de acceso,
+- generar, entregar, rotar, revocar y gestionar API keys,
+- prestar el servicio de acceso a la API,
+- mantener la seguridad del servicio, prevenir abusos, fraudes o accesos no autorizados,
+- atender solicitudes, incidencias y consultas de los usuarios,
+- cumplir las obligaciones legales que resulten aplicables.
+
+No utilizaremos los datos para finalidades incompatibles con las anteriores.
+
+## 4. Base jurídica del tratamiento
+
+La base jurídica para el tratamiento de los datos es:
+
+- la ejecución de la relación precontractual o contractual al solicitar el usuario el acceso a la API y usar el servicio;
+- el interés legítimo del responsable en garantizar la seguridad, integridad y correcto funcionamiento de la plataforma, prevenir abusos y responder ante incidentes;
+- el cumplimiento de obligaciones legales, cuando resulte aplicable.
+
+Cuando alguna operación requiera consentimiento, este se solicitará de forma separada.
+
+## 5. Conservación de los datos
+
+Los datos personales se conservarán durante el tiempo necesario para:
+
+- mantener activa la cuenta del usuario y prestarle el servicio;
+- gestionar incidencias, seguridad y posibles responsabilidades derivadas del uso de la API;
+- cumplir obligaciones legales.
+
+Con carácter general:
+
+- los datos de la cuenta se conservarán mientras la cuenta permanezca activa y, después, durante el plazo necesario para atender posibles responsabilidades legales;
+- los registros técnicos y de seguridad se conservarán durante un plazo limitado, proporcional a su finalidad;
+- los correos o comunicaciones de soporte se conservarán mientras sean necesarios para gestionar la consulta o incidencia y, posteriormente, durante el plazo necesario para atender posibles responsabilidades.
+
+Cuando los datos ya no sean necesarios, serán suprimidos o anonimizados de forma segura.
+
+## 6. Destinatarios y encargados del tratamiento
+
+No se cederán datos personales a terceros salvo obligación legal o cuando sea necesario para la prestación del servicio.
+
+Podrán tener acceso a los datos proveedores que prestan servicios auxiliares al responsable, tales como alojamiento, infraestructura, bases de datos, correo electrónico transaccional, monitorización o seguridad, actuando como encargados del tratamiento y con las garantías contractuales adecuadas.
+
+## 7. Transferencias internacionales
+
+Con carácter general, procuramos que los datos se traten dentro del Espacio Económico Europeo.
+
+Si para la prestación del servicio utilizamos proveedores situados fuera del Espacio Económico Europeo, o que realicen transferencias internacionales de datos, dichas transferencias se efectuarán con las garantías adecuadas conforme a la normativa aplicable.
+
+## 8. Derechos de las personas usuarias
+
+La persona usuaria puede ejercer, cuando proceda, los siguientes derechos:
+
+- acceso,
+- rectificación,
+- supresión,
+- oposición,
+- limitación del tratamiento,
+- portabilidad.
+
+Para ello puede enviar una solicitud a: **[EMAIL DE CONTACTO]** indicando el derecho que desea ejercer y acreditando su identidad cuando sea necesario.
+
+Asimismo, si considera que el tratamiento no se ajusta a la normativa, puede presentar una reclamación ante la Agencia Española de Protección de Datos.
+
+## 9. Seguridad
+
+Aplicamos medidas técnicas y organizativas razonables para proteger los datos personales frente a pérdida, acceso no autorizado, alteración o divulgación indebida.
+
+No obstante, ningún sistema es completamente invulnerable, por lo que no puede garantizarse una seguridad absoluta.
+
+## 10. Menores de edad
+
+El servicio no está dirigido a menores de edad. Si detectamos que se han recogido datos de un menor sin legitimación suficiente, procederemos a su supresión.
+
+## 11. Cambios en esta política
+
+Podremos actualizar esta Política de privacidad para adaptarla a cambios normativos, técnicos o del servicio. En caso de cambios relevantes, se informará por medios razonables a las personas usuarias.

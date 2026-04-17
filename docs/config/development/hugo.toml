@@ -1,0 +1,3 @@
+# Overrides para desarrollo local (hugo server usa este entorno por defecto)
+[params]
+  apiBaseURL = "http://localhost:8000"

@@ -13,7 +13,7 @@ from app.auth import crud
 from app.auth.database import get_auth_db
 from app.auth.dependencies import get_current_developer, require_frontend_origin
 from app.auth.models import DeveloperAccount
-from app.auth.schemas import ApiKeyResponse, DeveloperProfileResponse, RevokeResponse
+from app.auth.schemas import ApiKeyResponse, DeleteAccountResponse, DeveloperProfileResponse, RevokeResponse
 from app.auth.service import generate_api_key
 from app.config import settings
 
@@ -42,7 +42,6 @@ def get_profile(
     return DeveloperProfileResponse(
         id=developer.id,
         email=developer.email,
-        name=developer.name,
         organization=developer.organization,
         status=developer.status,
         created_at=developer.created_at,
@@ -131,3 +130,46 @@ def revoke_api_key(
     )
 
     return RevokeResponse(message="Todas tus API keys han sido revocadas.")
+
+
+# ─── Exportación de datos (portabilidad RGPD) ───────────
+
+@router.get("/me/data-export")
+def export_my_data(
+    developer: DeveloperAccount = Depends(get_current_developer),
+    db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
+):
+    """Exporta todos los datos personales del desarrollador en formato JSON (Art. 20 RGPD)."""
+    data = crud.get_developer_data_export(db, developer)
+    return data
+
+
+# ─── Eliminación de cuenta (supresión RGPD) ─────────────
+
+@router.delete("/me", response_model=DeleteAccountResponse)
+def delete_my_account(
+    request: Request,
+    developer: DeveloperAccount = Depends(get_current_developer),
+    db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
+):
+    """Elimina la cuenta del desarrollador y anonimiza sus datos personales (Art. 17 RGPD).
+
+    Se revocan todas las API keys activas y se anonimiza la cuenta.
+    Los registros de auditoría se preservan de forma anónima por interés legítimo de seguridad.
+    """
+    client_ip = _get_client_ip(request)
+
+    crud.create_audit_entry(
+        db,
+        developer_id=developer.id,
+        event_type="account_deleted",
+        ip_address=client_ip,
+    )
+
+    crud.anonymize_developer(db, developer)
+
+    return DeleteAccountResponse(
+        message="Tu cuenta ha sido eliminada y tus datos personales anonimizados."
+    )

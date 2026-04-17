@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 
 from app.auth.database import AuthBase, AuthSessionLocal, auth_engine, get_auth_db
 from app.auth.models import DeveloperAccount, ApiKey, EmailVerificationToken, AuditLog  # noqa: F401
+from app.auth.dependencies import require_frontend_origin
 from app.database import get_db
 from app.main import app
 
@@ -61,6 +62,7 @@ def _override_get_auth_db():
 # Aplicar overrides
 app.dependency_overrides[get_db] = _override_get_db
 app.dependency_overrides[get_auth_db] = _override_get_auth_db
+app.dependency_overrides[require_frontend_origin] = lambda: None
 
 client = TestClient(app)
 
@@ -75,13 +77,13 @@ def _setup_db():
 
 # ─── Helpers ─────────────────────────────────────────────
 
-def _register(email="test@example.com", name="Test User", **kwargs):
+def _register(email="test@example.com", **kwargs):
     """Helper para registrar un desarrollador."""
-    payload = {"email": email, "name": name, **kwargs}
+    payload = {"email": email, "privacy_accepted": True, **kwargs}
     return client.post("/v1/auth/register", json=payload)
 
 
-def _activate_and_get_key(email="test@example.com", name="Test User"):
+def _activate_and_get_key(email="test@example.com"):
     """Registra, verifica y devuelve la API key completa."""
     from app.auth.service import generate_api_key, generate_verification_token, hash_token
 
@@ -90,11 +92,13 @@ def _activate_and_get_key(email="test@example.com", name="Test User"):
         # Crear developer activo directamente
         from app.auth import crud
 
-        dev = crud.create_developer(db, email=email, name=name)
+        dev = crud.create_developer(db, email=email)
         crud.activate_developer(db, dev)
 
         full_key, prefix, key_hash = generate_api_key()
         crud.create_api_key(db, developer_id=dev.id, key_prefix=prefix, key_hash=key_hash)
+        dev_id = dev.id  # capturar antes de cerrar sesión
+        db.expunge(dev)
         return full_key, dev
     finally:
         db.close()
@@ -121,7 +125,7 @@ def test_register_duplicate_active_email(mock_email):
     # Crear cuenta activa directamente
     _activate_and_get_key("dup@example.com")
 
-    response = _register(email="dup@example.com", name="Dup")
+    response = _register(email="dup@example.com")
     assert response.status_code == 409
 
 
@@ -130,8 +134,8 @@ def test_register_duplicate_pending_email(mock_email):
     """Registrar dos veces el mismo email con cuenta pending devuelve 409."""
     mock_email.send_verification_email.return_value = True
 
-    _register(email="pending@example.com", name="Pending")
-    response = _register(email="pending@example.com", name="Pending 2")
+    _register(email="pending@example.com")
+    response = _register(email="pending@example.com")
     assert response.status_code == 409
 
 
@@ -144,7 +148,7 @@ def test_verify_valid_token():
 
     db = _TestSessionLocal()
     try:
-        dev = crud.create_developer(db, email="verify@example.com", name="Verify")
+        dev = crud.create_developer(db, email="verify@example.com")
         full_token, token_hash = generate_verification_token()
         expires = datetime.now(timezone.utc) + timedelta(hours=24)
         crud.create_verification_token(db, developer_id=dev.id, token_hash=token_hash, expires_at=expires)
@@ -166,7 +170,7 @@ def test_verify_expired_token():
 
     db = _TestSessionLocal()
     try:
-        dev = crud.create_developer(db, email="expired@example.com", name="Expired")
+        dev = crud.create_developer(db, email="expired@example.com")
         full_token, token_hash = generate_verification_token()
         # Token expirado hace 1 hora
         expires = datetime.now(timezone.utc) - timedelta(hours=1)
@@ -201,7 +205,7 @@ def test_protected_endpoint_with_invalid_key():
 
 def test_protected_endpoint_with_valid_key():
     """Acceder a /v1/developers/me con API key válida devuelve 200."""
-    full_key, dev = _activate_and_get_key("valid@example.com", "Valid")
+    full_key, dev = _activate_and_get_key("valid@example.com")
     response = client.get("/v1/developers/me", headers={"X-API-Key": full_key})
     assert response.status_code == 200
     data = response.json()
@@ -213,11 +217,10 @@ def test_protected_endpoint_with_valid_key():
 
 def test_developer_profile():
     """GET /v1/developers/me devuelve datos correctos del perfil."""
-    full_key, dev = _activate_and_get_key("profile@example.com", "Profile User")
+    full_key, dev = _activate_and_get_key("profile@example.com")
     response = client.get("/v1/developers/me", headers={"X-API-Key": full_key})
     assert response.status_code == 200
     data = response.json()
-    assert data["name"] == "Profile User"
     assert data["api_key_prefix"] is not None
     assert len(data["api_key_prefix"]) == 8
 
@@ -226,7 +229,7 @@ def test_developer_profile():
 
 def test_rotate_api_key():
     """POST /v1/developers/me/api-keys/rotate genera nueva clave."""
-    full_key, dev = _activate_and_get_key("rotate@example.com", "Rotate")
+    full_key, dev = _activate_and_get_key("rotate@example.com")
     response = client.post(
         "/v1/developers/me/api-keys/rotate",
         headers={"X-API-Key": full_key},
@@ -251,7 +254,7 @@ def test_rotate_api_key():
 
 def test_revoke_api_key():
     """POST /v1/developers/me/api-keys/revoke invalida la clave inmediatamente."""
-    full_key, dev = _activate_and_get_key("revoke@example.com", "Revoke")
+    full_key, dev = _activate_and_get_key("revoke@example.com")
 
     response = client.post(
         "/v1/developers/me/api-keys/revoke",
@@ -277,7 +280,7 @@ def test_resend_verification_pending(mock_email):
     _email_limiter._cache.clear()
 
     # Registrar primero
-    _register(email="resend@example.com", name="Resend")
+    _register(email="resend@example.com")
 
     response = client.post(
         "/v1/auth/resend-verification",
@@ -315,12 +318,12 @@ def test_rate_limit_register(mock_email):
     for i in range(5):
         client.post("/v1/auth/register", json={
             "email": f"ratelimit{i}@example.com",
-            "name": f"RL {i}",
+            "privacy_accepted": True,
         })
 
     response = client.post("/v1/auth/register", json={
         "email": "ratelimit_extra@example.com",
-        "name": "RL Extra",
+        "privacy_accepted": True,
     })
     assert response.status_code == 429
 
@@ -348,3 +351,107 @@ def test_openapi_includes_api_key_security():
         s.get("type") == "apiKey" and s.get("in") == "header" and s.get("name") == "X-API-Key"
         for s in security_schemes.values()
     ), f"No se encontró X-API-Key en securitySchemes: {security_schemes}"
+
+
+# ─── Tests de consentimiento RGPD ────────────────────────
+
+@patch("app.api.routes_auth.email_service")
+def test_register_without_privacy_accepted(mock_email):
+    """POST /v1/auth/register sin aceptar privacidad devuelve 422."""
+    mock_email.send_verification_email.return_value = True
+
+    from app.api.routes_auth import _ip_limiter, _email_limiter
+    _ip_limiter._cache.clear()
+    _email_limiter._cache.clear()
+
+    response = client.post("/v1/auth/register", json={
+        "email": "noprivacy@example.com",
+        "privacy_accepted": False,
+    })
+    assert response.status_code == 422
+
+
+@patch("app.api.routes_auth.email_service")
+def test_register_with_marketing_consent(mock_email):
+    """POST /v1/auth/register con marketing_consent guarda el consentimiento."""
+    mock_email.send_verification_email.return_value = True
+
+    from app.api.routes_auth import _ip_limiter, _email_limiter
+    _ip_limiter._cache.clear()
+    _email_limiter._cache.clear()
+
+    response = _register(
+        email="marketing@example.com",
+        marketing_consent=True,
+    )
+    assert response.status_code == 201
+
+    # Verificar que se almacenó el consentimiento
+    db = _TestSessionLocal()
+    try:
+        from app.auth import crud
+        dev = crud.get_developer_by_email(db, "marketing@example.com")
+        assert dev is not None
+        assert dev.privacy_accepted_at is not None
+        assert dev.marketing_consent is True
+        assert dev.marketing_consent_at is not None
+    finally:
+        db.close()
+
+
+# ─── Tests de exportación de datos ──────────────────────
+
+def test_data_export():
+    """GET /v1/developers/me/data-export devuelve datos personales del desarrollador."""
+    full_key, dev = _activate_and_get_key("export@example.com")
+    response = client.get(
+        "/v1/developers/me/data-export",
+        headers={"X-API-Key": full_key},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert "account" in data
+    assert "api_keys" in data
+    assert "audit_log" in data
+    assert data["account"]["email"] == "export@example.com"
+
+
+# ─── Tests de eliminación de cuenta ─────────────────────
+
+def test_delete_account():
+    """DELETE /v1/developers/me anonimiza la cuenta y revoca las claves."""
+    full_key, dev = _activate_and_get_key("delete@example.com")
+    dev_id = dev.id  # capturar el id antes de que la sesión se cierre
+
+    response = client.delete(
+        "/v1/developers/me",
+        headers={"X-API-Key": full_key},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert "anonimizado" in data["message"].lower() or "eliminada" in data["message"].lower()
+
+    # La clave ya no debe funcionar
+    response2 = client.get("/v1/developers/me", headers={"X-API-Key": full_key})
+    assert response2.status_code == 401
+
+    # La cuenta debe estar anonimizada en la BD
+    db = _TestSessionLocal()
+    try:
+        from app.auth import crud
+        anon_dev = crud.get_developer_by_id(db, dev_id)
+        assert anon_dev is not None
+        assert anon_dev.status == "deleted"
+        assert "@anonymous.invalid" in anon_dev.email
+    finally:
+        db.close()
+
+
+# ─── Tests de security headers ──────────────────────────
+
+def test_security_headers():
+    """Las respuestas incluyen cabeceras de seguridad."""
+    response = client.get("/health")
+    assert response.headers.get("X-Content-Type-Options") == "nosniff"
+    assert response.headers.get("X-Frame-Options") == "DENY"
+    assert response.headers.get("Referrer-Policy") == "strict-origin-when-cross-origin"

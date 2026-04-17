@@ -13,16 +13,27 @@ layout: "single"
 <input type="email" id="reg-email" name="email" class="api-form__input" required placeholder="tu@email.com" autocomplete="email">
 </div>
 <div class="api-form__group">
-<label for="reg-nombre" class="api-form__label">Nombre <span class="required">*</span></label>
-<input type="text" id="reg-nombre" name="nombre" class="api-form__input" required placeholder="Tu nombre" autocomplete="name">
-</div>
-<div class="api-form__group">
 <label for="reg-organizacion" class="api-form__label">Organización</label>
 <input type="text" id="reg-organizacion" name="organizacion" class="api-form__input" placeholder="Universidad, medio, empresa…" autocomplete="organization">
 </div>
 <div class="api-form__group">
 <label for="reg-uso" class="api-form__label">Uso previsto <span class="required">*</span></label>
 <textarea id="reg-uso" name="uso_previsto" class="api-form__input api-form__textarea" required placeholder="Describe brevemente para qué quieres usar la API" rows="3"></textarea>
+</div>
+<div class="api-form__group api-form__privacy-notice">
+<p class="api-form__privacy-text">Al registrarte, trataremos tu correo electrónico para crear tu cuenta, facilitarte una API key y gestionar la seguridad del servicio. Más información sobre el tratamiento de tus datos y tus derechos en la <strong><a href="../privacidad/">Política de privacidad</a></strong>.</p>
+</div>
+<div class="api-form__group">
+<label class="api-form__checkbox-label">
+<input type="checkbox" id="reg-privacy" name="privacy_accepted" required>
+He leído y acepto la <a href="../privacidad/">Política de privacidad</a> <span class="required">*</span>
+</label>
+</div>
+<div class="api-form__group">
+<label class="api-form__checkbox-label">
+<input type="checkbox" id="reg-marketing" name="marketing_consent">
+Acepto recibir comunicaciones informativas sobre novedades del servicio (opcional)
+</label>
 </div>
 <div id="register-feedback" class="api-feedback" hidden></div>
 <button type="submit" class="btn btn-primary">Registrarse</button>

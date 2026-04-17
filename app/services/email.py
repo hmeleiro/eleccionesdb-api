@@ -37,7 +37,7 @@ class EmailService:
         if not self._api_key:
             logger.warning(
                 "RESEND_API_KEY no configurada — email de verificación NO enviado a %s",
-                to_email,
+                self._mask_email(to_email),
             )
             return False
 
@@ -63,7 +63,7 @@ class EmailService:
                     },
                 )
             if response.status_code in (200, 201):
-                logger.info("Email de verificación enviado a %s", to_email)
+                logger.info("Email de verificación enviado a %s", self._mask_email(to_email))
                 return True
 
             logger.error(
@@ -72,8 +72,17 @@ class EmailService:
             return False
 
         except httpx.HTTPError as exc:
-            logger.error("Error de red al enviar email a %s: %s", to_email, exc)
+            logger.error("Error de red al enviar email a %s: %s", self._mask_email(to_email), exc)
             return False
+
+    @staticmethod
+    def _mask_email(email: str) -> str:
+        """Enmascara un email para uso en logs: h***@domain.com"""
+        try:
+            local, domain = email.rsplit("@", 1)
+            return f"{local[0]}***@{domain}" if local else f"***@{domain}"
+        except (ValueError, IndexError):
+            return "***"
 
     def _build_html(self, name: str, url: str) -> str:
         return f"""\

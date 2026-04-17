@@ -24,9 +24,10 @@ class RestoreSessionResponse(BaseModel):
 
 class RegisterRequest(BaseModel):
     email: EmailStr
-    name: str
     organization: str | None = None
     intended_use: str | None = None
+    privacy_accepted: bool
+    marketing_consent: bool = False
 
 
 class RegisterResponse(BaseModel):
@@ -63,6 +64,10 @@ class RevokeResponse(BaseModel):
     message: str
 
 
+class DeleteAccountResponse(BaseModel):
+    message: str
+
+
 # ─── Perfil de desarrollador ─────────────────────────────
 
 class DeveloperProfileResponse(BaseModel):
@@ -70,7 +75,6 @@ class DeveloperProfileResponse(BaseModel):
 
     id: int
     email: str
-    name: str
     organization: str | None = None
     status: str
     created_at: datetime.datetime

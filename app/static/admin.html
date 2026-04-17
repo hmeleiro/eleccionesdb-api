@@ -91,7 +91,7 @@
             <table class="table table-hover table-sm mb-0" id="dev-table">
               <thead class="table-light">
                 <tr>
-                  <th>ID</th><th>Email</th><th>Nombre</th><th>Estado</th><th>Registrado</th>
+                  <th>ID</th><th>Email</th><th>Estado</th><th>Registrado</th>
                 </tr>
               </thead>
               <tbody id="dev-tbody">
@@ -288,14 +288,13 @@ function renderTable({ items, total, page, pages }) {
 
   const tbody = $('dev-tbody');
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3 text-muted">Sin resultados</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Sin resultados</td></tr>';
     return;
   }
   tbody.innerHTML = items.map(d => `
     <tr data-id="${d.id}" class="${selectedId === d.id ? 'table-primary' : ''}">
       <td class="text-muted">${d.id}</td>
       <td>${escHtml(d.email)}</td>
-      <td>${escHtml(d.name)}</td>
       <td>${statusBadge(d.status)}</td>
       <td class="text-muted">${fmtDate(d.created_at)}</td>
     </tr>`).join('');
@@ -342,7 +341,7 @@ async function loadDetail(id) {
 
 function renderDetail(dev) {
   $('detail-panel').style.display = 'block';
-  $('detail-name').textContent = dev.name;
+  $('detail-name').textContent = dev.email;
   $('detail-status-badge').className = `ms-auto badge bg-${
     {active:'success',pending:'warning text-dark',suspended:'danger'}[dev.status] || 'secondary'}`;
   $('detail-status-badge').textContent = dev.status;
@@ -352,6 +351,8 @@ function renderDetail(dev) {
     <dt class="col-4">Organización</dt><dd class="col-8">${escHtml(dev.organization || '–')}</dd>
     <dt class="col-4">Uso previsto</dt><dd class="col-8">${escHtml(dev.intended_use || '–')}</dd>
     <dt class="col-4">Email verif.</dt><dd class="col-8">${dev.email_verified ? '<span class="text-success">Sí</span>' : '<span class="text-danger">No</span>'}</dd>
+    <dt class="col-4">Privacidad</dt><dd class="col-8">${dev.privacy_accepted_at ? '<span class="text-success">Aceptada</span> <small class="text-muted">' + fmtDate(dev.privacy_accepted_at) + '</small>' : '<span class="text-danger">No aceptada</span>'}</dd>
+    <dt class="col-4">Marketing</dt><dd class="col-8">${dev.marketing_consent ? '<span class="text-success">Sí</span> <small class="text-muted">' + fmtDate(dev.marketing_consent_at) + '</small>' : '<span class="text-muted">No</span>'}</dd>
     <dt class="col-4">Registrado</dt><dd class="col-8">${fmtDate(dev.created_at)}</dd>
     <dt class="col-4">Actualizado</dt><dd class="col-8">${fmtDate(dev.updated_at)}</dd>
   `;

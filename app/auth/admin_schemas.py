@@ -23,7 +23,6 @@ class AdminTokenResponse(BaseModel):
 class DeveloperListItem(BaseModel):
     id: int
     email: str
-    name: str
     organization: Optional[str]
     status: str
     email_verified: bool
@@ -68,11 +67,13 @@ class AuditLogEntry(BaseModel):
 class DeveloperDetail(BaseModel):
     id: int
     email: str
-    name: str
     organization: Optional[str]
     intended_use: Optional[str]
     status: str
     email_verified: bool
+    privacy_accepted_at: Optional[datetime]
+    marketing_consent: bool
+    marketing_consent_at: Optional[datetime]
     created_at: datetime
     updated_at: datetime
     api_keys: list[ApiKeyInfo]

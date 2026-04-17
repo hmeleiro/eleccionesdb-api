@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es">
-  <head><meta charset="utf-8" />
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Panel de cuenta · EleccionesDB API</title>
 <meta name="description" content="Consulta tu perfil de desarrollador y gestiona tus API keys." />
@@ -13,7 +13,7 @@
   content="Consulta tu perfil de desarrollador y gestiona tus API keys."
 />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://eleccionesdb-api.spainelectoralproject.com/developers/account/" />
+<meta property="og:url" content="http://localhost:1313/developers/account/" />
 <meta property="og:site_name" content="EleccionesDB API" />
 
 
@@ -26,10 +26,10 @@
 
 
 
-<link rel="stylesheet" href="/css/main.min.067b614884c6d492e0e50c9fd08773b82cbd8d1242ac9b2352ef4b582139db61.css" integrity="sha256-BnthSITG1JLg5Qyf0IdzuCy9jRJCrJsjUu9LWCE522E=" />
+<link rel="stylesheet" href="/css/main.min.6b1499082345cc3b71270d2e3c59ab7da2aec2badae08a9e5a59ff318385be52.css" integrity="sha256-axSZCCNFzDtxJw0uPFmrfaKuwrra4IqeWln/MYOFvlI=" />
 </head>
 
-  <body data-api-base="https://api.spainelectoralproject.com"><header class="site-header">
+  <body data-api-base="http://localhost:8000"><header class="site-header">
   <div class="container header-inner">
     <a href="https://eleccionesdb-api.spainelectoralproject.com/" class="site-logo">
       <span class="logo-icon">◆</span>
@@ -137,6 +137,19 @@
 <button type="button" id="account-revoke" class="btn btn-secondary api-btn-danger">Revocar todas</button>
 </div>
 </div>
+<h2>Tus datos</h2>
+<div class="api-account-actions__grid">
+<div class="api-account-action-card">
+<h3>Exportar mis datos</h3>
+<p>Descarga una copia de todos tus datos personales en formato JSON (derecho de portabilidad).</p>
+<button type="button" id="account-export" class="btn btn-secondary">Exportar datos</button>
+</div>
+<div class="api-account-action-card">
+<h3>Eliminar cuenta</h3>
+<p>Elimina tu cuenta y anonimiza todos tus datos personales. Esta acción es <strong>irreversible</strong>.</p>
+<button type="button" id="account-delete" class="btn btn-secondary api-btn-danger">Eliminar cuenta</button>
+</div>
+</div>
 </div>
 <div id="account-key-container" hidden></div>
 <div id="account-profile" hidden></div>
@@ -175,14 +188,14 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 <a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a>. Contenido disponible bajo licencia abierta.</p>
+      <p>© 2026 <a href="https://spainelectoralproject.com/" target="_blank" rel="noopener">Spain Electoral Project</a>. Contenido disponible bajo licencia abierta. · <a href="/developers/privacidad/">Política de privacidad</a></p>
     </div>
   </div>
 </footer>
 
   
 
-<script src="/js/api-client.min.5e90d97b1171814cbb93cb88652686254d847fb5231c4449a0fc6f4423e28a0a.js" integrity="sha256-XpDZexFxgUy7k8uIZSaGJU2Ef7UjHERJoPxvRCPiigo=" defer></script>
+<script src="/js/api-client.min.3819f7e75f794f20e16097f5e98528dd82b336cad811478b99abdef98be77a22.js" integrity="sha256-OBn35195TyDhYJf16YUo3YKzNsrYEUeLmave&#43;YvneiI=" defer></script>
 
 </body>
 </html>

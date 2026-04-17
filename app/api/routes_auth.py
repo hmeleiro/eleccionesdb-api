@@ -90,7 +90,7 @@ def recover_access(
     background_tasks.add_task(
         email_service.send_verification_email,
         developer.email,
-        developer.name,
+        developer.email,
         restore_url,
     )
 
@@ -191,12 +191,20 @@ def register(
             )
 
     # Crear cuenta
+    now = datetime.now(timezone.utc)
+    if not body.privacy_accepted:
+        raise HTTPException(
+            status_code=422,
+            detail="Es necesario aceptar la política de privacidad para registrarse.",
+        )
     developer = crud.create_developer(
         db,
         email=body.email.lower(),
-        name=body.name,
         organization=body.organization,
         intended_use=body.intended_use,
+        privacy_accepted_at=now,
+        marketing_consent=body.marketing_consent,
+        marketing_consent_at=now if body.marketing_consent else None,
     )
 
     # Generar token de verificación
@@ -214,7 +222,7 @@ def register(
     background_tasks.add_task(
         email_service.send_verification_email,
         developer.email,
-        developer.name,
+        developer.email,
         verification_url,
     )
 
@@ -452,7 +460,7 @@ def resend_verification(
     background_tasks.add_task(
         email_service.send_verification_email,
         developer.email,
-        developer.name,
+        developer.email,
         verification_url,
     )
 

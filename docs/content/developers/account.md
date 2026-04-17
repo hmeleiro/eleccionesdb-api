@@ -38,6 +38,19 @@ layout: "single"
 <button type="button" id="account-revoke" class="btn btn-secondary api-btn-danger">Revocar todas</button>
 </div>
 </div>
+<h2>Tus datos</h2>
+<div class="api-account-actions__grid">
+<div class="api-account-action-card">
+<h3>Exportar mis datos</h3>
+<p>Descarga una copia de todos tus datos personales en formato JSON (derecho de portabilidad).</p>
+<button type="button" id="account-export" class="btn btn-secondary">Exportar datos</button>
+</div>
+<div class="api-account-action-card">
+<h3>Eliminar cuenta</h3>
+<p>Elimina tu cuenta y anonimiza todos tus datos personales. Esta acción es <strong>irreversible</strong>.</p>
+<button type="button" id="account-delete" class="btn btn-secondary api-btn-danger">Eliminar cuenta</button>
+</div>
+</div>
 </div>
 <div id="account-key-container" hidden></div>
 <div id="account-profile" hidden></div>

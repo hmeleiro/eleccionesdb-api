@@ -212,11 +212,28 @@
       btn.textContent = "Enviando…";
       hideFeedback("register-feedback");
 
+      const privacyCheckbox = document.getElementById("reg-privacy");
+      if (privacyCheckbox && !privacyCheckbox.checked) {
+        showFeedback(
+          "register-feedback",
+          "error",
+          "Es necesario aceptar la Política de privacidad para registrarse.",
+        );
+        btn.disabled = false;
+        btn.textContent = "Registrarse";
+        return;
+      }
+
+      const marketingCheckbox = document.getElementById("reg-marketing");
+
       const payload = {
         email: form.email.value.trim(),
-        name: form.nombre.value.trim(),
         organization: form.organizacion.value.trim(),
         intended_use: form.uso_previsto.value.trim(),
+        privacy_accepted: privacyCheckbox ? privacyCheckbox.checked : false,
+        marketing_consent: marketingCheckbox
+          ? marketingCheckbox.checked
+          : false,
       };
 
       try {
@@ -377,7 +394,6 @@
     if (!container) return;
     const fields = [
       ["Email", data.email],
-      ["Nombre", data.nombre || data.name],
       ["Organización", data.organizacion || data.organization],
     ];
 
@@ -411,6 +427,8 @@
     const rotateBtn = document.getElementById("account-rotate");
     const revokeBtn = document.getElementById("account-revoke");
     const logoutBtn = document.getElementById("account-logout");
+    const exportBtn = document.getElementById("account-export");
+    const deleteBtn = document.getElementById("account-delete");
     const profileContainer = document.getElementById("account-profile");
     const keyContainer = document.getElementById("account-key-container");
 
@@ -579,6 +597,104 @@
       revokeBtn.disabled = false;
     });
 
+    // Exportar datos
+    if (exportBtn) {
+      exportBtn.addEventListener("click", async function () {
+        ensureKeySaved();
+        if (!sessionStorage.getItem(SESSION_KEY)) return;
+
+        exportBtn.disabled = true;
+        showFeedback("account-feedback", "loading", "Exportando datos…");
+
+        try {
+          const res = await request("/v1/developers/me/data-export", {
+            method: "GET",
+            headers: authHeaders(),
+          });
+
+          if (res.ok && res.data) {
+            hideFeedback("account-feedback");
+            var blob = new Blob([JSON.stringify(res.data, null, 2)], {
+              type: "application/json",
+            });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = "mis-datos-eleccionesdb.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showFeedback(
+              "account-feedback",
+              "success",
+              "Datos exportados correctamente.",
+            );
+          } else {
+            showFeedback("account-feedback", "error", errorMsg(res));
+          }
+        } catch (_) {
+          showFeedback(
+            "account-feedback",
+            "error",
+            "No se pudo conectar con el servidor.",
+          );
+        }
+
+        exportBtn.disabled = false;
+      });
+    }
+
+    // Eliminar cuenta
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", async function () {
+        ensureKeySaved();
+        if (!sessionStorage.getItem(SESSION_KEY)) return;
+
+        if (
+          !confirm(
+            "¿Seguro que quieres eliminar tu cuenta? Se revocarán todas tus API keys y se anonimizarán tus datos personales. Esta acción es IRREVERSIBLE.",
+          )
+        ) {
+          return;
+        }
+
+        deleteBtn.disabled = true;
+        showFeedback("account-feedback", "loading", "Eliminando cuenta…");
+
+        try {
+          const res = await request("/v1/developers/me", {
+            method: "DELETE",
+            headers: authHeaders(),
+          });
+
+          if (res.ok) {
+            sessionStorage.removeItem(SESSION_KEY);
+            keyInput.value = "";
+            profileContainer.innerHTML = "";
+            profileContainer.hidden = true;
+            keyContainer.innerHTML = "";
+            keyContainer.hidden = true;
+            showFeedback(
+              "account-feedback",
+              "success",
+              "Tu cuenta ha sido eliminada y tus datos anonimizados. Gracias por haber usado el servicio.",
+            );
+          } else {
+            showFeedback("account-feedback", "error", errorMsg(res));
+          }
+        } catch (_) {
+          showFeedback(
+            "account-feedback",
+            "error",
+            "No se pudo conectar con el servidor.",
+          );
+        }
+
+        deleteBtn.disabled = false;
+      });
+    }
+
     function ensureKeySaved() {
       const val = keyInput.value.trim();
       if (val) {
@@ -605,7 +721,6 @@
 
     const profileFields = [
       ["Email", data.email],
-      ["Nombre", data.nombre || data.name],
       ["Organización", data.organizacion || data.organization],
       ["Uso previsto", data.uso_previsto || data.intended_use],
       ["Registrado", data.created_at],
