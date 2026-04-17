@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.auth import crud
 from app.auth.database import get_auth_db
-from app.auth.dependencies import get_current_developer
+from app.auth.dependencies import get_current_developer, require_frontend_origin
 from app.auth.models import DeveloperAccount
 from app.auth.schemas import ApiKeyResponse, DeveloperProfileResponse, RevokeResponse
 from app.auth.service import generate_api_key
@@ -33,6 +33,7 @@ def _get_client_ip(request: Request) -> str:
 def get_profile(
     developer: DeveloperAccount = Depends(get_current_developer),
     db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
 ):
     """Devuelve el perfil del desarrollador autenticado."""
     active_keys = crud.get_active_keys_for_developer(db, developer.id)
@@ -57,6 +58,7 @@ def rotate_api_key(
     request: Request,
     developer: DeveloperAccount = Depends(get_current_developer),
     db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
 ):
     """Rota la API key: revoca la actual (con periodo de gracia) y genera una nueva.
 
@@ -106,6 +108,7 @@ def revoke_api_key(
     request: Request,
     developer: DeveloperAccount = Depends(get_current_developer),
     db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
 ):
     """Revoca inmediatamente todas las API keys activas del desarrollador.
 

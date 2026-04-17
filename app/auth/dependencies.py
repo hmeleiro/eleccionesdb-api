@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timezone
 
 from cachetools import TTLCache
-from fastapi import Depends, HTTPException, Security
+from fastapi import Depends, HTTPException, Request, Security
 from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 
@@ -16,6 +16,7 @@ from app.auth import crud
 from app.auth.database import get_auth_db
 from app.auth.models import DeveloperAccount
 from app.auth.service import hash_token
+from app.config import settings
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -78,3 +79,30 @@ class RateLimiter:
                 detail="Demasiadas solicitudes. Inténtalo más tarde.",
             )
         self._cache[key] = count + 1
+
+
+# ─── Restricción de origen (frontend) ───────────────────
+
+_FRONTEND_ORIGINS: frozenset[str] = frozenset()
+
+
+def _get_frontend_origins() -> frozenset[str]:
+    global _FRONTEND_ORIGINS
+    if not _FRONTEND_ORIGINS:
+        _FRONTEND_ORIGINS = frozenset(settings.FRONTEND_ORIGINS)
+    return _FRONTEND_ORIGINS
+
+
+def require_frontend_origin(request: Request) -> None:
+    """Rechaza peticiones que no provengan del frontend autorizado.
+
+    Los navegadores incluyen el header Origin en todas las peticiones
+    cross-origin (fetch/XHR). Las llamadas programáticas directas
+    (curl, scripts) no lo envían, por lo que son bloqueadas.
+    """
+    origin = request.headers.get("origin")
+    if not origin or origin not in _get_frontend_origins():
+        raise HTTPException(
+            status_code=403,
+            detail="Este endpoint solo está disponible desde el frontend de desarrolladores.",
+        )

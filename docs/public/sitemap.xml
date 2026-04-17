@@ -2,26 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/categories/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/referencia/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/datos/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/categories/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/datos/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/ejemplos/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/developers/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/ejemplos/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/account/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/recover/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/developers/account/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/referencia/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/developers/recover/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/register/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/developers/register/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/restore/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/developers/restore/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/tags/</loc>
+    <loc>http://localhost:1313/eleccionesdb-api/tags/</loc>
   </url>
 </urlset>

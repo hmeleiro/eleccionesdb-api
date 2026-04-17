@@ -4,11 +4,6 @@ description: "Catálogo completo de endpoints, parámetros, filtros y estructura
 ---
 
 
-<div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; padding: 2.5rem 2rem 2rem 2rem; max-width: 700px; margin: 0 auto 2.5rem auto;">
-  <h1 style="color: #2d5bff; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Referencia de la API</h1>
-  <p style="font-size: 1.1rem; color: #1a1a2e; margin-bottom: 1.5rem;">Catálogo completo de endpoints, parámetros, filtros y estructura de respuestas.</p>
-</div>
-
 <div style="background: #f1f5ff; border-left: 4px solid #2d5bff; padding: 1.5em 1.5em 1em 1.5em; border-radius: 8px; margin-bottom: 2em;">
   <strong style="color: #2d5bff; font-size: 1.1em;">Información general</strong>
   <ul style="font-size: 1.05rem; color: #1a1a2e; margin: 0.5em 0 0 0;">

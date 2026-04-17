@@ -27,7 +27,7 @@ from sqlalchemy.orm import Session
 
 from app.auth import crud
 from app.auth.database import get_auth_db
-from app.auth.dependencies import RateLimiter
+from app.auth.dependencies import RateLimiter, require_frontend_origin
 from app.auth.schemas import (
     RegisterRequest,
     RegisterResponse,
@@ -67,6 +67,7 @@ def recover_access(
     body: RecoverAccessRequest,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
 ):
     """Permite recuperar acceso si el usuario ha perdido todas sus API keys."""
     generic_message = "Si el email está registrado y activo, recibirás un enlace para restaurar el acceso."
@@ -156,6 +157,7 @@ def register(
     request: Request,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
 ):
     """Registra una nueva cuenta de desarrollador.
 
@@ -409,6 +411,7 @@ def resend_verification(
     request: Request,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_auth_db),
+    _: None = Depends(require_frontend_origin),
 ):
     """Solicita reenvío del email de verificación.
 

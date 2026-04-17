@@ -47,10 +47,7 @@ app = FastAPI(
 # ─── CORS ───────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://hmeleiro.github.io",
-        "http://localhost:1313",
-    ],
+    allow_origins=settings.FRONTEND_ORIGINS,
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["*"],
 )

@@ -48,6 +48,14 @@ class Settings(BaseSettings):
     ADMIN_JWT_SECRET: str = "change-me-in-production"
     ADMIN_JWT_EXPIRE_HOURS: int = 8
 
+    # ── Orígenes permitidos (frontend) ───────────────────
+    # Sólo peticiones con Origin en esta lista pueden usar /auth y /developers.
+    # Separar por comas en la variable de entorno: FRONTEND_ORIGINS=https://a.com,https://b.com
+    FRONTEND_ORIGINS: list[str] = [
+        "https://hmeleiro.github.io",
+        "http://localhost:1313",
+    ]
+
     @computed_field  # type: ignore[prop-decorator]
     @property
     def DATABASE_URL(self) -> str:
