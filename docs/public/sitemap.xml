@@ -2,26 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/categories/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/categories/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/datos/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/datos/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/developers/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/ejemplos/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/ejemplos/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/account/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/developers/account/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/recover/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/developers/recover/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/referencia/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/referencia/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/register/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/developers/register/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/developers/restore/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/developers/restore/</loc>
   </url><url>
-    <loc>https://hmeleiro.github.io/eleccionesdb-api/tags/</loc>
+    <loc>https://eleccionesdb-api.spainelectoralproject.com/tags/</loc>
   </url>
 </urlset>
