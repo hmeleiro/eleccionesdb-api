@@ -52,6 +52,7 @@ class Settings(BaseSettings):
     # Sólo peticiones con Origin en esta lista pueden usar /auth y /developers.
     # Separar por comas en la variable de entorno: FRONTEND_ORIGINS=https://a.com,https://b.com
     FRONTEND_ORIGINS: list[str] = [
+        "https://eleccionesdb-api.spainelectoralproject.com",
         "https://hmeleiro.github.io",
         "http://localhost:1313",
     ]
