@@ -75,12 +75,15 @@ Podrán tener acceso a los datos los siguientes proveedores, que actúan como en
 
 - **IONOS Cloud S.L.U.** — alojamiento e infraestructura. Datos en el Espacio Económico Europeo. DPA conforme al Art. 28 RGPD y Art. 33 LOPDGDD.
 - **Resend** — correo electrónico transaccional. Datos procesados en Irlanda (UE). DPA vigente desde el momento del registro.
+- **Cloudflare, Inc.** — gestión de DNS y proxy de tráfico. Cloudflare puede procesar datos técnicos (dirección IP, cabeceras HTTP) como parte de la resolución DNS y la entrega del tráfico. DPA suscrito conforme al Art. 28 RGPD. Cloudflare está certificado bajo el EU-US Data Privacy Framework y el EU Cloud Code of Conduct (ISO/IEC 27701:2019).
 
 ## 7. Transferencias internacionales
 
-Todos los proveedores actuales procesan los datos dentro del Espacio Económico Europeo. No se realizan transferencias internacionales de datos.
+Cloudflare, Inc. es una empresa estadounidense que puede transferir datos técnicos (dirección IP, cabeceras HTTP) fuera del Espacio Económico Europeo. Estas transferencias están amparadas por el EU-US Data Privacy Framework, en el que Cloudflare se encuentra certificado, y por el DPA suscrito con el responsable.
 
-Si en el futuro fuera necesario utilizar proveedores situados fuera del EEE, dichas transferencias se efectuarán con las garantías adecuadas conforme a la normativa aplicable.
+El resto de proveedores procesan los datos dentro del Espacio Económico Europeo.
+
+Si en el futuro fuera necesario utilizar proveedores adicionales situados fuera del EEE, dichas transferencias se efectuarán con las garantías adecuadas conforme a la normativa aplicable.
 
 ## 8. Derechos de las personas usuarias
 

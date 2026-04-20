@@ -491,11 +491,6 @@ pre code {
   margin-bottom: var(--space-3);
 }
 
-h2 {
-    margin-top: var(--space-3);
-  margin-bottom: var(--space-3);
-}
-
 .page-desc {
   font-size: var(--text-lg);
   color: var(--color-text-secondary);
@@ -525,16 +520,10 @@ h2 {
   margin-bottom: var(--space-4);
 }
 
-ul, ol {
-  margin-bottom: var(--space-4);
-  margin-top: var(--space-4);
-  padding-left: var(--space-10);
-}
-
 .prose ul,
 .prose ol {
   margin-bottom: var(--space-4);
-  padding-left: var(--space-10);
+  padding-left: var(--space-6);
 }
 
 .prose li {
