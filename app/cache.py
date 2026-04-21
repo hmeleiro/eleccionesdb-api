@@ -6,6 +6,8 @@ y tamaños máximos según la categoría del endpoint.  Ideal para datos
 inmutables como resultados electorales históricos.
 """
 
+import hashlib
+import json
 import logging
 import threading
 from urllib.parse import parse_qsl, urlencode
@@ -105,45 +107,92 @@ response_cache = ResponseCache()
 # Middleware
 # ─────────────────────────────────────────────────────────
 
+# Rutas POST de resultados que son de solo lectura y se pueden cachear
+_CACHEABLE_POST_PATHS = {
+    "/v1/resultados/totales-territorio",
+    "/v1/resultados/votos-partido",
+    "/v1/resultados/combinados",
+}
+
+
 class CacheMiddleware(BaseHTTPMiddleware):
-    """Middleware que cachea respuestas GET exitosas en memoria."""
+    """Middleware que cachea respuestas GET y POST (resultados) exitosas en memoria."""
+
+    @staticmethod
+    def _body_cache_key(raw_body: bytes) -> str:
+        """Devuelve un hash SHA-256 del body JSON normalizado (claves ordenadas)."""
+        try:
+            normalized = json.dumps(json.loads(raw_body), sort_keys=True, ensure_ascii=False)
+        except (ValueError, UnicodeDecodeError):
+            normalized = raw_body.decode(errors="replace")
+        return hashlib.sha256(normalized.encode()).hexdigest()
 
     async def dispatch(self, request: Request, call_next):
-        if request.method != "GET":
-            return await call_next(request)
-
         path = request.scope["path"]
-        query_string = request.scope.get("query_string", b"").decode()
 
-        # Solo cachear rutas que pertenecen a un tier
-        if response_cache._resolve_tier(path) is None:
-            return await call_next(request)
+        # ── GET ────────────────────────────────────────────────────────────
+        if request.method == "GET":
+            query_string = request.scope.get("query_string", b"").decode()
 
-        # ¿Está en caché?
-        cached = response_cache.get(path, query_string)
-        if cached is not None:
-            body, content_type = cached
-            return Response(
-                content=body,
-                media_type=content_type,
-                headers={"X-Cache": "HIT"},
-            )
+            if response_cache._resolve_tier(path) is None:
+                return await call_next(request)
 
-        # Ejecutar handler
-        response = await call_next(request)
+            cached = response_cache.get(path, query_string)
+            if cached is not None:
+                body, content_type = cached
+                return Response(
+                    content=body,
+                    media_type=content_type,
+                    headers={"X-Cache": "HIT"},
+                )
 
-        # Solo cachear respuestas 200
-        if response.status_code == 200:
-            body = b""
-            async for chunk in response.body_iterator:
-                body += chunk
-            content_type = response.headers.get("content-type", "application/json")
-            response_cache.set(path, query_string, (body, content_type))
-            return Response(
-                content=body,
-                status_code=200,
-                media_type=content_type,
-                headers={"X-Cache": "MISS"},
-            )
+            response = await call_next(request)
 
-        return response
+            if response.status_code == 200:
+                body = b""
+                async for chunk in response.body_iterator:
+                    body += chunk
+                content_type = response.headers.get("content-type", "application/json")
+                response_cache.set(path, query_string, (body, content_type))
+                return Response(
+                    content=body,
+                    status_code=200,
+                    media_type=content_type,
+                    headers={"X-Cache": "MISS"},
+                )
+
+            return response
+
+        # ── POST (solo rutas de resultados) ────────────────────────────────
+        if request.method == "POST" and path in _CACHEABLE_POST_PATHS:
+            raw_body = await request.body()  # Starlette cachea el body en request._body
+            cache_key = self._body_cache_key(raw_body)
+
+            cached = response_cache.get(path, cache_key)
+            if cached is not None:
+                body, content_type = cached
+                return Response(
+                    content=body,
+                    media_type=content_type,
+                    headers={"X-Cache": "HIT"},
+                )
+
+            response = await call_next(request)
+
+            if response.status_code == 200:
+                body = b""
+                async for chunk in response.body_iterator:
+                    body += chunk
+                content_type = response.headers.get("content-type", "application/json")
+                response_cache.set(path, cache_key, (body, content_type))
+                return Response(
+                    content=body,
+                    status_code=200,
+                    media_type=content_type,
+                    headers={"X-Cache": "MISS"},
+                )
+
+            return response
+
+        # ── Resto de métodos / rutas ────────────────────────────────────────
+        return await call_next(request)
