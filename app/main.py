@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 
 from app.config import settings
 from fastapi.staticfiles import StaticFiles
@@ -68,6 +68,44 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
     return response
+
+
+# ─── 414 guard: GET con query string excesiva ──────────
+# Umbrales: 4 000 chars cubre ~50 municipios; sobre ese tamaño el riesgo de
+# 414 en proxies y servidores intermedios es real.
+# Nota: si hay un proxy Nginx delante, ajustar `large_client_header_buffers`
+# como medida complementaria (p.ej. `large_client_header_buffers 4 16k;`).
+
+_MAX_QUERY_LENGTH = 4_000
+
+# Rutas afectadas y su equivalente POST (mismo path)
+_POST_SEARCH_PATHS = {
+    "/v1/resultados/totales-territorio",
+    "/v1/resultados/votos-partido",
+    "/v1/resultados/combinados",
+}
+
+
+@app.middleware("http")
+async def guard_long_query_strings(request: Request, call_next):
+    if (
+        request.method == "GET"
+        and len(request.url.query) > _MAX_QUERY_LENGTH
+        and request.url.path in _POST_SEARCH_PATHS
+    ):
+        return JSONResponse(
+            status_code=414,
+            content={
+                "detail": (
+                    "La query string es demasiado larga y puede causar errores en servidores "
+                    "o proxies intermedios. Usa el endpoint POST en el mismo path enviando los "
+                    "filtros como JSON en el cuerpo de la petición."
+                ),
+                "post_endpoint": str(request.url.path),
+                "docs": "/docs",
+            },
+        )
+    return await call_next(request)
 
 # ─── Routers ────────────────────────────────────────────
 

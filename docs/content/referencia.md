@@ -10,7 +10,7 @@ description: "Catálogo completo de endpoints, parámetros, filtros y estructura
     <li><b>Base URL:</b> <code>https://api.spainelectoralproject.com/v1</code></li>
     <li><b>Versión:</b> 1.0.0</li>
     <li><b>Especificación:</b> OpenAPI 3.1.0</li>
-    <li><b>Métodos HTTP:</b> Solo <code>GET</code> (API de solo lectura)</li>
+    <li><b>Métodos HTTP:</b> <code>GET</code> para consultas simples; <code>POST</code> en los endpoints de resultados para filtros complejos con listas largas (ver <a href="#post-en-endpoints-de-resultados">más abajo</a>)</li>
     <li><b>Autenticación:</b> API key (header <code>X-API-Key</code>)</li>
     <li><b>Formato respuesta:</b> JSON (<code>application/json</code>)</li>
   </ul>
@@ -87,9 +87,12 @@ o
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/v1/resultados/totales-territorio` | Totales territorio filtrables por múltiples criterios |
-| GET | `/v1/resultados/votos-partido` | Votos por partido filtrables |
-| GET | `/v1/resultados/combinados` | Votos con partido, territorio y elección expandidos |
+| GET | `/v1/resultados/totales-territorio` | Totales territorio — filtros en query params |
+| **POST** | `/v1/resultados/totales-territorio` | Totales territorio — filtros en body JSON (listas largas) |
+| GET | `/v1/resultados/votos-partido` | Votos por partido — filtros en query params |
+| **POST** | `/v1/resultados/votos-partido` | Votos por partido — filtros en body JSON (listas largas) |
+| GET | `/v1/resultados/combinados` | Resultados combinados — filtros en query params |
+| **POST** | `/v1/resultados/combinados` | Resultados combinados — filtros en body JSON (listas largas) |
 
 ## Paginación
 
@@ -130,6 +133,8 @@ Página 3: ?skip=200&limit=100
 
 Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no es error).
 
+> **Con POST:** la paginación va dentro del body como campo `paginacion`, no como query params (ver [POST en endpoints de resultados](#post-en-endpoints-de-resultados)).
+
 ## Filtros
 
 ### Convenciones generales
@@ -137,6 +142,74 @@ Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no
 - Todos los filtros son **opcionales**. Sin filtros se devuelven todos los registros.
 - Los filtros de texto (`nombre`, `siglas`, `denominacion`, `agrupacion`) usan **búsqueda parcial case-insensitive** (ILIKE).
 - Para filtrar por **múltiples valores**, se repite el parámetro: `?tipo_eleccion=G&tipo_eleccion=A`.
+
+### POST en endpoints de resultados
+
+Los tres endpoints de resultados aceptan también el método **POST** en el mismo path. El comportamiento es idéntico al GET, pero los filtros se envían en el cuerpo JSON en lugar de en la query string.
+
+**¿Cuándo usar POST?** Cuando necesitas filtrar por listas largas de municipios u otros identificadores. Las URLs con decenas de IDs superan los límites de longitud de proxies y servidores y producen errores `414 URI Too Long`.
+
+#### Estructura del body
+
+Todos los campos son opcionales. Los campos `null` se pueden omitir.
+
+```json
+{
+  "paginacion": { "skip": 0, "limit": 200 },
+  "eleccion_id": [208, 226],
+  "territorio_id": null,
+  "partido_id": [80, 73, 102],
+  "year": ["2019", "2023"],
+  "tipo_eleccion": ["G"],
+  "tipo_territorio": ["municipio"],
+  "codigo_ccaa": ["13"],
+  "codigo_provincia": null,
+  "codigo_municipio": ["28001", "28002", "28003", "..."]
+}
+```
+
+`partido_id` solo está disponible en `/votos-partido` y `/combinados`, no en `/totales-territorio`.
+
+La respuesta es exactamente la misma estructura `PaginatedResponse` que devuelve el GET.
+
+#### Ejemplo con curl
+
+```bash
+curl -X POST https://api.spainelectoralproject.com/v1/resultados/combinados \
+  -H "X-API-Key: TU_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "paginacion": {"skip": 0, "limit": 500},
+    "year": ["2023"],
+    "tipo_eleccion": ["G"],
+    "tipo_territorio": ["municipio"],
+    "codigo_municipio": ["28001", "28002", "28003"]
+  }'
+```
+
+#### Ejemplo con R (httr2)
+
+```r
+library(httr2)
+
+body <- list(
+  paginacion    = list(skip = 0L, limit = 500L),
+  year          = list("2023"),
+  tipo_eleccion = list("G"),
+  tipo_territorio = list("municipio"),
+  codigo_municipio = as.list(mis_municipios)  # vector con todos los códigos
+)
+
+resp <- request("https://api.spainelectoralproject.com/v1/resultados/combinados") |>
+  req_method("POST") |>
+  req_headers(`X-API-Key` = Sys.getenv("ELECCIONESDB_API_KEY")) |>
+  req_body_json(body) |>
+  req_perform()
+
+resultados <- resp |> resp_body_json(simplifyVector = TRUE)
+```
+
+---
 
 ### Filtros por endpoint
 
@@ -206,4 +279,40 @@ Los mismos filtros que `resultados/totales-territorio`, más:
 | Código HTTP | Significado | Ejemplo |
 |---|---|---|
 | 404 | Recurso no encontrado | `{"detail": "Elección no encontrada"}` |
+| 414 | Query string demasiado larga | Ver abajo |
 | 422 | Error de validación | `{"detail": [{"type": "...", "loc": [...], "msg": "..."}]}` |
+
+### 414 URI Too Long
+
+Ocurre cuando el GET de un endpoint de resultados recibe una query string demasiado larga (más de ~4000 caracteres, equivalente a unas 40-50 repeticiones del parámetro `codigo_municipio`).
+
+```json
+{
+  "detail": "La query string es demasiado larga y puede causar errores en servidores o proxies intermedios. Usa el endpoint POST en el mismo path enviando los filtros como JSON en el cuerpo de la petición.",
+  "post_endpoint": "/v1/resultados/combinados",
+  "docs": "/docs"
+}
+```
+
+**Solución:** usa el método POST en el mismo path con los filtros en el body JSON. Ver [POST en endpoints de resultados](#post-en-endpoints-de-resultados).
+
+### 404 Not Found
+
+El body siempre tiene la forma `{"detail": "Mensaje descriptivo"}`. Mensajes posibles: `"Elección no encontrada"`, `"Territorio no encontrado"`, `"Partido no encontrado"`, etc.
+
+### 422 Validation Error
+
+```json
+{
+  "detail": [
+    {
+      "type": "greater_than_equal",
+      "loc": ["query", "limit"],
+      "msg": "Input should be greater than or equal to 1",
+      "input": "-5"
+    }
+  ]
+}
+```
+
+`loc` indica dónde está el error: `["query", "param"]` para query params, `["body", "campo"]` para campos del body POST.

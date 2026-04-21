@@ -9,7 +9,7 @@ Documentación funcional para construir un paquete de R que consuma esta API.
 | Base URL | `http://{host}:{port}` (por defecto `http://localhost:8000`) |
 | Versión | 1.0.0 |
 | Especificación | OpenAPI 3.1.0 |
-| Métodos HTTP | Solo `GET` (API de solo lectura) |
+| Métodos HTTP | `GET` para consultas simples; `POST` (mismo path) para filtros complejos con listas largas |
 | Autenticación | API key (header `X-API-Key`) |
 | Rate limiting | Ninguno |
 | Formato respuesta | JSON (`application/json`) |
@@ -76,9 +76,12 @@ o
 |---|---|---|---|
 | GET | `/v1/elecciones/{id}/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio de una elección |
 | GET | `/v1/elecciones/{id}/totales-territorio/{territorio_id}` | `ResultadoCompleto` | Totales territorio + votos por partido |
-| GET | `/v1/resultados/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio filtrable |
-| GET | `/v1/resultados/votos-partido` | `PaginatedResponse[VotoPartido]` | Votos por partido filtrable |
-| GET | `/v1/resultados/combinados` | `PaginatedResponse[ResultadoCombinado]` | Votos con todo expandido |
+| GET | `/v1/resultados/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio — filtros en query string |
+| **POST** | `/v1/resultados/totales-territorio` | `PaginatedResponse[TotalTerritorio]` | Totales territorio — filtros en body JSON (listas largas) |
+| GET | `/v1/resultados/votos-partido` | `PaginatedResponse[VotoPartido]` | Votos por partido — filtros en query string |
+| **POST** | `/v1/resultados/votos-partido` | `PaginatedResponse[VotoPartido]` | Votos por partido — filtros en body JSON (listas largas) |
+| GET | `/v1/resultados/combinados` | `PaginatedResponse[ResultadoCombinado]` | Resultados combinados — filtros en query string |
+| **POST** | `/v1/resultados/combinados` | `PaginatedResponse[ResultadoCombinado]` | Resultados combinados — filtros en body JSON (listas largas) |
 
 ## 3. Paginación
 
@@ -116,7 +119,56 @@ Página 3: ?skip=200&limit=100
 
 ## 4. Filtros
 
-### Convenciones generales
+### GET vs POST para resultados electorales
+
+Los tres endpoints de resultados (`/v1/resultados/totales-territorio`, `/v1/resultados/votos-partido`, `/v1/resultados/combinados`) admiten **dos modos de filtrado**:
+
+| Situación | Usa |
+|---|---|
+| Pocos filtros (p.ej. una provincia, un año) | `GET` con query params |
+| Lista larga de municipios / muchos IDs | `POST` con body JSON |
+| Script de R/Python que descarga datos masivos | `POST` con body JSON |
+
+Ambos métodos devuelven **exactamente la misma estructura** de respuesta (`PaginatedResponse`).
+
+### Estructura del body POST
+
+Todos los campos son opcionales. La paginación va embebida en el body:
+
+```json
+{
+  "paginacion": {
+    "skip": 0,
+    "limit": 200
+  },
+  "eleccion_id": [208, 226],
+  "territorio_id": null,
+  "partido_id": [80, 73, 102],
+  "year": ["2019", "2023"],
+  "tipo_eleccion": ["G"],
+  "tipo_territorio": ["municipio"],
+  "codigo_ccaa": null,
+  "codigo_provincia": null,
+  "codigo_municipio": ["28001", "28002", "28003"]
+}
+```
+
+Campos exclusivos de `VotoPartidoSearch` y `ResultadoCombinadoSearch`: `partido_id`.
+
+### Errores 414 en GET
+
+Si el GET recibe una query string superior a ~4000 caracteres, la API devuelve:
+
+```json
+{
+  "detail": "La query string es demasiado larga...",
+  "post_endpoint": "/v1/resultados/combinados",
+  "docs": "/docs"
+}
+```
+Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
+
+### Convenciones generales (GET)
 - Los filtros se pasan como **query parameters**.
 - Todos los filtros son **opcionales** — sin filtros se devuelven todos los registros.
 - Los filtros de texto (`nombre`, `siglas`, `agrupacion`) usan **búsqueda parcial case-insensitive** (ILIKE).
@@ -151,23 +203,33 @@ Página 3: ?skip=200&limit=100
 |---|---|---|---|
 | `agrupacion` | str | `PCE/IU` | Búsqueda parcial por agrupación |
 
-#### Resultados — Totales territorio (`/v1/resultados/totales-territorio`)
+#### Resultados — Totales territorio (`GET /v1/resultados/totales-territorio`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `eleccion_id` | int (repetible) | `208` | ID de elección |
-| `tipo_territorio` | str (repetible) | `provincia` | tipo (enum) |
+| `territorio_id` | int (repetible) | `20` | ID de territorio |
+| `year` | str (repetible) | `2023` | Año electoral |
+| `tipo_eleccion` | str (repetible) | `G` | Tipo de elección |
+| `tipo_territorio` | str (repetible) | `provincia` | Tipo de territorio (enum) |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
+| `codigo_municipio` | str (repetible) | `28001` | Código municipio INE — usa POST para listas largas |
 
-#### Resultados — Votos partido (`/v1/resultados/votos-partido`)
+#### Resultados — Votos partido (`GET /v1/resultados/votos-partido`)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `eleccion_id` | int (repetible) | `208` | ID de elección |
 | `territorio_id` | int (repetible) | `20` | ID de territorio |
 | `partido_id` | int (repetible) | `9451` | ID de partido |
+| `year` | str (repetible) | `2023` | Año electoral |
+| `tipo_eleccion` | str (repetible) | `G` | Tipo de elección |
+| `tipo_territorio` | str (repetible) | `municipio` | Tipo de territorio |
+| `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
+| `codigo_provincia` | str (repetible) | `28` | Código provincia |
+| `codigo_municipio` | str (repetible) | `28001` | Código municipio INE — usa POST para listas largas |
 
-#### Resultados — Combinados (`/v1/resultados/combinados`)
-Mismos filtros que totales territorio: `eleccion_id`, `tipo_territorio`, `codigo_ccaa`, `codigo_provincia`.
+#### Resultados — Combinados (`GET /v1/resultados/combinados`)
+Mismos filtros que totales territorio + `partido_id`: `eleccion_id`, `territorio_id`, `partido_id`, `year`, `tipo_eleccion`, `tipo_territorio`, `codigo_ccaa`, `codigo_provincia`, `codigo_municipio`.
 
 #### Totales territorio por elección (`/v1/elecciones/{id}/totales-territorio`)
 | Parámetro | Tipo | Ejemplo | Descripción |
@@ -285,6 +347,17 @@ cada item incluye `partido` (con `recode` anidado), `territorio` y `eleccion`.
 
 ## 11. Manejo de errores
 
+### HTTP 414 — URI Too Long
+Ocurre cuando el GET de un endpoint de resultados recibe una query string superior a 4000 caracteres. Body:
+```json
+{
+  "detail": "La query string es demasiado larga...",
+  "post_endpoint": "/v1/resultados/combinados",
+  "docs": "/docs"
+}
+```
+**Solución**: usar el endpoint `POST` en el mismo path con los filtros en el body JSON.
+
 ### HTTP 404 — Not Found
 Ocurre cuando un recurso específico no existe. El body siempre tiene:
 ```json
@@ -336,3 +409,6 @@ Cuando un filtro no coincide con nada, NO es un error. Se devuelve:
 8. **Códigos son strings**: `codigo_ccaa`, `year`, `mes`, `dia` son **strings, no integers** (conservan ceros a la izquierda).
 9. **API key obligatoria**: Todos los endpoints de `/v1/*` requieren el header `X-API-Key` (excepto `/v1/auth/*` y `/health`).
 10. **Endpoint combinados**: Para análisis exploratorio rápido, `/resultados/combinados` devuelve todo en una sola llamada (partido+recode+territorio+elección), evitando múltiples joins en R.
+11. **Usa siempre POST para los tres endpoints de resultados** (`/totales-territorio`, `/votos-partido`, `/combinados`): simplifica el cliente R eliminando cualquier lógica de umbral y evita completamente los errores 414. Los endpoints GET siguen disponibles para uso directo (curl, navegador), pero desde R no hay ventaja práctica en usarlos. Envía el body con `req_body_json()` de httr2.
+12. **Paginación en el body POST**: `skip` y `limit` van dentro del campo `paginacion` del body, no como query params: `list(paginacion = list(skip = 0L, limit = 500L), codigo_municipio = municipios_vector, year = list("2023"), tipo_eleccion = list("G"))`.
+13. **Respuesta idéntica GET y POST**: Los dos métodos devuelven exactamente la misma estructura `PaginatedResponse`. El código de parsing/unnesting en R no necesita cambios.

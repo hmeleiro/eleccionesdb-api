@@ -110,7 +110,7 @@
     <li><b>Base URL:</b> <code>https://api.spainelectoralproject.com/v1</code></li>
     <li><b>Versión:</b> 1.0.0</li>
     <li><b>Especificación:</b> OpenAPI 3.1.0</li>
-    <li><b>Métodos HTTP:</b> Solo <code>GET</code> (API de solo lectura)</li>
+    <li><b>Métodos HTTP:</b> <code>GET</code> para consultas simples; <code>POST</code> en los endpoints de resultados para filtros complejos con listas largas (ver <a href="#post-en-endpoints-de-resultados">más abajo</a>)</li>
     <li><b>Autenticación:</b> API key (header <code>X-API-Key</code>)</li>
     <li><b>Formato respuesta:</b> JSON (<code>application/json</code>)</li>
   </ul>
@@ -268,17 +268,32 @@
       <tr>
           <td>GET</td>
           <td><code>/v1/resultados/totales-territorio</code></td>
-          <td>Totales territorio filtrables por múltiples criterios</td>
+          <td>Totales territorio — filtros en query params</td>
+      </tr>
+      <tr>
+          <td><strong>POST</strong></td>
+          <td><code>/v1/resultados/totales-territorio</code></td>
+          <td>Totales territorio — filtros en body JSON (listas largas)</td>
       </tr>
       <tr>
           <td>GET</td>
           <td><code>/v1/resultados/votos-partido</code></td>
-          <td>Votos por partido filtrables</td>
+          <td>Votos por partido — filtros en query params</td>
+      </tr>
+      <tr>
+          <td><strong>POST</strong></td>
+          <td><code>/v1/resultados/votos-partido</code></td>
+          <td>Votos por partido — filtros en body JSON (listas largas)</td>
       </tr>
       <tr>
           <td>GET</td>
           <td><code>/v1/resultados/combinados</code></td>
-          <td>Votos con partido, territorio y elección expandidos</td>
+          <td>Resultados combinados — filtros en query params</td>
+      </tr>
+      <tr>
+          <td><strong>POST</strong></td>
+          <td><code>/v1/resultados/combinados</code></td>
+          <td>Resultados combinados — filtros en body JSON (listas largas)</td>
       </tr>
   </tbody>
 </table>
@@ -334,6 +349,9 @@ Página 2: ?skip=100&amp;limit=100
 Página 3: ?skip=200&amp;limit=100
 ...hasta que skip &gt;= total
 </code></pre><p>Cuando no hay coincidencias, la respuesta es <code>total=0</code> y <code>data=[]</code> (HTTP 200, no es error).</p>
+<blockquote>
+<p><strong>Con POST:</strong> la paginación va dentro del body como campo <code>paginacion</code>, no como query params (ver <a href="#post-en-endpoints-de-resultados">POST en endpoints de resultados</a>).</p>
+</blockquote>
 <h2 id="filtros">Filtros</h2>
 <h3 id="convenciones-generales">Convenciones generales</h3>
 <ul>
@@ -341,6 +359,55 @@ Página 3: ?skip=200&amp;limit=100
 <li>Los filtros de texto (<code>nombre</code>, <code>siglas</code>, <code>denominacion</code>, <code>agrupacion</code>) usan <strong>búsqueda parcial case-insensitive</strong> (ILIKE).</li>
 <li>Para filtrar por <strong>múltiples valores</strong>, se repite el parámetro: <code>?tipo_eleccion=G&amp;tipo_eleccion=A</code>.</li>
 </ul>
+<h3 id="post-en-endpoints-de-resultados">POST en endpoints de resultados</h3>
+<p>Los tres endpoints de resultados aceptan también el método <strong>POST</strong> en el mismo path. El comportamiento es idéntico al GET, pero los filtros se envían en el cuerpo JSON en lugar de en la query string.</p>
+<p><strong>¿Cuándo usar POST?</strong> Cuando necesitas filtrar por listas largas de municipios u otros identificadores. Las URLs con decenas de IDs superan los límites de longitud de proxies y servidores y producen errores <code>414 URI Too Long</code>.</p>
+<h4 id="estructura-del-body">Estructura del body</h4>
+<p>Todos los campos son opcionales. Los campos <code>null</code> se pueden omitir.</p>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;paginacion&#34;</span>: { <span style="color:#58a1dd">&#34;skip&#34;</span>: <span style="color:#a6be9d">0</span>, <span style="color:#58a1dd">&#34;limit&#34;</span>: <span style="color:#a6be9d">200</span> },
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;eleccion_id&#34;</span>: [<span style="color:#a6be9d">208</span>, <span style="color:#a6be9d">226</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;territorio_id&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;partido_id&#34;</span>: [<span style="color:#a6be9d">80</span>, <span style="color:#a6be9d">73</span>, <span style="color:#a6be9d">102</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;year&#34;</span>: [<span style="color:#a6be9d">&#34;2019&#34;</span>, <span style="color:#a6be9d">&#34;2023&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;tipo_eleccion&#34;</span>: [<span style="color:#a6be9d">&#34;G&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;tipo_territorio&#34;</span>: [<span style="color:#a6be9d">&#34;municipio&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;codigo_ccaa&#34;</span>: [<span style="color:#a6be9d">&#34;13&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;codigo_provincia&#34;</span>: <span style="color:#ff636f">null</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;codigo_municipio&#34;</span>: [<span style="color:#a6be9d">&#34;28001&#34;</span>, <span style="color:#a6be9d">&#34;28002&#34;</span>, <span style="color:#a6be9d">&#34;28003&#34;</span>, <span style="color:#a6be9d">&#34;...&#34;</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>partido_id</code> solo está disponible en <code>/votos-partido</code> y <code>/combinados</code>, no en <code>/totales-territorio</code>.</p>
+<p>La respuesta es exactamente la misma estructura <code>PaginatedResponse</code> que devuelve el GET.</p>
+<h4 id="ejemplo-con-curl">Ejemplo con curl</h4>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST https://api.spainelectoralproject.com/v1/resultados/combinados <span style="color:#a6be9d">\
+</span></span></span><span style="display:flex;"><span>  -H <span style="color:#a6be9d">&#34;X-API-Key: TU_API_KEY&#34;</span> <span style="color:#a6be9d">\
+</span></span></span><span style="display:flex;"><span>  -H <span style="color:#a6be9d">&#34;Content-Type: application/json&#34;</span> <span style="color:#a6be9d">\
+</span></span></span><span style="display:flex;"><span>  -d <span style="color:#a6be9d">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#a6be9d">    &#34;paginacion&#34;: {&#34;skip&#34;: 0, &#34;limit&#34;: 500},
+</span></span></span><span style="display:flex;"><span><span style="color:#a6be9d">    &#34;year&#34;: [&#34;2023&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#a6be9d">    &#34;tipo_eleccion&#34;: [&#34;G&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#a6be9d">    &#34;tipo_territorio&#34;: [&#34;municipio&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#a6be9d">    &#34;codigo_municipio&#34;: [&#34;28001&#34;, &#34;28002&#34;, &#34;28003&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#a6be9d">  }&#39;</span>
+</span></span></code></pre></div><h4 id="ejemplo-con-r-httr2">Ejemplo con R (httr2)</h4>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#58a1dd">library</span>(<span style="color:#58a1dd">httr2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">body</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">list</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">paginacion</span>    <span style="color:#ff636f">=</span> <span style="color:#58a1dd">list</span>(<span style="color:#58a1dd">skip</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">0L</span>, <span style="color:#58a1dd">limit</span> <span style="color:#ff636f">=</span> <span style="color:#a6be9d">500L</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">year</span>          <span style="color:#ff636f">=</span> <span style="color:#58a1dd">list</span>(<span style="color:#a6be9d">&#34;2023&#34;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">tipo_eleccion</span> <span style="color:#ff636f">=</span> <span style="color:#58a1dd">list</span>(<span style="color:#a6be9d">&#34;G&#34;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">tipo_territorio</span> <span style="color:#ff636f">=</span> <span style="color:#58a1dd">list</span>(<span style="color:#a6be9d">&#34;municipio&#34;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">codigo_municipio</span> <span style="color:#ff636f">=</span> <span style="color:#58a1dd">as.list</span>(<span style="color:#58a1dd">mis_municipios</span>)  <span style="color:#828b96;font-style:italic"># vector con todos los códigos</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">resp</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">request</span>(<span style="color:#a6be9d">&#34;https://api.spainelectoralproject.com/v1/resultados/combinados&#34;</span>) <span style="color:#ff636f">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">req_method</span>(<span style="color:#a6be9d">&#34;POST&#34;</span>) <span style="color:#ff636f">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">req_headers</span>(<span style="color:#58a1dd">`X-API-Key`</span> <span style="color:#ff636f">=</span> <span style="color:#58a1dd">Sys.getenv</span>(<span style="color:#a6be9d">&#34;ELECCIONESDB_API_KEY&#34;</span>)) <span style="color:#ff636f">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">req_body_json</span>(<span style="color:#58a1dd">body</span>) <span style="color:#ff636f">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">req_perform</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#58a1dd">resultados</span> <span style="color:#ff636f">&lt;-</span> <span style="color:#58a1dd">resp</span> <span style="color:#ff636f">|&gt;</span> <span style="color:#58a1dd">resp_body_json</span>(<span style="color:#58a1dd">simplifyVector</span> <span style="color:#ff636f">=</span> <span style="color:#ff636f">TRUE</span>)
+</span></span></code></pre></div><hr>
 <h3 id="filtros-por-endpoint">Filtros por endpoint</h3>
 <h4 id="v1elecciones"><code>/v1/elecciones</code></h4>
 <table>
@@ -594,12 +661,39 @@ Página 3: ?skip=200&amp;limit=100
           <td><code>{&quot;detail&quot;: &quot;Elección no encontrada&quot;}</code></td>
       </tr>
       <tr>
+          <td>414</td>
+          <td>Query string demasiado larga</td>
+          <td>Ver abajo</td>
+      </tr>
+      <tr>
           <td>422</td>
           <td>Error de validación</td>
           <td><code>{&quot;detail&quot;: [{&quot;type&quot;: &quot;...&quot;, &quot;loc&quot;: [...], &quot;msg&quot;: &quot;...&quot;}]}</code></td>
       </tr>
   </tbody>
 </table>
+<h3 id="414-uri-too-long">414 URI Too Long</h3>
+<p>Ocurre cuando el GET de un endpoint de resultados recibe una query string demasiado larga (más de ~4000 caracteres, equivalente a unas 40-50 repeticiones del parámetro <code>codigo_municipio</code>).</p>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;detail&#34;</span>: <span style="color:#a6be9d">&#34;La query string es demasiado larga y puede causar errores en servidores o proxies intermedios. Usa el endpoint POST en el mismo path enviando los filtros como JSON en el cuerpo de la petición.&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;post_endpoint&#34;</span>: <span style="color:#a6be9d">&#34;/v1/resultados/combinados&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;docs&#34;</span>: <span style="color:#a6be9d">&#34;/docs&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>Solución:</strong> usa el método POST en el mismo path con los filtros en el body JSON. Ver <a href="#post-en-endpoints-de-resultados">POST en endpoints de resultados</a>.</p>
+<h3 id="404-not-found">404 Not Found</h3>
+<p>El body siempre tiene la forma <code>{&quot;detail&quot;: &quot;Mensaje descriptivo&quot;}</code>. Mensajes posibles: <code>&quot;Elección no encontrada&quot;</code>, <code>&quot;Territorio no encontrado&quot;</code>, <code>&quot;Partido no encontrado&quot;</code>, etc.</p>
+<h3 id="422-validation-error">422 Validation Error</h3>
+<div class="highlight"><pre tabindex="0" style="color:#1d2432;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#58a1dd">&#34;detail&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;type&#34;</span>: <span style="color:#a6be9d">&#34;greater_than_equal&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;loc&#34;</span>: [<span style="color:#a6be9d">&#34;query&#34;</span>, <span style="color:#a6be9d">&#34;limit&#34;</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;msg&#34;</span>: <span style="color:#a6be9d">&#34;Input should be greater than or equal to 1&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#58a1dd">&#34;input&#34;</span>: <span style="color:#a6be9d">&#34;-5&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>loc</code> indica dónde está el error: <code>[&quot;query&quot;, &quot;param&quot;]</code> para query params, <code>[&quot;body&quot;, &quot;campo&quot;]</code> para campos del body POST.</p>
 
       </div>
     </div>

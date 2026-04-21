@@ -21,4 +21,4 @@ db_schema.sql
 openapi.json
 initial-prompt
 api-examples.json
-api-usage-rules.md
+./api-usage-rules.md

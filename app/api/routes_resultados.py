@@ -10,6 +10,9 @@ from app.schemas.resultados import (
     TotalTerritorioSchema,
     VotoPartidoSchema,
     ResultadoCombinadoSchema,
+    TotalTerritorioSearch,
+    VotoPartidoSearch,
+    ResultadoCombinadoSearch,
 )
 from app import crud
 
@@ -32,7 +35,13 @@ def list_totales_territorio(
     db: Session = Depends(get_db),
     developer=Depends(get_current_developer),
 ):
-    """Totales territorio (censo, participación, votos blancos/nulos…) con filtros."""
+    """Totales territorio (censo, participación, votos blancos/nulos…) con filtros.
+
+    Usa este endpoint GET para consultas sencillas con pocos identificadores.
+    Si necesitas filtrar por listas largas de municipios u otros identificadores,
+    usa **POST /v1/resultados/totales-territorio** con los filtros en el cuerpo JSON
+    para evitar errores `414 URI Too Long`.
+    """
     return crud.get_totales_territorio(
         db,
         skip=pagination.skip,
@@ -45,6 +54,47 @@ def list_totales_territorio(
         codigo_ccaa=codigo_ccaa,
         codigo_provincia=codigo_provincia,
         codigo_municipio=codigo_municipio,
+    )
+
+
+@router.post(
+    "/totales-territorio",
+    response_model=PaginatedResponse[TotalTerritorioSchema],
+    summary="Buscar totales territorio con filtros complejos (body JSON)",
+)
+def search_totales_territorio(
+    body: TotalTerritorioSearch,
+    db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
+):
+    """Totales territorio (censo, participación, votos blancos/nulos…) con filtros en body JSON.
+
+    Endpoint de **solo lectura**. Equivale al GET, pero acepta los filtros en el cuerpo JSON
+    en lugar de query parameters. Úsalo cuando necesites listas largas de municipios u otros
+    identificadores que provocarían errores `414 URI Too Long` en el GET.
+
+    Ejemplo de body:
+    ```json
+    {
+      "paginacion": {"skip": 0, "limit": 100},
+      "year": ["2019", "2023"],
+      "tipo_eleccion": ["G"],
+      "codigo_municipio": ["28001", "28002", "28003"]
+    }
+    ```
+    """
+    return crud.get_totales_territorio(
+        db,
+        skip=body.paginacion.skip,
+        limit=body.paginacion.limit,
+        eleccion_id=body.eleccion_id,
+        territorio_id=body.territorio_id,
+        year=body.year,
+        tipo_eleccion=body.tipo_eleccion,
+        tipo_territorio=body.tipo_territorio,
+        codigo_ccaa=body.codigo_ccaa,
+        codigo_provincia=body.codigo_provincia,
+        codigo_municipio=body.codigo_municipio,
     )
 
 
@@ -65,7 +115,13 @@ def list_votos_partido(
     db: Session = Depends(get_db),
     developer=Depends(get_current_developer),
 ):
-    """Votos por partido y territorio con filtros opcionales."""
+    """Votos por partido y territorio con filtros opcionales.
+
+    Usa este endpoint GET para consultas sencillas con pocos identificadores.
+    Si necesitas filtrar por listas largas de municipios u otros identificadores,
+    usa **POST /v1/resultados/votos-partido** con los filtros en el cuerpo JSON
+    para evitar errores `414 URI Too Long`.
+    """
     return crud.get_votos_partido(
         db,
         skip=pagination.skip,
@@ -79,6 +135,49 @@ def list_votos_partido(
         codigo_ccaa=codigo_ccaa,
         codigo_provincia=codigo_provincia,
         codigo_municipio=codigo_municipio,
+    )
+
+
+@router.post(
+    "/votos-partido",
+    response_model=PaginatedResponse[VotoPartidoSchema],
+    summary="Buscar votos por partido con filtros complejos (body JSON)",
+)
+def search_votos_partido(
+    body: VotoPartidoSearch,
+    db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
+):
+    """Votos por partido y territorio con filtros en body JSON.
+
+    Endpoint de **solo lectura**. Equivale al GET, pero acepta los filtros en el cuerpo JSON
+    en lugar de query parameters. Úsalo cuando necesites listas largas de municipios u otros
+    identificadores que provocarían errores `414 URI Too Long` en el GET.
+
+    Ejemplo de body:
+    ```json
+    {
+      "paginacion": {"skip": 0, "limit": 100},
+      "year": ["2023"],
+      "tipo_eleccion": ["G"],
+      "partido_id": [1, 2, 3],
+      "codigo_municipio": ["28001", "28002", "28003"]
+    }
+    ```
+    """
+    return crud.get_votos_partido(
+        db,
+        skip=body.paginacion.skip,
+        limit=body.paginacion.limit,
+        eleccion_id=body.eleccion_id,
+        territorio_id=body.territorio_id,
+        partido_id=body.partido_id,
+        year=body.year,
+        tipo_eleccion=body.tipo_eleccion,
+        tipo_territorio=body.tipo_territorio,
+        codigo_ccaa=body.codigo_ccaa,
+        codigo_provincia=body.codigo_provincia,
+        codigo_municipio=body.codigo_municipio,
     )
 
 
@@ -99,7 +198,13 @@ def list_resultados_combinados(
     db: Session = Depends(get_db),
     developer=Depends(get_current_developer),
 ):
-    """Votos con partido+recode, territorio y elección expandidos. Ideal para análisis cruzado."""
+    """Votos con partido+recode, territorio y elección expandidos. Ideal para análisis cruzado.
+
+    Usa este endpoint GET para consultas sencillas con pocos identificadores.
+    Si necesitas filtrar por listas largas de municipios u otros identificadores,
+    usa **POST /v1/resultados/combinados** con los filtros en el cuerpo JSON
+    para evitar errores `414 URI Too Long`.
+    """
     return crud.get_resultados_combinados(
         db,
         skip=pagination.skip,
@@ -113,5 +218,48 @@ def list_resultados_combinados(
         codigo_ccaa=codigo_ccaa,
         codigo_provincia=codigo_provincia,
         codigo_municipio=codigo_municipio,
+    )
+
+
+@router.post(
+    "/combinados",
+    response_model=PaginatedResponse[ResultadoCombinadoSchema],
+    summary="Buscar resultados combinados con filtros complejos (body JSON)",
+)
+def search_resultados_combinados(
+    body: ResultadoCombinadoSearch,
+    db: Session = Depends(get_db),
+    developer=Depends(get_current_developer),
+):
+    """Votos con partido+recode, territorio y elección expandidos, con filtros en body JSON.
+
+    Endpoint de **solo lectura**. Equivale al GET, pero acepta los filtros en el cuerpo JSON
+    en lugar de query parameters. Úsalo cuando necesites listas largas de municipios u otros
+    identificadores que provocarían errores `414 URI Too Long` en el GET.
+
+    Ejemplo de body:
+    ```json
+    {
+      "paginacion": {"skip": 0, "limit": 200},
+      "year": ["2023"],
+      "tipo_eleccion": ["G"],
+      "tipo_territorio": ["municipio"],
+      "codigo_municipio": ["28001", "28002", "28003", "08001"]
+    }
+    ```
+    """
+    return crud.get_resultados_combinados(
+        db,
+        skip=body.paginacion.skip,
+        limit=body.paginacion.limit,
+        eleccion_id=body.eleccion_id,
+        territorio_id=body.territorio_id,
+        partido_id=body.partido_id,
+        year=body.year,
+        tipo_eleccion=body.tipo_eleccion,
+        tipo_territorio=body.tipo_territorio,
+        codigo_ccaa=body.codigo_ccaa,
+        codigo_provincia=body.codigo_provincia,
+        codigo_municipio=body.codigo_municipio,
     )
 
