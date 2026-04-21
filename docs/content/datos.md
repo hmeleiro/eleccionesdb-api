@@ -5,7 +5,9 @@ description: "Cobertura, fuentes oficiales y opciones de descarga de los datos e
 
 ## Cobertura
 
-La API da acceso a los datos de [eleccionesdb](https://eleccionesdb.spainelectoralproject.com/), una base de datos relacional con resultados electorales de España.
+La API da acceso a los datos de [eleccionesdb](https://eleccionesdb.spainelectoralproject.com/), una base de datos relacional con resultados electorales de España. 
+
+Es recomendable leer la pagina sobre la [calidad de los datos](https://eleccionesdb.spainelectoralproject.com/calidad/).
 
 ### Ámbitos electorales
 
