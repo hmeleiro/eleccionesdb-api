@@ -52,15 +52,22 @@ def _apply_eleccion_filters(query, model, year=None, tipo_eleccion=None, eleccio
 def _apply_territorio_filters(query, model,
                                territorio_id=None, tipo_territorio=None,
                                codigo_ccaa=None, codigo_provincia=None,
-                               codigo_municipio=None):
+                               codigo_municipio=None,
+                               codigo_circunscripcion=None):
     """Join con Territorio si hay filtros territoriales."""
     query = _apply_in_filter(query, model.territorio_id, territorio_id)
-    if tipo_territorio or codigo_ccaa or codigo_provincia or codigo_municipio:
+    if (tipo_territorio or codigo_ccaa or codigo_provincia
+            or codigo_municipio or codigo_circunscripcion):
         query = query.join(Territorio, model.territorio_id == Territorio.id)
         query = _apply_in_filter(query, Territorio.tipo, tipo_territorio)
         query = _apply_in_filter(query, Territorio.codigo_ccaa, codigo_ccaa)
         query = _apply_in_filter(query, Territorio.codigo_provincia, codigo_provincia)
         query = _apply_in_filter(query, Territorio.codigo_municipio, codigo_municipio)
+        query = _apply_in_filter(
+            query,
+            Territorio.codigo_circunscripcion,
+            codigo_circunscripcion,
+        )
     return query
 
 
@@ -218,10 +225,15 @@ def get_totales_territorio(
     codigo_ccaa: Optional[list[str]] = None,
     codigo_provincia: Optional[list[str]] = None,
     codigo_municipio: Optional[list[str]] = None,
+    codigo_circunscripcion: Optional[list[str]] = None,
 ) -> dict:
     query = db.query(ResumenTerritorial)
     query = _apply_eleccion_filters(query, ResumenTerritorial, year, tipo_eleccion, eleccion_id)
-    query = _apply_territorio_filters(query, ResumenTerritorial, territorio_id, tipo_territorio, codigo_ccaa, codigo_provincia, codigo_municipio)
+    query = _apply_territorio_filters(
+        query, ResumenTerritorial, territorio_id, tipo_territorio,
+        codigo_ccaa, codigo_provincia, codigo_municipio,
+        codigo_circunscripcion,
+    )
     return _paginate(query.order_by(ResumenTerritorial.id), skip, limit)
 
 
@@ -238,10 +250,15 @@ def get_votos_partido(
     codigo_ccaa: Optional[list[str]] = None,
     codigo_provincia: Optional[list[str]] = None,
     codigo_municipio: Optional[list[str]] = None,
+    codigo_circunscripcion: Optional[list[str]] = None,
 ) -> dict:
     query = db.query(VotoTerritorial)
     query = _apply_eleccion_filters(query, VotoTerritorial, year, tipo_eleccion, eleccion_id)
-    query = _apply_territorio_filters(query, VotoTerritorial, territorio_id, tipo_territorio, codigo_ccaa, codigo_provincia, codigo_municipio)
+    query = _apply_territorio_filters(
+        query, VotoTerritorial, territorio_id, tipo_territorio,
+        codigo_ccaa, codigo_provincia, codigo_municipio,
+        codigo_circunscripcion,
+    )
     query = _apply_in_filter(query, VotoTerritorial.partido_id, partido_id)
     return _paginate(query.order_by(VotoTerritorial.id), skip, limit)
 
@@ -309,6 +326,7 @@ def get_resultados_combinados(
     codigo_ccaa: Optional[list[str]] = None,
     codigo_provincia: Optional[list[str]] = None,
     codigo_municipio: Optional[list[str]] = None,
+    codigo_circunscripcion: Optional[list[str]] = None,
 ) -> dict:
     query = (
         db.query(VotoTerritorial)
@@ -319,7 +337,11 @@ def get_resultados_combinados(
         )
     )
     query = _apply_eleccion_filters(query, VotoTerritorial, year, tipo_eleccion, eleccion_id)
-    query = _apply_territorio_filters(query, VotoTerritorial, territorio_id, tipo_territorio, codigo_ccaa, codigo_provincia, codigo_municipio)
+    query = _apply_territorio_filters(
+        query, VotoTerritorial, territorio_id, tipo_territorio,
+        codigo_ccaa, codigo_provincia, codigo_municipio,
+        codigo_circunscripcion,
+    )
     query = _apply_in_filter(query, VotoTerritorial.partido_id, partido_id)
     return _paginate(query.order_by(VotoTerritorial.id), skip, limit)
 

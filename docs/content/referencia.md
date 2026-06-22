@@ -164,6 +164,7 @@ Todos los campos son opcionales. Los campos `null` se pueden omitir.
   "tipo_territorio": ["municipio"],
   "codigo_ccaa": ["13"],
   "codigo_provincia": null,
+  "codigo_circunscripcion": ["001"],
   "codigo_municipio": ["28001", "28002", "28003", "..."]
 }
 ```
@@ -264,6 +265,7 @@ resultados <- resp |> resp_body_json(simplifyVector = TRUE)
 | `tipo_territorio` | str (repetible) | `provincia` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
+| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
 | `codigo_municipio` | str (repetible) | `079` | Código municipio |
 
 #### `/v1/resultados/votos-partido` y `/v1/resultados/combinados`

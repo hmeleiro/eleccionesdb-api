@@ -126,6 +126,10 @@ class BaseResultadosSearch(BaseModel):
     codigo_provincia: Optional[list[str]] = Field(
         default=None, description="Filtrar por código(s) de provincia, p.ej. ['28', '08']"
     )
+    codigo_circunscripcion: Optional[list[str]] = Field(
+        default=None,
+        description="Filtrar por código(s) de circunscripción, p.ej. ['001', '002']",
+    )
     codigo_municipio: Optional[list[str]] = Field(
         default=None,
         description="Filtrar por código(s) de municipio INE, p.ej. ['28001', '28002']. "

@@ -149,6 +149,7 @@ Todos los campos son opcionales. La paginación va embebida en el body:
   "tipo_territorio": ["municipio"],
   "codigo_ccaa": null,
   "codigo_provincia": null,
+  "codigo_circunscripcion": ["001"],
   "codigo_municipio": ["28001", "28002", "28003"]
 }
 ```
@@ -213,6 +214,7 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 | `tipo_territorio` | str (repetible) | `provincia` | Tipo de territorio (enum) |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
+| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
 | `codigo_municipio` | str (repetible) | `28001` | Código municipio INE — usa POST para listas largas |
 
 #### Resultados — Votos partido (`GET /v1/resultados/votos-partido`)
@@ -226,10 +228,11 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 | `tipo_territorio` | str (repetible) | `municipio` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
+| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
 | `codigo_municipio` | str (repetible) | `28001` | Código municipio INE — usa POST para listas largas |
 
 #### Resultados — Combinados (`GET /v1/resultados/combinados`)
-Mismos filtros que totales territorio + `partido_id`: `eleccion_id`, `territorio_id`, `partido_id`, `year`, `tipo_eleccion`, `tipo_territorio`, `codigo_ccaa`, `codigo_provincia`, `codigo_municipio`.
+Mismos filtros que totales territorio + `partido_id`: `eleccion_id`, `territorio_id`, `partido_id`, `year`, `tipo_eleccion`, `tipo_territorio`, `codigo_ccaa`, `codigo_provincia`, `codigo_circunscripcion`, `codigo_municipio`.
 
 #### Totales territorio por elección (`/v1/elecciones/{id}/totales-territorio`)
 | Parámetro | Tipo | Ejemplo | Descripción |
