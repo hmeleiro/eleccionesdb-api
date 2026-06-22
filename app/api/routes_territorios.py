@@ -20,7 +20,10 @@ def list_territorios(
     codigo_ccaa: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) CCAA"),
     codigo_provincia: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) provincia"),
     codigo_municipio: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) municipio"),
-    codigo_circunscripcion: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) circunscripción"),
+    codigo_circunscripcion: Optional[list[str]] = Query(
+        default=None,
+        description='Filtrar por código(s) de circunscripción; usa "99" para CCAA y provincias',
+    ),
     nombre: Optional[str] = Query(default=None, description="Buscar por nombre (parcial, sin distinguir mayúsculas)"),
     db: Session = Depends(get_db),
     _developer=Depends(get_current_developer),

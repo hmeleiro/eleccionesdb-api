@@ -22,6 +22,7 @@ from app.schemas.resultados import (
     TotalTerritorioSearch,
     VotoPartidoSearch,
 )
+from app.schemas.territorios import TerritorioDetail, TerritorioList
 
 
 @pytest.fixture()
@@ -54,6 +55,23 @@ def db():
                 codigo_circunscripcion="002",
                 nombre="Circunscripción 2",
             ),
+            Territorio(
+                id=3,
+                tipo="ccaa",
+                codigo_ccaa="01",
+                codigo_provincia="99",
+                codigo_circunscripcion="99",
+                nombre="Andalucía",
+            ),
+            Territorio(
+                id=4,
+                tipo="provincia",
+                codigo_ccaa="01",
+                codigo_provincia="04",
+                codigo_circunscripcion="99",
+                nombre="Almería",
+                parent_id=3,
+            ),
         ]
     )
     session.add(Partido(id=1, siglas="TEST", denominacion="Partido de prueba"))
@@ -61,11 +79,19 @@ def db():
         [
             ResumenTerritorial(id=1, eleccion_id=1, territorio_id=1),
             ResumenTerritorial(id=2, eleccion_id=1, territorio_id=2),
+            ResumenTerritorial(id=3, eleccion_id=1, territorio_id=3),
+            ResumenTerritorial(id=4, eleccion_id=1, territorio_id=4),
             VotoTerritorial(
                 id=1, eleccion_id=1, territorio_id=1, partido_id=1, votos=100
             ),
             VotoTerritorial(
                 id=2, eleccion_id=1, territorio_id=2, partido_id=1, votos=200
+            ),
+            VotoTerritorial(
+                id=3, eleccion_id=1, territorio_id=3, partido_id=1, votos=300
+            ),
+            VotoTerritorial(
+                id=4, eleccion_id=1, territorio_id=4, partido_id=1, votos=400
             ),
         ]
     )
@@ -93,15 +119,50 @@ def test_resultados_filter_by_codigo_circunscripcion(db, getter):
     assert [item.territorio_id for item in result["data"]] == [1]
 
 
-def test_totales_territorio_eleccion_filter_by_codigo_circunscripcion(db):
+@pytest.mark.parametrize(
+    "getter",
+    [
+        crud.get_totales_territorio,
+        crud.get_votos_partido,
+        crud.get_resultados_combinados,
+    ],
+)
+def test_resultados_filter_by_codigo_circunscripcion_99(db, getter):
+    result = getter(db, codigo_circunscripcion=["99"])
+
+    assert result["total"] == 2
+    assert [item.territorio_id for item in result["data"]] == [3, 4]
+
+
+def test_territorios_filter_by_codigo_circunscripcion_99(db):
+    result = crud.get_territorios(db, codigo_circunscripcion=["99"])
+
+    assert result["total"] == 2
+    assert [(item.tipo, item.id) for item in result["data"]] == [
+        ("ccaa", 3),
+        ("provincia", 4),
+    ]
+
+
+@pytest.mark.parametrize("schema", [TerritorioList, TerritorioDetail])
+@pytest.mark.parametrize("territorio_id", [3, 4])
+def test_territorio_schemas_return_persisted_codigo_circunscripcion(
+    db, schema, territorio_id
+):
+    territorio = crud.get_territorio(db, territorio_id)
+
+    assert schema.model_validate(territorio).codigo_circunscripcion == "99"
+
+
+def test_totales_territorio_eleccion_filter_by_codigo_circunscripcion_99(db):
     result = crud.get_totales_territorio_eleccion(
         db,
         eleccion_id=1,
-        codigo_circunscripcion=["002"],
+        codigo_circunscripcion=["99"],
     )
 
-    assert result["total"] == 1
-    assert [item.territorio_id for item in result["data"]] == [2]
+    assert result["total"] == 2
+    assert [item.territorio_id for item in result["data"]] == [3, 4]
 
 
 @pytest.mark.parametrize(
@@ -109,9 +170,9 @@ def test_totales_territorio_eleccion_filter_by_codigo_circunscripcion(db):
     [TotalTerritorioSearch, VotoPartidoSearch, ResultadoCombinadoSearch],
 )
 def test_post_search_schemas_accept_codigo_circunscripcion(search_schema):
-    body = search_schema(codigo_circunscripcion=["001", "002"])
+    body = search_schema(codigo_circunscripcion=["99", "001"])
 
-    assert body.codigo_circunscripcion == ["001", "002"]
+    assert body.codigo_circunscripcion == ["99", "001"]
 
 
 @pytest.mark.parametrize(
@@ -126,6 +187,13 @@ def test_get_openapi_exposes_codigo_circunscripcion(path):
     parameters = app.openapi()["paths"][path]["get"]["parameters"]
 
     assert "codigo_circunscripcion" in {parameter["name"] for parameter in parameters}
+
+
+def test_openapi_territorio_list_exposes_codigo_circunscripcion_99_contract():
+    schema = app.openapi()["components"]["schemas"]["TerritorioList"]
+    field = schema["properties"]["codigo_circunscripcion"]
+
+    assert '"99"' in field["description"]
 
 
 def test_all_get_endpoints_with_codigo_provincia_also_expose_circunscripcion():

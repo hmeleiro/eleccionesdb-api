@@ -149,7 +149,7 @@ Todos los campos son opcionales. La paginación va embebida en el body:
   "tipo_territorio": ["municipio"],
   "codigo_ccaa": null,
   "codigo_provincia": null,
-  "codigo_circunscripcion": ["001"],
+  "codigo_circunscripcion": ["99"],
   "codigo_municipio": ["28001", "28002", "28003"]
 }
 ```
@@ -190,8 +190,10 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 | `tipo` | str (repetible) | `ccaa`, `provincia` | Tipo de territorio (enum) |
 | `codigo_ccaa` | str (repetible) | `01` | Código de comunidad autónoma |
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
-| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
+| `codigo_circunscripcion` | str (repetible) | `99`, `001` | Código de circunscripción; `99` para CCAA y provincias |
 | `nombre` | str | `madrid` | Búsqueda parcial por nombre |
+
+`codigo_circunscripcion` forma parte de las respuestas resumidas y detalladas de territorio. El valor persistido para territorios de tipo `ccaa` y `provincia` es `"99"`; por tanto, `codigo_circunscripcion=["99"]` selecciona ambos tipos (puede combinarse con `tipo` o `tipo_territorio` para restringirlos).
 
 #### Partidos (`/v1/partidos`)
 | Parámetro | Tipo | Ejemplo | Descripción |
@@ -215,7 +217,7 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 | `tipo_territorio` | str (repetible) | `provincia` | Tipo de territorio (enum) |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
-| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
+| `codigo_circunscripcion` | str (repetible) | `99`, `001` | Código de circunscripción; `99` para CCAA y provincias |
 | `codigo_municipio` | str (repetible) | `28001` | Código municipio INE — usa POST para listas largas |
 
 #### Resultados — Votos partido (`GET /v1/resultados/votos-partido`)
@@ -229,7 +231,7 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 | `tipo_territorio` | str (repetible) | `municipio` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
-| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
+| `codigo_circunscripcion` | str (repetible) | `99`, `001` | Código de circunscripción; `99` para CCAA y provincias |
 | `codigo_municipio` | str (repetible) | `28001` | Código municipio INE — usa POST para listas largas |
 
 #### Resultados — Combinados (`GET /v1/resultados/combinados`)
@@ -241,7 +243,7 @@ Mismos filtros que totales territorio + `partido_id`: `eleccion_id`, `territorio
 | `tipo_territorio` | str (repetible) | `provincia` | tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
-| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
+| `codigo_circunscripcion` | str (repetible) | `99`, `001` | Código de circunscripción; `99` para CCAA y provincias |
 
 
 ## 5. Tipos de territorio (enum)
@@ -299,7 +301,7 @@ Los siguientes campos pueden ser `null`:
 
 | Modelo | Campo | Cuándo es null |
 |---|---|---|
-| Territorio | `codigo_circunscripcion` | Territorios que no son circunscripción |
+| Territorio | `codigo_circunscripcion` | Territorios sin código persistido; CCAA y provincias usan `"99"` |
 | Territorio | `parent_id` | Territorios raíz (ccaa) |
 | Partido | `partido_recode_id` | Partido sin agrupación |
 | Partido (detail) | `recode` | Partido sin agrupación |
@@ -313,6 +315,7 @@ Los siguientes campos pueden ser `null`:
 | `year`, `mes`, `dia` | Strings con ceros | `"2019"`, `"04"`, `"28"` |
 | `codigo_ccaa` | String 2 dígitos | `"01"` |
 | `codigo_provincia` | String 2 dígitos | `"28"` |
+| `codigo_circunscripcion` | String de 2 o 3 dígitos | `"99"` (CCAA/provincia), `"001"` (circunscripción) |
 | `codigo_municipio` | String 3 dígitos | `"999"` (wildcard) |
 | `codigo_distrito` | String 2 dígitos | `"99"` (wildcard) |
 | `codigo_seccion` | String 4 dígitos | `"9999"` (wildcard) |

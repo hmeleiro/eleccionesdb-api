@@ -217,6 +217,7 @@ GET /v1/territorios?tipo=ccaa&limit=3
       "tipo": "ccaa",
       "codigo_ccaa": "01",
       "codigo_provincia": null,
+      "codigo_circunscripcion": "99",
       "codigo_municipio": null,
       "codigo_distrito": null,
       "codigo_seccion": null,
@@ -228,6 +229,7 @@ GET /v1/territorios?tipo=ccaa&limit=3
       "tipo": "ccaa",
       "codigo_ccaa": "02",
       "codigo_provincia": null,
+      "codigo_circunscripcion": "99",
       "codigo_municipio": null,
       "codigo_distrito": null,
       "codigo_seccion": null,
@@ -239,6 +241,7 @@ GET /v1/territorios?tipo=ccaa&limit=3
       "tipo": "ccaa",
       "codigo_ccaa": "03",
       "codigo_provincia": null,
+      "codigo_circunscripcion": "99",
       "codigo_municipio": null,
       "codigo_distrito": null,
       "codigo_seccion": null,
@@ -268,6 +271,7 @@ GET /v1/territorios/1/hijos?limit=3
       "tipo": "provincia",
       "codigo_ccaa": "01",
       "codigo_provincia": "04",
+      "codigo_circunscripcion": "99",
       "codigo_municipio": null,
       "codigo_distrito": null,
       "codigo_seccion": null,
@@ -279,6 +283,7 @@ GET /v1/territorios/1/hijos?limit=3
       "tipo": "provincia",
       "codigo_ccaa": "01",
       "codigo_provincia": "11",
+      "codigo_circunscripcion": "99",
       "codigo_municipio": null,
       "codigo_distrito": null,
       "codigo_seccion": null,
@@ -290,10 +295,37 @@ GET /v1/territorios/1/hijos?limit=3
       "tipo": "provincia",
       "codigo_ccaa": "01",
       "codigo_provincia": "14",
+      "codigo_circunscripcion": "99",
       "codigo_municipio": null,
       "codigo_distrito": null,
       "codigo_seccion": null,
       "parent_id": 1
+    }
+  ]
+}
+```
+
+## Provincias por código de circunscripción
+
+El código persistido de circunscripción para CCAA y provincias es `"99"`. El filtro puede combinarse con el tipo de territorio:
+
+```
+GET /v1/territorios?codigo_circunscripcion=99&tipo=provincia&limit=1
+```
+
+```json
+{
+  "total": 52,
+  "skip": 0,
+  "limit": 1,
+  "data": [
+    {
+      "id": 20,
+      "nombre": "Almería",
+      "tipo": "provincia",
+      "codigo_ccaa": "01",
+      "codigo_provincia": "04",
+      "codigo_circunscripcion": "99"
     }
   ]
 }
@@ -317,6 +349,7 @@ GET /v1/territorios?nombre=madrid&tipo=ccaa
       "tipo": "ccaa",
       "codigo_ccaa": "13",
       "codigo_provincia": null,
+      "codigo_circunscripcion": "99",
       "codigo_municipio": null,
       "codigo_distrito": null,
       "codigo_seccion": null,
@@ -491,7 +524,8 @@ GET /v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codigo_p
         "nombre": "Madrid",
         "tipo": "provincia",
         "codigo_ccaa": "13",
-        "codigo_provincia": "28"
+        "codigo_provincia": "28",
+        "codigo_circunscripcion": "99"
       },
       "eleccion": {
         "id": 208,
@@ -523,7 +557,8 @@ GET /v1/resultados/combinados?eleccion_id=208&tipo_territorio=provincia&codigo_p
         "nombre": "Madrid",
         "tipo": "provincia",
         "codigo_ccaa": "13",
-        "codigo_provincia": "28"
+        "codigo_provincia": "28",
+        "codigo_circunscripcion": "99"
       },
       "eleccion": {
         "id": 208,

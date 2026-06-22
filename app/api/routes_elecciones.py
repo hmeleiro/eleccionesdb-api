@@ -83,7 +83,10 @@ def get_totales_territorio_eleccion(
     tipo_territorio: Optional[list[str]] = Query(default=None, description="Filtrar por tipo de territorio (ccaa, provincia, municipio…)"),
     codigo_ccaa: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) CCAA"),
     codigo_provincia: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) provincia"),
-    codigo_circunscripcion: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) circunscripción"),
+    codigo_circunscripcion: Optional[list[str]] = Query(
+        default=None,
+        description='Filtrar por código(s) de circunscripción; usa "99" para CCAA y provincias',
+    ),
     codigo_municipio: Optional[list[str]] = Query(default=None, description="Filtrar por código(s) municipio"),
     db: Session = Depends(get_db),
     developer=Depends(get_current_developer),

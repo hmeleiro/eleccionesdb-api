@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
+
+
+_CODIGO_CIRCUNSCRIPCION_DESCRIPTION = (
+    'Código de circunscripción persistido; para CCAA y provincias es "99".'
+)
 
 
 class TerritorioList(BaseModel):
@@ -13,6 +18,10 @@ class TerritorioList(BaseModel):
     codigo_completo: str | None = None
     codigo_ccaa: str | None = None
     codigo_provincia: str | None = None
+    codigo_circunscripcion: str | None = Field(
+        default=None,
+        description=_CODIGO_CIRCUNSCRIPCION_DESCRIPTION,
+    )
 
 
 class TerritorioDetail(BaseModel):
@@ -26,7 +35,10 @@ class TerritorioDetail(BaseModel):
     codigo_municipio: str | None = None
     codigo_distrito: str | None = None
     codigo_seccion: str | None = None
-    codigo_circunscripcion: str | None = None
+    codigo_circunscripcion: str | None = Field(
+        default=None,
+        description=_CODIGO_CIRCUNSCRIPCION_DESCRIPTION,
+    )
     nombre: str | None = None
     codigo_completo: str | None = None
     parent_id: int | None = None

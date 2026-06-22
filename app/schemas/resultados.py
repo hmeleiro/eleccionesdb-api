@@ -128,7 +128,10 @@ class BaseResultadosSearch(BaseModel):
     )
     codigo_circunscripcion: Optional[list[str]] = Field(
         default=None,
-        description="Filtrar por código(s) de circunscripción, p.ej. ['001', '002']",
+        description=(
+            "Filtrar por código(s) de circunscripción; usa ['99'] para CCAA y provincias, "
+            "p.ej. ['99', '001']"
+        ),
     )
     codigo_municipio: Optional[list[str]] = Field(
         default=None,

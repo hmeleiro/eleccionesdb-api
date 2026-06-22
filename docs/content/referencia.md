@@ -164,7 +164,7 @@ Todos los campos son opcionales. Los campos `null` se pueden omitir.
   "tipo_territorio": ["municipio"],
   "codigo_ccaa": ["13"],
   "codigo_provincia": null,
-  "codigo_circunscripcion": ["001"],
+  "codigo_circunscripcion": ["99"],
   "codigo_municipio": ["28001", "28002", "28003", "..."]
 }
 ```
@@ -229,8 +229,10 @@ resultados <- resp |> resp_body_json(simplifyVector = TRUE)
 | `tipo` | str (repetible) | `ccaa`, `provincia` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código de comunidad autónoma |
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
-| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
+| `codigo_circunscripcion` | str (repetible) | `99`, `001` | Código de circunscripción; `99` para CCAA y provincias |
 | `nombre` | str | `madrid` | Búsqueda parcial por nombre |
+
+`codigo_circunscripcion` se devuelve tanto en listados como en detalles de territorio. Para CCAA y provincias, el valor persistido es `"99"`; el filtro `codigo_circunscripcion=["99"]` selecciona ambos tipos y puede combinarse con `tipo` o `tipo_territorio`.
 
 #### `/v1/partidos`
 
@@ -253,7 +255,7 @@ resultados <- resp |> resp_body_json(simplifyVector = TRUE)
 | `tipo_territorio` | str (repetible) | `provincia` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código de comunidad autónoma |
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
-| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
+| `codigo_circunscripcion` | str (repetible) | `99`, `001` | Código de circunscripción; `99` para CCAA y provincias |
 | `codigo_municipio` | str (repetible) | `079` | Código de municipio |
 
 #### `/v1/resultados/totales-territorio`
@@ -267,7 +269,7 @@ resultados <- resp |> resp_body_json(simplifyVector = TRUE)
 | `tipo_territorio` | str (repetible) | `provincia` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
-| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
+| `codigo_circunscripcion` | str (repetible) | `99`, `001` | Código de circunscripción; `99` para CCAA y provincias |
 | `codigo_municipio` | str (repetible) | `079` | Código municipio |
 
 #### `/v1/resultados/votos-partido` y `/v1/resultados/combinados`
