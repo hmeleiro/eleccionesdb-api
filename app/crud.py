@@ -275,12 +275,17 @@ def get_totales_territorio_eleccion(
     codigo_ccaa: Optional[list[str]] = None,
     codigo_provincia: Optional[list[str]] = None,
     codigo_municipio: Optional[list[str]] = None,
+    codigo_circunscripcion: Optional[list[str]] = None,
 ) -> dict:
     query = (
         db.query(ResumenTerritorial)
         .filter(ResumenTerritorial.eleccion_id == eleccion_id)
     )
-    query = _apply_territorio_filters(query, ResumenTerritorial, territorio_id, tipo_territorio, codigo_ccaa, codigo_provincia, codigo_municipio)
+    query = _apply_territorio_filters(
+        query, ResumenTerritorial, territorio_id, tipo_territorio,
+        codigo_ccaa, codigo_provincia, codigo_municipio,
+        codigo_circunscripcion,
+    )
     return _paginate(query.order_by(ResumenTerritorial.id), skip, limit)
 
 

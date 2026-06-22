@@ -229,6 +229,7 @@ resultados <- resp |> resp_body_json(simplifyVector = TRUE)
 | `tipo` | str (repetible) | `ccaa`, `provincia` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código de comunidad autónoma |
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
+| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
 | `nombre` | str | `madrid` | Búsqueda parcial por nombre |
 
 #### `/v1/partidos`
@@ -252,6 +253,7 @@ resultados <- resp |> resp_body_json(simplifyVector = TRUE)
 | `tipo_territorio` | str (repetible) | `provincia` | Tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código de comunidad autónoma |
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
+| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
 | `codigo_municipio` | str (repetible) | `079` | Código de municipio |
 
 #### `/v1/resultados/totales-territorio`

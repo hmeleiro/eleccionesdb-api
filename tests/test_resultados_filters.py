@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app import crud
-from app.api import routes_resultados
+from app.api import routes_elecciones, routes_resultados
 from app.database import Base
 from app.main import app
 from app.models.models import (
@@ -93,6 +93,17 @@ def test_resultados_filter_by_codigo_circunscripcion(db, getter):
     assert [item.territorio_id for item in result["data"]] == [1]
 
 
+def test_totales_territorio_eleccion_filter_by_codigo_circunscripcion(db):
+    result = crud.get_totales_territorio_eleccion(
+        db,
+        eleccion_id=1,
+        codigo_circunscripcion=["002"],
+    )
+
+    assert result["total"] == 1
+    assert [item.territorio_id for item in result["data"]] == [2]
+
+
 @pytest.mark.parametrize(
     "search_schema",
     [TotalTerritorioSearch, VotoPartidoSearch, ResultadoCombinadoSearch],
@@ -115,6 +126,19 @@ def test_get_openapi_exposes_codigo_circunscripcion(path):
     parameters = app.openapi()["paths"][path]["get"]["parameters"]
 
     assert "codigo_circunscripcion" in {parameter["name"] for parameter in parameters}
+
+
+def test_all_get_endpoints_with_codigo_provincia_also_expose_circunscripcion():
+    for path, operations in app.openapi()["paths"].items():
+        get_operation = operations.get("get")
+        if not get_operation:
+            continue
+
+        parameter_names = {
+            parameter["name"] for parameter in get_operation.get("parameters", [])
+        }
+        if "codigo_provincia" in parameter_names:
+            assert "codigo_circunscripcion" in parameter_names, path
 
 
 @pytest.mark.parametrize(
@@ -172,3 +196,24 @@ def test_post_routes_forward_codigo_circunscripcion(
     )
 
     assert crud_mock.call_args.kwargs["codigo_circunscripcion"] == ["001"]
+
+
+def test_totales_territorio_eleccion_route_forwards_codigo_circunscripcion(
+    monkeypatch,
+):
+    crud_mock = MagicMock()
+    monkeypatch.setattr(
+        routes_elecciones.crud,
+        "get_totales_territorio_eleccion",
+        crud_mock,
+    )
+
+    routes_elecciones.get_totales_territorio_eleccion(
+        eleccion_id=1,
+        pagination=SimpleNamespace(skip=0, limit=50),
+        codigo_circunscripcion=["002"],
+        db=MagicMock(),
+        developer=MagicMock(),
+    )
+
+    assert crud_mock.call_args.kwargs["codigo_circunscripcion"] == ["002"]

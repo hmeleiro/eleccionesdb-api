@@ -190,6 +190,7 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 | `tipo` | str (repetible) | `ccaa`, `provincia` | Tipo de territorio (enum) |
 | `codigo_ccaa` | str (repetible) | `01` | Código de comunidad autónoma |
 | `codigo_provincia` | str (repetible) | `28` | Código de provincia |
+| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
 | `nombre` | str | `madrid` | Búsqueda parcial por nombre |
 
 #### Partidos (`/v1/partidos`)
@@ -240,6 +241,7 @@ Mismos filtros que totales territorio + `partido_id`: `eleccion_id`, `territorio
 | `tipo_territorio` | str (repetible) | `provincia` | tipo de territorio |
 | `codigo_ccaa` | str (repetible) | `01` | Código CCAA |
 | `codigo_provincia` | str (repetible) | `28` | Código provincia |
+| `codigo_circunscripcion` | str (repetible) | `001` | Código de circunscripción |
 
 
 ## 5. Tipos de territorio (enum)
