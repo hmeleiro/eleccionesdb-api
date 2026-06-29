@@ -172,7 +172,7 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 ### Convenciones generales (GET)
 - Los filtros se pasan como **query parameters**.
 - Todos los filtros son **opcionales** — sin filtros se devuelven todos los registros.
-- Los filtros de texto (`nombre`, `siglas`, `agrupacion`) usan **búsqueda parcial case-insensitive** (ILIKE).
+- Los filtros de texto (`nombre`, `siglas`, `agrupacion`, `bloque`) usan **búsqueda parcial case-insensitive** (ILIKE).
 - Los filtros de lista (`tipo_eleccion`, `year`, etc.) aceptan **un solo valor** por parámetro. Para filtrar por múltiples valores, se repite el parámetro: `?tipo_eleccion=G&tipo_eleccion=A`.
 
 ### Filtros por endpoint
@@ -206,6 +206,7 @@ Estado HTTP `414 URI Too Long`. La solución es usar el POST equivalente.
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `agrupacion` | str | `PCE/IU` | Búsqueda parcial por agrupación |
+| `bloque` | str | `izquierda` | Búsqueda parcial por bloque |
 
 #### Resultados — Totales territorio (`GET /v1/resultados/totales-territorio`)
 | Parámetro | Tipo | Ejemplo | Descripción |
@@ -292,7 +293,10 @@ Partido (N) ──── (1) PartidoRecode (agrupación/grupo)
 PartidoRecode
   ├── partido_recode: nombre corto ("PP", "PSOE")
   ├── agrupacion: familia ideológica ("AP/PP", "PSOE")
-  └── color: color hexadecimal ("#008DDA")
+  ├── color: color hexadecimal principal ("#008DDA")
+  ├── bloque: bloque político ("izquierda", "derecha")
+  ├── color_pastel: variante pastel del color hexadecimal
+  └── color_oscuro: variante oscura del color hexadecimal
 ```
 
 ## 8. Campos nullables
@@ -305,6 +309,7 @@ Los siguientes campos pueden ser `null`:
 | Territorio | `parent_id` | Territorios raíz (ccaa) |
 | Partido | `partido_recode_id` | Partido sin agrupación |
 | Partido (detail) | `recode` | Partido sin agrupación |
+| PartidoRecode | `agrupacion`, `bloque`, `color`, `color_pastel`, `color_oscuro` | Agrupaciones sin metadatos políticos o cromáticos asignados |
 | TotalTerritorio | `participacion_3` | Cuando no hay tercer avance de participación |
 
 ## 9. Formato de campos
@@ -320,7 +325,7 @@ Los siguientes campos pueden ser `null`:
 | `codigo_distrito` | String 2 dígitos | `"99"` (wildcard) |
 | `codigo_seccion` | String 4 dígitos | `"9999"` (wildcard) |
 | `codigo_completo` | String 13 dígitos | `"0199999999999"` |
-| `color` | Hex color con # | `"#008DDA"` |
+| `color` / `color_pastel` / `color_oscuro` | Hex color con # | `"#008DDA"` |
 
 **Nota sobre wildcards**: Los códigos `99`, `999`, `9999` actúan como wildcards. Por ejemplo, una CCAA tiene `codigo_provincia="99"`, `codigo_municipio="999"`, etc.
 

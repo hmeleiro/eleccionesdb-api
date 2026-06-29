@@ -101,6 +101,9 @@ class PartidoRecode(Base):
     partido_recode = sa.Column(sa.String(50), nullable=False, unique=True)
     agrupacion = sa.Column(sa.String(50), nullable=True)
     color = sa.Column(sa.String(7), nullable=True)
+    bloque = sa.Column(sa.String(50), nullable=True)
+    color_pastel = sa.Column(sa.String(7), nullable=True)
+    color_oscuro = sa.Column(sa.String(7), nullable=True)
 
     partidos = relationship("Partido", back_populates="recode")
 

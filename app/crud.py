@@ -193,10 +193,13 @@ def get_partidos_recode(
     skip: int = 0,
     limit: int = 50,
     agrupacion: Optional[str] = None,
+    bloque: Optional[str] = None,
 ) -> dict:
     query = db.query(PartidoRecode)
     if agrupacion:
         query = query.filter(PartidoRecode.agrupacion.ilike(f"%{agrupacion}%"))
+    if bloque:
+        query = query.filter(PartidoRecode.bloque.ilike(f"%{bloque}%"))
     return _paginate(query.order_by(PartidoRecode.id), skip, limit)
 
 

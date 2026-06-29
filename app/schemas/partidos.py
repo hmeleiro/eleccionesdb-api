@@ -12,6 +12,9 @@ class PartidoRecodeSchema(BaseModel):
     partido_recode: str
     agrupacion: str | None = None
     color: str | None = None
+    bloque: str | None = None
+    color_pastel: str | None = None
+    color_oscuro: str | None = None
 
 
 class PartidoRecodeDetail(PartidoRecodeSchema):

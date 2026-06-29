@@ -140,7 +140,7 @@ Cuando no hay coincidencias, la respuesta es `total=0` y `data=[]` (HTTP 200, no
 ### Convenciones generales
 
 - Todos los filtros son **opcionales**. Sin filtros se devuelven todos los registros.
-- Los filtros de texto (`nombre`, `siglas`, `denominacion`, `agrupacion`) usan **búsqueda parcial case-insensitive** (ILIKE).
+- Los filtros de texto (`nombre`, `siglas`, `denominacion`, `agrupacion`, `bloque`) usan **búsqueda parcial case-insensitive** (ILIKE).
 - Para filtrar por **múltiples valores**, se repite el parámetro: `?tipo_eleccion=G&tipo_eleccion=A`.
 
 ### POST en endpoints de resultados
@@ -246,6 +246,7 @@ resultados <- resp |> resp_body_json(simplifyVector = TRUE)
 | Parámetro | Tipo | Ejemplo | Descripción |
 |---|---|---|---|
 | `agrupacion` | str | `PCE/IU` | Búsqueda parcial por agrupación |
+| `bloque` | str | `izquierda` | Búsqueda parcial por bloque |
 
 #### `/v1/elecciones/{id}/totales-territorio`
 

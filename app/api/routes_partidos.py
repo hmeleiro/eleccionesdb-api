@@ -50,6 +50,7 @@ def get_partido(partido_id: int, db: Session = Depends(get_db), developer=Depend
 def list_partidos_recode(
     pagination: PaginationParams = Depends(),
     agrupacion: Optional[str] = Query(default=None, description="Filtrar por agrupación (parcial)"),
+    bloque: Optional[str] = Query(default=None, description="Filtrar por bloque (parcial)"),
     db: Session = Depends(get_db),
     developer=Depends(get_current_developer),
 ):
@@ -59,6 +60,7 @@ def list_partidos_recode(
         skip=pagination.skip,
         limit=pagination.limit,
         agrupacion=agrupacion,
+        bloque=bloque,
     )
 
 
