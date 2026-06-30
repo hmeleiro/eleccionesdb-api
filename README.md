@@ -1,5 +1,8 @@
 # Elecciones DB API
 
+[![Spain Electoral Project](https://img.shields.io/badge/Spain%20Electoral-Project-red?style=flat-square)](https://spainelectoralproject.com)
+[![API health](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.spainelectoralproject.com%2Fhealth&query=%24.status&label=API%20health&style=flat-square&color=brightgreen)](https://api.spainelectoralproject.com/health)
+
 API REST para realizar consultas a [eleccionesdb](https://eleccionesdb.spainelectoralproject.com/), una base de datos de resultados electorales de España.  
 Desarrollada con **FastAPI** + **SQLAlchemy** + **PostgreSQL**.
 
